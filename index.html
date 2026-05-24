@@ -1,736 +1,1566 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dark Water Sports and Firearms — Guns, Fishing & Hunting Gear</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg:      #f5f0e8;
-      --bg2:     #ede7d9;
-      --green:   #2e4c24;
-      --green2:  #3a5c2e;
-      --tan:     #8b6914;
-      --amber:   #c8a84b;
-      --red:     #b91c1c;
-      --text:    #1a1a1a;
-      --text2:   #4a4a4a;
-      --white:   #ffffff;
-      --nav-h:   72px;
-    }
-
-    html { scroll-behavior: smooth; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0;
-      height: var(--nav-h);
-      background: rgba(255,255,255,0.97);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid rgba(0,0,0,0.09);
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 48px; z-index: 1000;
-      transition: box-shadow 0.3s;
-    }
-
-    .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-
-    .nav-logo-icon {
-      width: 42px; height: 42px;
-      background: var(--green); border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-    }
-
-    .nav-logo-icon svg { width: 26px; height: 26px; fill: #fff; }
-
-    .nav-logo-text { font-size: 18px; font-weight: 800; color: var(--green); letter-spacing: -0.3px; line-height: 1.1; }
-    .nav-logo-sub  { font-size: 10px; font-weight: 600; color: var(--tan); letter-spacing: 2.5px; text-transform: uppercase; }
-
-    .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
-    .nav-links a { text-decoration: none; font-size: 14px; font-weight: 600; color: var(--text2); transition: color 0.2s; }
-    .nav-links a:hover { color: var(--green); }
-
-    .nav-cta {
-      background: var(--green); color: var(--white) !important;
-      padding: 10px 22px; border-radius: 8px;
-      transition: background 0.2s !important;
-    }
-    .nav-cta:hover { background: #1e3418 !important; }
-
-    .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
-    .hamburger span { display: block; width: 24px; height: 2px; background: var(--green); border-radius: 2px; transition: all 0.3s; }
-    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-    .hamburger.open span:nth-child(2) { opacity: 0; }
-    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-    .mobile-menu {
-      display: none; position: fixed; top: var(--nav-h); left: 0; right: 0;
-      background: var(--white); border-bottom: 1px solid rgba(0,0,0,0.1);
-      padding: 16px 24px 28px; z-index: 999; flex-direction: column; gap: 2px;
-    }
-    .mobile-menu.open { display: flex; }
-    .mobile-menu a { text-decoration: none; font-size: 16px; font-weight: 600; color: var(--text); padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.06); }
-    .mobile-menu a:last-child { border: none; margin-top: 8px; background: var(--green); color: var(--white); text-align: center; border-radius: 10px; padding: 14px; }
-
-    /* ── HERO ── */
-    .hero {
-      height: 100vh; min-height: 620px;
-      position: relative; display: flex; align-items: center; overflow: hidden;
-    }
-
-    .hero-bg {
-      position: absolute; inset: 0;
-      background:
-        linear-gradient(to right, rgba(15,25,12,0.80) 0%, rgba(15,25,12,0.45) 55%, rgba(15,25,12,0.15) 100%),
-        url('https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=1600&q=80') center/cover no-repeat;
-    }
-
-    .hero-content {
-      position: relative; max-width: 1200px; margin: 0 auto;
-      padding: 0 48px; padding-top: var(--nav-h);
-    }
-
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(200,168,75,0.2); border: 1px solid rgba(200,168,75,0.5);
-      color: var(--amber); font-size: 11px; font-weight: 700;
-      letter-spacing: 2px; text-transform: uppercase;
-      padding: 7px 14px; border-radius: 4px; margin-bottom: 22px;
-    }
-
-    .hero-badge::before { content: '★'; font-size: 10px; }
-
-    .hero h1 {
-      font-size: clamp(34px, 5.5vw, 68px); font-weight: 900; color: #fff;
-      line-height: 1.05; margin-bottom: 18px; max-width: 660px;
-    }
-
-    .hero h1 em { font-style: normal; color: var(--amber); }
-
-    .hero p {
-      font-size: clamp(14px, 1.8vw, 17px); color: rgba(255,255,255,0.82);
-      max-width: 500px; line-height: 1.7; margin-bottom: 36px;
-    }
-
-    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
-
-    .btn { display: inline-block; text-decoration: none; padding: 15px 30px; border-radius: 10px; font-size: 15px; font-weight: 700; transition: all 0.2s; }
-    .btn-green  { background: var(--green); color: #fff; }
-    .btn-green:hover { background: #1e3418; transform: translateY(-1px); }
-    .btn-ghost  { background: rgba(255,255,255,0.12); color: #fff; border: 1.5px solid rgba(255,255,255,0.4); backdrop-filter: blur(4px); }
-    .btn-ghost:hover { background: rgba(255,255,255,0.22); }
-
-    .hero-scroll {
-      position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
-      display: flex; flex-direction: column; align-items: center; gap: 8px;
-      color: rgba(255,255,255,0.5); font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase;
-    }
-    .hero-scroll-line { width: 1px; height: 36px; background: linear-gradient(to bottom, rgba(255,255,255,0.5), transparent); animation: pulse 2s ease-in-out infinite; }
-    @keyframes pulse { 0%,100%{opacity:.4} 50%{opacity:1} }
-
-    /* ── ANNOUNCEMENT BAR ── */
-    .announcement {
-      background: var(--green); color: #fff;
-      padding: 14px 48px; text-align: center; font-size: 14px; font-weight: 600;
-      display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;
-    }
-    .announcement strong { color: var(--amber); }
-    .announcement a { color: var(--amber); text-decoration: underline; font-weight: 700; }
-
-    /* ── SECTION ── */
-    section { padding: 88px 48px; }
-    .section-inner { max-width: 1200px; margin: 0 auto; }
-    .section-label { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--tan); margin-bottom: 10px; }
-    .section-title { font-size: clamp(26px, 3.5vw, 44px); font-weight: 900; color: var(--green); line-height: 1.1; margin-bottom: 14px; }
-    .section-desc { font-size: 15px; color: var(--text2); max-width: 560px; line-height: 1.75; }
-
-    /* ── CATEGORIES ── */
-    #shop { background: var(--bg2); }
-
-    .categories-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 48px;
-    }
-
-    .category-card {
-      border-radius: 18px; overflow: hidden; position: relative; cursor: pointer;
-      text-decoration: none; aspect-ratio: 3/4;
-    }
-
-    .category-card img {
-      width: 100%; height: 100%; object-fit: cover; display: block;
-      transition: transform 0.5s ease;
-    }
-
-    .category-card:hover img { transform: scale(1.06); }
-
-    .category-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(10,20,8,0.85) 0%, rgba(10,20,8,0.15) 50%, transparent 100%);
-      display: flex; flex-direction: column; justify-content: flex-end; padding: 28px;
-    }
-
-    .category-icon {
-      width: 44px; height: 44px; background: rgba(200,168,75,0.9);
-      border-radius: 10px; display: flex; align-items: center; justify-content: center;
-      margin-bottom: 12px;
-    }
-
-    .category-icon svg { width: 24px; height: 24px; fill: #fff; }
-
-    .category-title { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 6px; }
-    .category-sub   { font-size: 13px; color: rgba(255,255,255,0.72); line-height: 1.5; }
-
-    .category-arrow {
-      display: inline-flex; align-items: center; gap: 6px;
-      color: var(--amber); font-size: 13px; font-weight: 700; margin-top: 12px;
-      transition: gap 0.2s;
-    }
-    .category-card:hover .category-arrow { gap: 10px; }
-
-    /* ── FFL SERVICES ── */
-    #services { background: var(--bg); }
-
-    .services-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 48px;
-    }
-
-    .service-card {
-      background: var(--white); border-radius: 16px; padding: 28px 24px;
-      border: 1.5px solid #e0d8cc;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    .service-card:hover { border-color: var(--green); box-shadow: 0 4px 20px rgba(46,76,36,0.1); }
-
-    .service-icon {
-      width: 48px; height: 48px; background: var(--bg2); border-radius: 12px;
-      display: flex; align-items: center; justify-content: center; margin-bottom: 16px;
-    }
-
-    .service-icon svg { width: 26px; height: 26px; }
-
-    .service-title { font-size: 16px; font-weight: 800; color: var(--green); margin-bottom: 8px; }
-    .service-desc  { font-size: 13px; color: var(--text2); line-height: 1.65; }
-
-    /* FFL badge */
-    .ffl-banner {
-      background: var(--green); border-radius: 18px; padding: 36px 40px;
-      display: flex; align-items: center; gap: 32px; margin-top: 40px; flex-wrap: wrap;
-    }
-
-    .ffl-badge {
-      flex-shrink: 0; width: 80px; height: 80px; border-radius: 50%;
-      background: var(--amber); display: flex; align-items: center; justify-content: center;
-      flex-direction: column; font-size: 10px; font-weight: 900; color: #fff;
-      letter-spacing: 1px; text-transform: uppercase; text-align: center; line-height: 1.3;
-    }
-
-    .ffl-badge span { font-size: 18px; display: block; }
-
-    .ffl-text h3 { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 8px; }
-    .ffl-text p  { font-size: 14px; color: rgba(255,255,255,0.78); line-height: 1.65; max-width: 580px; }
-
-    /* ── CONTACT ── */
-    #contact { background: var(--bg2); }
-
-    .contact-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
-      align-items: start; margin-top: 52px;
-    }
-
-    .store-info { display: flex; flex-direction: column; gap: 28px; }
-
-    .info-block h4 { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--tan); margin-bottom: 8px; }
-    .info-block p  { font-size: 15px; color: var(--text2); line-height: 1.65; }
-    .info-block a  { color: var(--green); font-weight: 600; text-decoration: none; }
-    .info-block a:hover { text-decoration: underline; }
-
-    .hours-card {
-      background: var(--green); border-radius: 16px; padding: 26px;
-    }
-
-    .hours-card h4 { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--amber); margin-bottom: 14px; }
-
-    .hours-row {
-      display: flex; justify-content: space-between;
-      padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.09);
-      font-size: 14px;
-    }
-    .hours-row:last-child { border-bottom: none; }
-    .hours-row span:first-child { color: rgba(255,255,255,0.72); }
-    .hours-row span:last-child  { color: #fff; font-weight: 700; }
-    .hours-row .closed { color: #f87171 !important; }
-
-    /* Form */
-    .contact-form {
-      background: var(--white); border-radius: 20px; padding: 36px;
-      box-shadow: 0 4px 32px rgba(0,0,0,0.07);
-    }
-
-    .contact-form h3 { font-size: 22px; font-weight: 800; color: var(--green); margin-bottom: 6px; }
-    .contact-form > p { font-size: 14px; color: var(--text2); margin-bottom: 24px; }
-
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
-    .form-group label { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text2); }
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%; padding: 13px 15px;
-      border: 1.5px solid #e0d8cc; border-radius: 10px;
-      font-size: 14px; color: var(--text); background: var(--bg);
-      outline: none; transition: border-color 0.2s; font-family: inherit;
-    }
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus { border-color: var(--green); }
-    .form-group textarea { resize: vertical; min-height: 90px; }
-
-    .form-submit {
-      width: 100%; background: var(--green); color: #fff; border: none;
-      border-radius: 10px; padding: 16px; font-size: 15px; font-weight: 700;
-      cursor: pointer; transition: background 0.2s; font-family: inherit; margin-top: 4px;
-    }
-    .form-submit:hover { background: #1e3418; }
-
-    .form-note { font-size: 12px; color: var(--text2); text-align: center; margin-top: 12px; }
-
-    /* ── MAP PLACEHOLDER ── */
-    .map-placeholder {
-      background: #d4ceC4; border-radius: 16px; height: 220px;
-      display: flex; align-items: center; justify-content: center;
-      overflow: hidden; margin-top: 28px; position: relative;
-    }
-
-    .map-placeholder iframe {
-      width: 100%; height: 100%; border: none; border-radius: 16px;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: #0e180b; color: rgba(255,255,255,0.55);
-      padding: 56px 48px 32px;
-    }
-
-    .footer-inner { max-width: 1200px; margin: 0 auto; }
-
-    .footer-top {
-      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px;
-      padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.07);
-    }
-
-    .footer-brand .nav-logo-text { color: #fff; }
-    .footer-brand p { font-size: 13px; line-height: 1.7; margin-top: 14px; max-width: 260px; }
-
-    .footer-col h5 { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--amber); margin-bottom: 16px; }
-    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-    .footer-col a { color: rgba(255,255,255,0.55); text-decoration: none; font-size: 13px; transition: color 0.2s; }
-    .footer-col a:hover { color: #fff; }
-
-    .footer-bottom {
-      display: flex; justify-content: space-between; align-items: center;
-      padding-top: 28px; font-size: 12px; gap: 16px; flex-wrap: wrap;
-    }
-
-    .ffl-disclaimer { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 6px; }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 1024px) {
-      .footer-top { grid-template-columns: 1fr 1fr; }
-      .footer-brand { grid-column: 1 / 3; }
-      .services-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-
-    @media (max-width: 900px) {
-      nav { padding: 0 20px; }
-      .nav-links { display: none; }
-      .hamburger { display: flex; }
-      section { padding: 64px 20px; }
-      .announcement { padding: 12px 20px; font-size: 13px; }
-      .categories-grid { grid-template-columns: 1fr; }
-      .category-card { aspect-ratio: 16/9; }
-      .services-grid { grid-template-columns: 1fr 1fr; }
-      .contact-grid { grid-template-columns: 1fr; gap: 40px; }
-      .ffl-banner { padding: 28px 24px; gap: 20px; }
-      footer { padding: 40px 20px 24px; }
-      .footer-top { grid-template-columns: 1fr 1fr; }
-      .footer-brand { grid-column: 1 / 3; }
-    }
-
-    @media (max-width: 600px) {
-      .hero-content { padding: 0 20px; padding-top: var(--nav-h); }
-      .hero h1 { font-size: 30px; }
-      .hero-actions { flex-direction: column; }
-      .btn { text-align: center; }
-      .services-grid { grid-template-columns: 1fr; }
-      .form-row { grid-template-columns: 1fr; }
-      .contact-form { padding: 24px 18px; }
-      .footer-top { grid-template-columns: 1fr; }
-      .footer-brand { grid-column: 1; }
-      .footer-bottom { flex-direction: column; align-items: flex-start; }
-    }
-  </style>
-</head>
-<body>
-
-  <!-- ANNOUNCEMENT -->
-  <div class="announcement">
-    <strong>NEW ARRIVALS:</strong> Smith &amp; Wesson M&amp;P Shield Plus &amp; Mossberg 500 now in stock.
-    <a href="#contact">Call to hold one →</a>
-  </div>
-
-  <!-- NAV -->
-  <nav id="navbar">
-    <a href="#home" class="nav-logo">
-      <div class="nav-logo-icon">
-        <!-- Crosshair / scope icon -->
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M12 5a7 7 0 100 14A7 7 0 0012 5z" stroke="#fff" stroke-width="1.5" fill="none"/></svg>
-      </div>
-      <div>
-        <div class="nav-logo-text">Dark Water</div>
-        <div class="nav-logo-sub">Sports &amp; Firearms</div>
-      </div>
-    </a>
-
-    <ul class="nav-links">
-      <li><a href="#shop">Shop</a></li>
-      <li><a href="#services">FFL &amp; Services</a></li>
-      <li><a href="#contact">Find Us</a></li>
-      <li><a href="#contact" class="nav-cta">Contact Us</a></li>
-    </ul>
-
-    <button class="hamburger" id="hamburger" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
-
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#shop"     onclick="closeMenu()">Shop</a>
-    <a href="#services" onclick="closeMenu()">FFL &amp; Services</a>
-    <a href="#contact"  onclick="closeMenu()">Find Us</a>
-    <a href="#contact"  onclick="closeMenu()">Contact Us</a>
-  </div>
-
-  <!-- HERO -->
-  <section class="hero" id="home">
-    <div class="hero-bg"></div>
-    <div class="hero-content">
-      <div class="hero-badge">FFL Licensed Dealer &bull; Locally Owned</div>
-      <h1>Your <em>Local</em> Source for Guns, Gear &amp; More</h1>
-      <p>Firearms, hunting supplies, and fishing gear — all under one roof. We're your hometown shop for everything outdoors, backed by real expertise.</p>
-      <div class="hero-actions">
-        <a href="#shop"    class="btn btn-green">Browse Our Inventory</a>
-        <a href="#contact" class="btn btn-ghost">Get Directions</a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dark Water Sports and Firearms — Guns, Fishing & Hunting Gear</title>
+    <script>
+      document.documentElement.classList.add("js");
+    </script>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --bg: #f5f0e8;
+        --bg2: #ede7d9;
+        --green: #2e4c24;
+        --green2: #3a5c2e;
+        --tan: #8b6914;
+        --amber: #c8a84b;
+        --red: #b91c1c;
+        --text: #1a1a1a;
+        --text2: #4a4a4a;
+        --white: #ffffff;
+        --nav-h: 72px;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      /* ── NAV ── */
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: var(--nav-h);
+        background: rgba(255, 255, 255, 0.97);
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.09);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 48px;
+        z-index: 1000;
+        transition: box-shadow 0.3s;
+      }
+
+      .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+      }
+
+      .nav-logo-icon {
+        width: 42px;
+        height: 42px;
+        background: var(--green);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .nav-logo-icon svg {
+        width: 26px;
+        height: 26px;
+        fill: #fff;
+      }
+
+      .nav-logo-text {
+        font-size: 18px;
+        font-weight: 800;
+        color: var(--green);
+        letter-spacing: -0.3px;
+        line-height: 1.1;
+      }
+      .nav-logo-sub {
+        font-size: 10px;
+        font-weight: 600;
+        color: var(--tan);
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        list-style: none;
+      }
+      .nav-links a {
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text2);
+        transition: color 0.2s;
+      }
+      .nav-links a:hover {
+        color: var(--green);
+      }
+
+      .nav-cta {
+        background: var(--green);
+        color: var(--white) !important;
+        padding: 10px 22px;
+        border-radius: 8px;
+        transition: background 0.2s !important;
+      }
+      .nav-cta:hover {
+        background: #1e3418 !important;
+      }
+
+      .hamburger {
+        display: none;
+        flex-direction: column;
+        gap: 5px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 4px;
+      }
+      .hamburger span {
+        display: block;
+        width: 24px;
+        height: 2px;
+        background: var(--green);
+        border-radius: 2px;
+        transition: all 0.3s;
+      }
+      .hamburger.open span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+      }
+      .hamburger.open span:nth-child(2) {
+        opacity: 0;
+      }
+      .hamburger.open span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+      }
+
+      .mobile-menu {
+        display: none;
+        position: fixed;
+        top: var(--nav-h);
+        left: 0;
+        right: 0;
+        background: var(--white);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        padding: 16px 24px 28px;
+        z-index: 999;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .mobile-menu.open {
+        display: flex;
+      }
+      .mobile-menu a {
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--text);
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      }
+      .mobile-menu a:last-child {
+        border: none;
+        margin-top: 8px;
+        background: var(--green);
+        color: var(--white);
+        text-align: center;
+        border-radius: 10px;
+        padding: 14px;
+      }
+
+      /* ── HERO ── */
+      .hero {
+        height: 100vh;
+        min-height: 620px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+      }
+
+      .hero-bg {
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(
+            to right,
+            rgba(15, 25, 12, 0.8) 0%,
+            rgba(15, 25, 12, 0.45) 55%,
+            rgba(15, 25, 12, 0.15) 100%
+          ),
+          url("https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=1600&q=80")
+            center/cover no-repeat;
+      }
+
+      .hero-content {
+        position: relative;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 48px;
+        padding-top: var(--nav-h);
+      }
+
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(200, 168, 75, 0.2);
+        border: 1px solid rgba(200, 168, 75, 0.5);
+        color: var(--amber);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 7px 14px;
+        border-radius: 4px;
+        margin-bottom: 22px;
+      }
+
+      .hero-badge::before {
+        content: "★";
+        font-size: 10px;
+      }
+
+      .hero h1 {
+        font-size: clamp(34px, 5.5vw, 68px);
+        font-weight: 900;
+        color: #fff;
+        line-height: 1.05;
+        margin-bottom: 18px;
+        max-width: 660px;
+      }
+
+      .hero h1 em {
+        font-style: normal;
+        color: var(--amber);
+      }
+
+      .hero p {
+        font-size: clamp(14px, 1.8vw, 17px);
+        color: rgba(255, 255, 255, 0.82);
+        max-width: 500px;
+        line-height: 1.7;
+        margin-bottom: 36px;
+      }
+
+      .hero-actions {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        display: inline-block;
+        text-decoration: none;
+        padding: 15px 30px;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 700;
+        transition: all 0.2s;
+      }
+      .btn-green {
+        background: var(--green);
+        color: #fff;
+      }
+      .btn-green:hover {
+        background: #1e3418;
+        transform: translateY(-1px);
+      }
+      .btn-ghost {
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+        border: 1.5px solid rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(4px);
+      }
+      .btn-ghost:hover {
+        background: rgba(255, 255, 255, 0.22);
+      }
+
+      .hero-scroll {
+        position: absolute;
+        bottom: 32px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 10px;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+      }
+      .hero-scroll-line {
+        width: 1px;
+        height: 36px;
+        background: linear-gradient(
+          to bottom,
+          rgba(255, 255, 255, 0.5),
+          transparent
+        );
+        animation: pulse 2s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 0.4;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      /* ── ANNOUNCEMENT BAR ── */
+      .announcement {
+        background: var(--green);
+        color: #fff;
+        padding: 14px 48px;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .announcement strong {
+        color: var(--amber);
+      }
+      .announcement a {
+        color: var(--amber);
+        text-decoration: underline;
+        font-weight: 700;
+      }
+
+      /* ── SECTION ── */
+      section {
+        padding: 88px 48px;
+      }
+      .section-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .section-label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--tan);
+        margin-bottom: 10px;
+      }
+      .section-title {
+        font-size: clamp(26px, 3.5vw, 44px);
+        font-weight: 900;
+        color: var(--green);
+        line-height: 1.1;
+        margin-bottom: 14px;
+      }
+      .section-desc {
+        font-size: 15px;
+        color: var(--text2);
+        max-width: 560px;
+        line-height: 1.75;
+      }
+
+      /* ── CATEGORIES ── */
+      #shop {
+        background: var(--bg2);
+      }
+
+      .categories-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin-top: 48px;
+      }
+
+      .category-card {
+        border-radius: 18px;
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+        text-decoration: none;
+        aspect-ratio: 3/4;
+      }
+
+      .category-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.5s ease;
+      }
+
+      .category-card:hover img {
+        transform: scale(1.06);
+      }
+
+      .category-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to top,
+          rgba(10, 20, 8, 0.85) 0%,
+          rgba(10, 20, 8, 0.15) 50%,
+          transparent 100%
+        );
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 28px;
+      }
+
+      .category-icon {
+        width: 44px;
+        height: 44px;
+        background: rgba(200, 168, 75, 0.9);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 12px;
+      }
+
+      .category-icon svg {
+        width: 24px;
+        height: 24px;
+        fill: #fff;
+      }
+
+      .category-title {
+        font-size: 22px;
+        font-weight: 900;
+        color: #fff;
+        margin-bottom: 6px;
+      }
+      .category-sub {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.72);
+        line-height: 1.5;
+      }
+
+      .category-arrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--amber);
+        font-size: 13px;
+        font-weight: 700;
+        margin-top: 12px;
+        transition: gap 0.2s;
+      }
+      .category-card:hover .category-arrow {
+        gap: 10px;
+      }
+
+      /* ── FFL SERVICES ── */
+      #services {
+        background: var(--bg);
+      }
+
+      .services-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-top: 48px;
+      }
+
+      .service-card {
+        background: var(--white);
+        border-radius: 16px;
+        padding: 28px 24px;
+        border: 1.5px solid #e0d8cc;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+
+      .service-card:hover {
+        border-color: var(--green);
+        box-shadow: 0 4px 20px rgba(46, 76, 36, 0.1);
+      }
+
+      .service-icon {
+        width: 48px;
+        height: 48px;
+        background: var(--bg2);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 16px;
+      }
+
+      .service-icon svg {
+        width: 26px;
+        height: 26px;
+      }
+
+      .service-title {
+        font-size: 16px;
+        font-weight: 800;
+        color: var(--green);
+        margin-bottom: 8px;
+      }
+      .service-desc {
+        font-size: 13px;
+        color: var(--text2);
+        line-height: 1.65;
+      }
+
+      /* FFL badge */
+      .ffl-banner {
+        background: var(--green);
+        border-radius: 18px;
+        padding: 36px 40px;
+        display: flex;
+        align-items: center;
+        gap: 32px;
+        margin-top: 40px;
+        flex-wrap: wrap;
+      }
+
+      .ffl-badge {
+        flex-shrink: 0;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: var(--amber);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        font-size: 10px;
+        font-weight: 900;
+        color: #fff;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        text-align: center;
+        line-height: 1.3;
+      }
+
+      .ffl-badge span {
+        font-size: 18px;
+        display: block;
+      }
+
+      .ffl-text h3 {
+        font-size: 22px;
+        font-weight: 900;
+        color: #fff;
+        margin-bottom: 8px;
+      }
+      .ffl-text p {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.78);
+        line-height: 1.65;
+        max-width: 580px;
+      }
+
+      /* ── CONTACT ── */
+      #contact {
+        background: var(--bg2);
+      }
+
+      .contact-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 64px;
+        align-items: start;
+        margin-top: 52px;
+      }
+
+      .store-info {
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+      }
+
+      .info-block h4 {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--tan);
+        margin-bottom: 8px;
+      }
+      .info-block p {
+        font-size: 15px;
+        color: var(--text2);
+        line-height: 1.65;
+      }
+      .info-block a {
+        color: var(--green);
+        font-weight: 600;
+        text-decoration: none;
+      }
+      .info-block a:hover {
+        text-decoration: underline;
+      }
+
+      .hours-card {
+        background: var(--green);
+        border-radius: 16px;
+        padding: 26px;
+      }
+
+      .hours-card h4 {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--amber);
+        margin-bottom: 14px;
+      }
+
+      .hours-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+        font-size: 14px;
+      }
+      .hours-row:last-child {
+        border-bottom: none;
+      }
+      .hours-row span:first-child {
+        color: rgba(255, 255, 255, 0.72);
+      }
+      .hours-row span:last-child {
+        color: #fff;
+        font-weight: 700;
+      }
+      .hours-row .closed {
+        color: #f87171 !important;
+      }
+
+      /* Form */
+      .contact-form {
+        background: var(--white);
+        border-radius: 20px;
+        padding: 36px;
+        box-shadow: 0 4px 32px rgba(0, 0, 0, 0.07);
+      }
+
+      .contact-form h3 {
+        font-size: 22px;
+        font-weight: 800;
+        color: var(--green);
+        margin-bottom: 6px;
+      }
+      .contact-form > p {
+        font-size: 14px;
+        color: var(--text2);
+        margin-bottom: 24px;
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 14px;
+      }
+      .form-group label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--text2);
+      }
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        padding: 13px 15px;
+        border: 1.5px solid #e0d8cc;
+        border-radius: 10px;
+        font-size: 14px;
+        color: var(--text);
+        background: var(--bg);
+        outline: none;
+        transition: border-color 0.2s;
+        font-family: inherit;
+      }
+      .form-group input:focus,
+      .form-group select:focus,
+      .form-group textarea:focus {
+        border-color: var(--green);
+      }
+      .form-group textarea {
+        resize: vertical;
+        min-height: 90px;
+      }
+
+      .form-submit {
+        width: 100%;
+        background: var(--green);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 16px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background 0.2s;
+        font-family: inherit;
+        margin-top: 4px;
+      }
+      .form-submit:hover {
+        background: #1e3418;
+      }
+
+      .form-note {
+        font-size: 12px;
+        color: var(--text2);
+        text-align: center;
+        margin-top: 12px;
+      }
+
+      /* ── MAP PLACEHOLDER ── */
+      .map-placeholder {
+        background: #d4cec4;
+        border-radius: 16px;
+        height: 220px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        margin-top: 28px;
+        position: relative;
+      }
+
+      .map-placeholder iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        border-radius: 16px;
+      }
+
+      /* ── FOOTER ── */
+      footer {
+        background: #0e180b;
+        color: rgba(255, 255, 255, 0.55);
+        padding: 56px 48px 32px;
+      }
+
+      .footer-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .footer-top {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: 40px;
+        padding-bottom: 40px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      }
+
+      .footer-brand .nav-logo-text {
+        color: #fff;
+      }
+      .footer-brand p {
+        font-size: 13px;
+        line-height: 1.7;
+        margin-top: 14px;
+        max-width: 260px;
+      }
+
+      .footer-col h5 {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--amber);
+        margin-bottom: 16px;
+      }
+      .footer-col ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .footer-col a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        font-size: 13px;
+        transition: color 0.2s;
+      }
+      .footer-col a:hover {
+        color: #fff;
+      }
+
+      .footer-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 28px;
+        font-size: 12px;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .ffl-disclaimer {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.35);
+        margin-top: 6px;
+      }
+
+      /* ── RESPONSIVE ── */
+      @media (max-width: 1024px) {
+        .footer-top {
+          grid-template-columns: 1fr 1fr;
+        }
+        .footer-brand {
+          grid-column: 1 / 3;
+        }
+        .services-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 900px) {
+        nav {
+          padding: 0 20px;
+        }
+        .nav-links {
+          display: none;
+        }
+        .hamburger {
+          display: flex;
+        }
+        section {
+          padding: 64px 20px;
+        }
+        .announcement {
+          padding: 12px 20px;
+          font-size: 13px;
+        }
+        .categories-grid {
+          grid-template-columns: 1fr;
+        }
+        .category-card {
+          aspect-ratio: 16/9;
+        }
+        .services-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .contact-grid {
+          grid-template-columns: 1fr;
+          gap: 40px;
+        }
+        .ffl-banner {
+          padding: 28px 24px;
+          gap: 20px;
+        }
+        footer {
+          padding: 40px 20px 24px;
+        }
+        .footer-top {
+          grid-template-columns: 1fr 1fr;
+        }
+        .footer-brand {
+          grid-column: 1 / 3;
+        }
+      }
+
+      /* ── SPLASH ── */
+      .js #splash {
+        position: fixed;
+        inset: 0;
+        background: #0e180b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        transition: opacity 0.55s ease;
+      }
+      #splash {
+        display: none;
+      }
+      .js #splash.fade-out {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .splash-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        animation: splash-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      }
+
+      .splash-icon {
+        width: 76px;
+        height: 76px;
+        background: rgba(200, 168, 75, 0.1);
+        border: 1.5px solid rgba(200, 168, 75, 0.35);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 10px;
+      }
+
+      .splash-title {
+        font-size: 30px;
+        font-weight: 900;
+        color: #fff;
+        letter-spacing: 5px;
+      }
+
+      .splash-sub {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--amber);
+        letter-spacing: 4px;
+        text-transform: uppercase;
+      }
+
+      .splash-bar {
+        height: 2px;
+        background: var(--amber);
+        margin-top: 6px;
+        animation: splash-bar-grow 0.45s ease 0.35s both;
+      }
+
+      @keyframes splash-rise {
+        from {
+          opacity: 0;
+          transform: translateY(18px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes splash-bar-grow {
+        from {
+          width: 0;
+          opacity: 0;
+        }
+        to {
+          width: 44px;
+          opacity: 1;
+        }
+      }
+
+      /* ── HERO STAGGER ── */
+      .js .hero-badge,
+      .js .hero h1,
+      .js .hero p,
+      .js .hero-actions,
+      .js .hero-scroll {
+        opacity: 0;
+      }
+
+      .js .hero-badge {
+        animation: hero-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) 1.55s forwards;
+      }
+      .js .hero h1 {
+        animation: hero-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) 1.8s forwards;
+      }
+      .js .hero p {
+        animation: hero-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) 2s forwards;
+      }
+      .js .hero-actions {
+        animation: hero-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) 2.2s forwards;
+      }
+      .js .hero-scroll {
+        animation: hero-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) 2.5s forwards;
+      }
+
+      @keyframes hero-up {
+        from {
+          opacity: 0;
+          transform: translateY(22px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* ── SCROLL REVEAL ── */
+      .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition:
+          opacity 0.65s ease,
+          transform 0.65s ease;
+      }
+      .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @media (max-width: 600px) {
+        .hero-content {
+          padding: 0 20px;
+          padding-top: var(--nav-h);
+        }
+        .hero h1 {
+          font-size: 30px;
+        }
+        .hero-actions {
+          flex-direction: column;
+        }
+        .btn {
+          text-align: center;
+        }
+        .services-grid {
+          grid-template-columns: 1fr;
+        }
+        .form-row {
+          grid-template-columns: 1fr;
+        }
+        .contact-form {
+          padding: 24px 18px;
+        }
+        .footer-top {
+          grid-template-columns: 1fr;
+        }
+        .footer-brand {
+          grid-column: 1;
+        }
+        .footer-bottom {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- SPLASH -->
+    <div id="splash" aria-hidden="true">
+      <div class="splash-content">
+        <div class="splash-icon">
+          <svg width="44" height="44" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3" fill="#fff" />
+            <path
+              d="M12 2v4M12 18v4M2 12h4M18 12h4M12 5a7 7 0 100 14A7 7 0 0012 5z"
+              stroke="#fff"
+              stroke-width="1.5"
+              fill="none"
+            />
+          </svg>
+        </div>
+        <div class="splash-title">DARK WATER</div>
+        <div class="splash-sub">Sports &amp; Firearms</div>
+        <div class="splash-bar"></div>
       </div>
     </div>
-    <div class="hero-scroll">
-      <div class="hero-scroll-line"></div>
-      Scroll
+
+    <!-- ANNOUNCEMENT -->
+    <div class="announcement">
+      <strong>NEW ARRIVALS:</strong> Smith &amp; Wesson M&amp;P Shield Plus
+      &amp; Mossberg 500 now in stock.
+      <a href="#contact">Call to hold one →</a>
     </div>
-  </section>
 
-  <!-- SHOP CATEGORIES -->
-  <section id="shop">
-    <div class="section-inner">
-      <div class="section-label">What We Carry</div>
-      <h2 class="section-title">Shop by Category</h2>
-      <p class="section-desc">From handguns and long guns to rods, reels, and camo — we carry top brands at competitive prices.</p>
+    <!-- NAV -->
+    <nav id="navbar">
+      <a href="#home" class="nav-logo">
+        <div class="nav-logo-icon">
+          <!-- Crosshair / scope icon -->
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3" />
+            <path
+              d="M12 2v4M12 18v4M2 12h4M18 12h4M12 5a7 7 0 100 14A7 7 0 0012 5z"
+              stroke="#fff"
+              stroke-width="1.5"
+              fill="none"
+            />
+          </svg>
+        </div>
+        <div>
+          <div class="nav-logo-text">Dark Water</div>
+          <div class="nav-logo-sub">Sports &amp; Firearms</div>
+        </div>
+      </a>
 
-      <div class="categories-grid">
+      <ul class="nav-links">
+        <li><a href="#shop">Shop</a></li>
+        <li><a href="#services">FFL &amp; Services</a></li>
+        <li><a href="#contact">Find Us</a></li>
+        <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+      </ul>
 
-        <!-- Firearms -->
-        <a class="category-card" href="#contact">
-          <img src="https://images.unsplash.com/photo-1584467541268-b040f83be3fd?w=800&q=80" alt="Firearms" loading="lazy" />
-          <div class="category-overlay">
-            <div class="category-icon">
-              <!-- Target/scope icon -->
-              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="#fff"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="7" stroke="#fff" stroke-width="1.5" fill="none"/></svg>
-            </div>
-            <div class="category-title">Firearms</div>
-            <div class="category-sub">Pistols, revolvers, rifles, shotguns &amp; more. New and used. All transfers handled in-house.</div>
-            <div class="category-arrow">View selection →</div>
-          </div>
-        </a>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
 
-        <!-- Hunting Gear -->
-        <a class="category-card" href="#contact">
-          <img src="https://images.unsplash.com/photo-1543946207-39bd91e70ca7?w=800&q=80" alt="Hunting Gear" loading="lazy" />
-          <div class="category-overlay">
-            <div class="category-icon">
-              <!-- Tree/nature icon -->
-              <svg viewBox="0 0 24 24"><path d="M12 2L4 14h5v8h6v-8h5L12 2z" fill="#fff"/></svg>
-            </div>
-            <div class="category-title">Hunting Gear</div>
-            <div class="category-sub">Camo, blinds, calls, knives, optics, ammunition &amp; everything you need in the field.</div>
-            <div class="category-arrow">View selection →</div>
-          </div>
-        </a>
-
-        <!-- Fishing -->
-        <a class="category-card" href="#contact">
-          <img src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=800&q=80" alt="Fishing Gear" loading="lazy" />
-          <div class="category-overlay">
-            <div class="category-icon">
-              <!-- Wave/fish icon -->
-              <svg viewBox="0 0 24 24"><path d="M2 12c2-4 6-6 10-4 2 1 4 1 6-1-1 3-3 5-6 5-2 0-4-.5-5-2-1 2-3 3-5 2z" fill="#fff"/><circle cx="18" cy="8" r="1.5" fill="#fff"/></svg>
-            </div>
-            <div class="category-title">Fishing</div>
-            <div class="category-sub">Rods, reels, tackle, lures, bait and all the gear for freshwater and saltwater fishing.</div>
-            <div class="category-arrow">View selection →</div>
-          </div>
-        </a>
-
-      </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#shop" onclick="closeMenu()">Shop</a>
+      <a href="#services" onclick="closeMenu()">FFL &amp; Services</a>
+      <a href="#contact" onclick="closeMenu()">Find Us</a>
+      <a href="#contact" onclick="closeMenu()">Contact Us</a>
     </div>
-  </section>
 
-  <!-- SERVICES / FFL -->
-  <section id="services">
-    <div class="section-inner">
-      <div class="section-label">What We Do</div>
-      <h2 class="section-title">Services We Offer</h2>
-      <p class="section-desc">We're more than just a store. We offer a full range of firearm services for our customers.</p>
-
-      <div class="services-grid">
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#2e4c24" stroke-width="1.8">
-              <path d="M9 12l2 2 4-4M12 2a10 10 0 100 20A10 10 0 0012 2z"/>
-            </svg>
-          </div>
-          <div class="service-title">FFL Transfers</div>
-          <div class="service-desc">Receive firearms purchased online or from out-of-state dealers. Competitive transfer fees with fast background check processing.</div>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#2e4c24" stroke-width="1.8">
-              <rect x="3" y="8" width="18" height="12" rx="2"/>
-              <path d="M7 8V6a5 5 0 0110 0v2"/>
-            </svg>
-          </div>
-          <div class="service-title">Layaway</div>
-          <div class="service-desc">Put any firearm or item on layaway with a small deposit. Flexible payment schedules — no credit needed.</div>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#2e4c24" stroke-width="1.8">
-              <circle cx="12" cy="12" r="3"/>
-              <path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/>
-            </svg>
-          </div>
-          <div class="service-title">Special Orders</div>
-          <div class="service-desc">Don't see what you're looking for? We can order any firearm, accessory, or gear item directly for you — usually within days.</div>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#2e4c24" stroke-width="1.8">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
-          </div>
-          <div class="service-title">Trade-Ins</div>
-          <div class="service-desc">We buy and accept trade-ins on used firearms. Bring it in for a fair appraisal — no appointment needed.</div>
-        </div>
-
-      </div>
-
-      <!-- FFL Banner -->
-      <div class="ffl-banner">
-        <div class="ffl-badge"><span>FFL</span>Licensed<br>Dealer</div>
-        <div class="ffl-text">
-          <h3>Federal Firearms Licensed Dealer</h3>
-          <p>As a licensed FFL dealer, we handle all required background checks (NICS) and paperwork so you don't have to. We comply with all federal, state, and local laws. All firearm purchases require a valid government-issued ID and completed ATF Form 4473.</p>
+    <!-- HERO -->
+    <section class="hero" id="home">
+      <div class="hero-bg"></div>
+      <div class="hero-content">
+        <div class="hero-badge">FFL Licensed Dealer &bull; Locally Owned</div>
+        <h1>Your <em>Local</em> Source for Guns, Gear &amp; More</h1>
+        <p>
+          Firearms, hunting supplies, and fishing gear — all under one roof.
+          We're your hometown shop for everything outdoors, backed by real
+          expertise.
+        </p>
+        <div class="hero-actions">
+          <a href="#shop" class="btn btn-green">Browse Our Inventory</a>
+          <a href="#contact" class="btn btn-ghost">Get Directions</a>
         </div>
       </div>
-
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="section-inner">
-      <div class="section-label">Come See Us</div>
-      <h2 class="section-title">Find Our Store</h2>
-      <p class="section-desc">Stop in any time during business hours. We love answering questions and helping you find exactly what you need.</p>
-
-      <div class="contact-grid">
-
-        <!-- Store info -->
-        <div class="store-info">
-          <div class="info-block">
-            <h4>Address</h4>
-            <p>123 Main Street<br>Your Town, ST 00000</p>
-          </div>
-          <div class="info-block">
-            <h4>Phone</h4>
-            <p><a href="tel:+15550001234">(555) 000-1234</a></p>
-          </div>
-          <div class="info-block">
-            <h4>Email</h4>
-            <p><a href="mailto:info@darkwatersportssupply.com">info@darkwatersportssupply.com</a></p>
-          </div>
-
-          <div class="hours-card">
-            <h4>Store Hours</h4>
-            <div class="hours-row"><span>Monday – Friday</span><span>9:00 AM – 6:00 PM</span></div>
-            <div class="hours-row"><span>Saturday</span><span>9:00 AM – 5:00 PM</span></div>
-            <div class="hours-row"><span>Sunday</span><span class="closed">Closed</span></div>
-          </div>
-
-          <!-- Embed your real Google Maps iframe here -->
-          <div class="map-placeholder">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="#8b6914" style="opacity:0.4"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-            <!-- Replace the div above with: <iframe src="YOUR_GOOGLE_MAPS_EMBED_URL" ...></iframe> -->
-          </div>
-        </div>
-
-        <!-- Contact form -->
-        <div class="contact-form">
-          <h3>Send Us a Message</h3>
-          <p>Have a question about inventory, pricing, or want to check if we have something in stock? We'll get back to you fast.</p>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label>First Name</label>
-              <input type="text" placeholder="John" />
-            </div>
-            <div class="form-group">
-              <label>Last Name</label>
-              <input type="text" placeholder="Smith" />
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label>Phone</label>
-              <input type="tel" placeholder="(555) 000-0000" />
-            </div>
-            <div class="form-group">
-              <label>Email</label>
-              <input type="email" placeholder="john@email.com" />
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label>I'm asking about…</label>
-            <select>
-              <option value="" disabled selected>Select a topic…</option>
-              <option>Firearm Availability / Pricing</option>
-              <option>FFL Transfer</option>
-              <option>Trade-In / Appraisal</option>
-              <option>Special Order</option>
-              <option>Hunting Gear</option>
-              <option>Fishing Gear</option>
-              <option>Layaway</option>
-              <option>Other</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Message</label>
-            <textarea placeholder="What can we help you with? Include make/model if asking about a specific firearm…"></textarea>
-          </div>
-
-          <button class="form-submit" onclick="handleSubmit(event)">Send Message</button>
-          <p class="form-note">We typically respond within a few hours during business hours.</p>
-        </div>
-
+      <div class="hero-scroll">
+        <div class="hero-scroll-line"></div>
+        Scroll
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-top">
-        <div class="footer-brand">
-          <a href="#home" class="nav-logo" style="display:inline-flex; text-decoration:none;">
-            <div class="nav-logo-icon">
-              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="#fff" stroke-width="1.5" fill="none"/><circle cx="12" cy="12" r="7" stroke="#fff" stroke-width="1.5" fill="none"/></svg>
-            </div>
-            <div>
-              <div class="nav-logo-text">Dark Water</div>
-              <div class="nav-logo-sub">Sports &amp; Firearms</div>
+    <!-- SHOP CATEGORIES -->
+    <section id="shop">
+      <div class="section-inner">
+        <div class="section-label">What We Carry</div>
+        <h2 class="section-title">Shop by Category</h2>
+        <p class="section-desc">
+          From handguns and long guns to rods, reels, and camo — we carry top
+          brands at competitive prices.
+        </p>
+
+        <div class="categories-grid">
+          <!-- Firearms -->
+          <a class="category-card" href="#contact">
+            <img
+              src="https://images.unsplash.com/photo-1584467541268-b040f83be3fd?w=800&q=80"
+              alt="Firearms"
+              loading="lazy"
+            />
+            <div class="category-overlay">
+              <div class="category-icon">
+                <!-- Target/scope icon -->
+                <svg viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="3" fill="#fff" />
+                  <path
+                    d="M12 2v3M12 19v3M2 12h3M19 12h3"
+                    stroke="#fff"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="7"
+                    stroke="#fff"
+                    stroke-width="1.5"
+                    fill="none"
+                  />
+                </svg>
+              </div>
+              <div class="category-title">Firearms</div>
+              <div class="category-sub">
+                Pistols, revolvers, rifles, shotguns &amp; more. New and used.
+                All transfers handled in-house.
+              </div>
+              <div class="category-arrow">View selection →</div>
             </div>
           </a>
-          <p>Your locally owned source for firearms, hunting gear, and fishing supplies. Proudly serving our community.</p>
-          <p class="ffl-disclaimer">FFL License #00-000-000-00-0X-00000 &bull; All sales subject to applicable state and federal law.</p>
-        </div>
 
-        <div class="footer-col">
-          <h5>Shop</h5>
-          <ul>
-            <li><a href="#shop">Firearms</a></li>
-            <li><a href="#shop">Hunting Gear</a></li>
-            <li><a href="#shop">Fishing</a></li>
-            <li><a href="#shop">Ammunition</a></li>
-            <li><a href="#shop">Accessories</a></li>
-          </ul>
-        </div>
+          <!-- Hunting Gear -->
+          <a class="category-card" href="#contact">
+            <img
+              src="https://images.unsplash.com/photo-1543946207-39bd91e70ca7?w=800&q=80"
+              alt="Hunting Gear"
+              loading="lazy"
+            />
+            <div class="category-overlay">
+              <div class="category-icon">
+                <!-- Tree/nature icon -->
+                <svg viewBox="0 0 24 24">
+                  <path d="M12 2L4 14h5v8h6v-8h5L12 2z" fill="#fff" />
+                </svg>
+              </div>
+              <div class="category-title">Hunting Gear</div>
+              <div class="category-sub">
+                Camo, blinds, calls, knives, optics, ammunition &amp; everything
+                you need in the field.
+              </div>
+              <div class="category-arrow">View selection →</div>
+            </div>
+          </a>
 
-        <div class="footer-col">
-          <h5>Services</h5>
-          <ul>
-            <li><a href="#services">FFL Transfers</a></li>
-            <li><a href="#services">Layaway</a></li>
-            <li><a href="#services">Special Orders</a></li>
-            <li><a href="#services">Trade-Ins</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h5>Visit Us</h5>
-          <ul>
-            <li><a href="#contact">123 Main Street</a></li>
-            <li><a href="tel:+15550001234">(555) 000-1234</a></li>
-            <li><a href="#contact">Mon–Fri: 9am–6pm</a></li>
-            <li><a href="#contact">Sat: 9am–5pm</a></li>
-          </ul>
+          <!-- Fishing -->
+          <a class="category-card" href="#contact">
+            <img
+              src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=800&q=80"
+              alt="Fishing Gear"
+              loading="lazy"
+            />
+            <div class="category-overlay">
+              <div class="category-icon">
+                <!-- Wave/fish icon -->
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M2 12c2-4 6-6 10-4 2 1 4 1 6-1-1 3-3 5-6 5-2 0-4-.5-5-2-1 2-3 3-5 2z"
+                    fill="#fff"
+                  />
+                  <circle cx="18" cy="8" r="1.5" fill="#fff" />
+                </svg>
+              </div>
+              <div class="category-title">Fishing</div>
+              <div class="category-sub">
+                Rods, reels, tackle, lures, bait and all the gear for freshwater
+                and saltwater fishing.
+              </div>
+              <div class="category-arrow">View selection →</div>
+            </div>
+          </a>
         </div>
       </div>
+    </section>
 
-      <div class="footer-bottom">
-        <span>&copy; 2025 Dark Water Sports and Firearms. All rights reserved.</span>
-        <span>Licensed FFL Dealer &bull; We reserve the right to refuse any sale</span>
+    <!-- SERVICES / FFL -->
+    <section id="services">
+      <div class="section-inner">
+        <div class="section-label">What We Do</div>
+        <h2 class="section-title">Services We Offer</h2>
+        <p class="section-desc">
+          We're more than just a store. We offer a full range of firearm
+          services for our customers.
+        </p>
+
+        <div class="services-grid">
+          <div class="service-card">
+            <div class="service-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#2e4c24"
+                stroke-width="1.8"
+              >
+                <path d="M9 12l2 2 4-4M12 2a10 10 0 100 20A10 10 0 0012 2z" />
+              </svg>
+            </div>
+            <div class="service-title">FFL Transfers</div>
+            <div class="service-desc">
+              Receive firearms purchased online or from out-of-state dealers.
+              Competitive transfer fees with fast background check processing.
+            </div>
+          </div>
+
+          <div class="service-card">
+            <div class="service-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#2e4c24"
+                stroke-width="1.8"
+              >
+                <rect x="3" y="8" width="18" height="12" rx="2" />
+                <path d="M7 8V6a5 5 0 0110 0v2" />
+              </svg>
+            </div>
+            <div class="service-title">Layaway</div>
+            <div class="service-desc">
+              Put any firearm or item on layaway with a small deposit. Flexible
+              payment schedules — no credit needed.
+            </div>
+          </div>
+
+          <div class="service-card">
+            <div class="service-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#2e4c24"
+                stroke-width="1.8"
+              >
+                <circle cx="12" cy="12" r="3" />
+                <path
+                  d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"
+                />
+              </svg>
+            </div>
+            <div class="service-title">Special Orders</div>
+            <div class="service-desc">
+              Don't see what you're looking for? We can order any firearm,
+              accessory, or gear item directly for you — usually within days.
+            </div>
+          </div>
+
+          <div class="service-card">
+            <div class="service-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#2e4c24"
+                stroke-width="1.8"
+              >
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+            </div>
+            <div class="service-title">Trade-Ins</div>
+            <div class="service-desc">
+              We buy and accept trade-ins on used firearms. Bring it in for a
+              fair appraisal — no appointment needed.
+            </div>
+          </div>
+        </div>
+
+        <!-- FFL Banner -->
+        <div class="ffl-banner">
+          <div class="ffl-badge"><span>FFL</span>Licensed<br />Dealer</div>
+          <div class="ffl-text">
+            <h3>Federal Firearms Licensed Dealer</h3>
+            <p>
+              As a licensed FFL dealer, we handle all required background checks
+              (NICS) and paperwork so you don't have to. We comply with all
+              federal, state, and local laws. All firearm purchases require a
+              valid government-issued ID and completed ATF Form 4473.
+            </p>
+          </div>
+        </div>
       </div>
-    </div>
-  </footer>
+    </section>
 
-  <script>
-    const hamburger = document.getElementById('hamburger');
-    const mobileMenu = document.getElementById('mobileMenu');
+    <!-- CONTACT -->
+    <section id="contact">
+      <div class="section-inner">
+        <div class="section-label">Come See Us</div>
+        <h2 class="section-title">Find Our Store</h2>
+        <p class="section-desc">
+          Stop in any time during business hours. We love answering questions
+          and helping you find exactly what you need.
+        </p>
 
-    hamburger.addEventListener('click', () => {
-      hamburger.classList.toggle('open');
-      mobileMenu.classList.toggle('open');
-    });
+        <div class="contact-grid">
+          <!-- Store info -->
+          <div class="store-info">
+            <div class="info-block">
+              <h4>Address</h4>
+              <p>123 Main Street<br />Your Town, ST 00000</p>
+            </div>
+            <div class="info-block">
+              <h4>Phone</h4>
+              <p><a href="tel:+15550001234">(555) 000-1234</a></p>
+            </div>
+            <div class="info-block">
+              <h4>Email</h4>
+              <p>
+                <a href="mailto:info@darkwatersportssupply.com"
+                  >info@darkwatersportssupply.com</a
+                >
+              </p>
+            </div>
 
-    function closeMenu() {
-      hamburger.classList.remove('open');
-      mobileMenu.classList.remove('open');
-    }
+            <div class="hours-card">
+              <h4>Store Hours</h4>
+              <div class="hours-row">
+                <span>Monday – Friday</span><span>9:00 AM – 6:00 PM</span>
+              </div>
+              <div class="hours-row">
+                <span>Saturday</span><span>9:00 AM – 5:00 PM</span>
+              </div>
+              <div class="hours-row">
+                <span>Sunday</span><span class="closed">Closed</span>
+              </div>
+            </div>
 
-    function handleSubmit(e) {
-      e.preventDefault();
-      const btn = e.target;
-      btn.textContent = 'Sending…';
-      btn.disabled = true;
-      setTimeout(() => {
-        btn.textContent = '✓ Message Sent!';
-        btn.style.background = '#2e7d32';
-      }, 1200);
-    }
+            <!-- Embed your real Google Maps iframe here -->
+            <div class="map-placeholder">
+              <svg
+                width="48"
+                height="48"
+                viewBox="0 0 24 24"
+                fill="#8b6914"
+                style="opacity: 0.4"
+              >
+                <path
+                  d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+                />
+              </svg>
+              <!-- Replace the div above with: <iframe src="YOUR_GOOGLE_MAPS_EMBED_URL" ...></iframe> -->
+            </div>
+          </div>
 
-    window.addEventListener('scroll', () => {
-      document.getElementById('navbar').style.boxShadow =
-        window.scrollY > 60 ? '0 2px 20px rgba(0,0,0,0.1)' : '';
-    });
-  </script>
-</body>
+          <!-- Contact form -->
+          <div class="contact-form">
+            <h3>Send Us a Message</h3>
+            <p>
+              Have a question about inventory, pricing, or want to check if we
+              have something in stock? We'll get back to you fast.
+            </p>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>First Name</label>
+                <input type="text" placeholder="John" />
+              </div>
+              <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" placeholder="Smith" />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Phone</label>
+                <input type="tel" placeholder="(555) 000-0000" />
+              </div>
+              <div class="form-group">
+                <label>Email</label>
+                <input type="email" placeholder="john@email.com" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>I'm asking about…</label>
+              <select>
+                <option value="" disabled selected>Select a topic…</option>
+                <option>Firearm Availability / Pricing</option>
+                <option>FFL Transfer</option>
+                <option>Trade-In / Appraisal</option>
+                <option>Special Order</option>
+                <option>Hunting Gear</option>
+                <option>Fishing Gear</option>
+                <option>Layaway</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Message</label>
+              <textarea
+                placeholder="What can we help you with? Include make/model if asking about a specific firearm…"
+              ></textarea>
+            </div>
+
+            <button class="form-submit" onclick="handleSubmit(event)">
+              Send Message
+            </button>
+            <p class="form-note">
+              We typically respond within a few hours during business hours.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-inner">
+        <div class="footer-top">
+          <div class="footer-brand">
+            <a
+              href="#home"
+              class="nav-logo"
+              style="display: inline-flex; text-decoration: none"
+            >
+              <div class="nav-logo-icon">
+                <svg viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="3" />
+                  <path
+                    d="M12 2v4M12 18v4M2 12h4M18 12h4"
+                    stroke="#fff"
+                    stroke-width="1.5"
+                    fill="none"
+                  />
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="7"
+                    stroke="#fff"
+                    stroke-width="1.5"
+                    fill="none"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="nav-logo-text">Dark Water</div>
+                <div class="nav-logo-sub">Sports &amp; Firearms</div>
+              </div>
+            </a>
+            <p>
+              Your locally owned source for firearms, hunting gear, and fishing
+              supplies. Proudly serving our community.
+            </p>
+            <p class="ffl-disclaimer">
+              FFL License #00-000-000-00-0X-00000 &bull; All sales subject to
+              applicable state and federal law.
+            </p>
+          </div>
+
+          <div class="footer-col">
+            <h5>Shop</h5>
+            <ul>
+              <li><a href="#shop">Firearms</a></li>
+              <li><a href="#shop">Hunting Gear</a></li>
+              <li><a href="#shop">Fishing</a></li>
+              <li><a href="#shop">Ammunition</a></li>
+              <li><a href="#shop">Accessories</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h5>Services</h5>
+            <ul>
+              <li><a href="#services">FFL Transfers</a></li>
+              <li><a href="#services">Layaway</a></li>
+              <li><a href="#services">Special Orders</a></li>
+              <li><a href="#services">Trade-Ins</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h5>Visit Us</h5>
+            <ul>
+              <li><a href="#contact">123 Main Street</a></li>
+              <li><a href="tel:+15550001234">(555) 000-1234</a></li>
+              <li><a href="#contact">Mon–Fri: 9am–6pm</a></li>
+              <li><a href="#contact">Sat: 9am–5pm</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <span
+            >&copy; 2026 Dark Water Sports and Firearms. All rights
+            reserved.</span
+          >
+          <span
+            >Licensed FFL Dealer &bull; We reserve the right to refuse any
+            sale</span
+          >
+        </div>
+      </div>
+    </footer>
+
+    <script src="main.js"></script>
+  </body>
 </html>
