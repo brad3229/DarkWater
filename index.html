@@ -292,39 +292,6 @@
         background: rgba(255, 255, 255, 0.22);
       }
 
-      .hero-scroll {
-        position: absolute;
-        bottom: 32px;
-        left: 50%;
-        transform: translateX(-50%);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 8px;
-        color: rgba(255, 255, 255, 0.5);
-        font-size: 10px;
-        letter-spacing: 2.5px;
-        text-transform: uppercase;
-      }
-      .hero-scroll-line {
-        width: 1px;
-        height: 36px;
-        background: linear-gradient(
-          to bottom,
-          rgba(255, 255, 255, 0.5),
-          transparent
-        );
-        animation: pulse 2s ease-in-out infinite;
-      }
-      @keyframes pulse {
-        0%,
-        100% {
-          opacity: 0.4;
-        }
-        50% {
-          opacity: 1;
-        }
-      }
 
       /* ── ANNOUNCEMENT BAR ── */
       .announcement {
@@ -973,8 +940,7 @@
       .js .hero-badge,
       .js .hero h1,
       .js .hero p,
-      .js .hero-actions,
-      .js .hero-scroll {
+      .js .hero-actions {
         opacity: 0;
       }
 
@@ -990,10 +956,6 @@
       .js .hero-actions {
         animation: hero-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) 2.2s forwards;
       }
-      .js .hero-scroll {
-        animation: hero-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) 2.5s forwards;
-      }
-
       @keyframes hero-up {
         from {
           opacity: 0;
@@ -1137,10 +1099,6 @@
           <a href="#shop" class="btn btn-green">Browse Our Inventory</a>
           <a href="#contact" class="btn btn-ghost">Get Directions</a>
         </div>
-      </div>
-      <div class="hero-scroll">
-        <div class="hero-scroll-line"></div>
-        Scroll
       </div>
     </section>
 
