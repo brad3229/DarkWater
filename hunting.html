@@ -54,27 +54,28 @@
       .page-hero p { font-size: 15px; color: rgba(255,255,255,0.72); max-width: 480px; line-height: 1.7; }
 
       /* ── LAYOUT ── */
-      .page-body { max-width: 1200px; margin: 0 auto; padding: 40px 48px 80px; display: grid; grid-template-columns: 220px 1fr; gap: 32px; align-items: start; }
+      .page-body { max-width: 1200px; margin: 0 auto; padding: 40px 48px 80px; }
 
-      /* ── SIDEBAR ── */
-      .sidebar { background: var(--white); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; position: sticky; top: calc(var(--nav-h) + 20px); }
-      .sidebar-header { background: var(--dark); padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; }
-      .sidebar-header h3 { font-size: 13px; font-weight: 700; color: #fff; letter-spacing: 1px; text-transform: uppercase; }
-      .clear-all { background: none; border: none; color: rgba(255,255,255,0.55); font-size: 12px; cursor: pointer; font-family: inherit; transition: color 0.2s; }
-      .clear-all:hover { color: #fff; }
-      .sidebar-section { padding: 20px; border-bottom: 1px solid var(--border); }
-      .sidebar-section:last-child { border-bottom: none; }
-      .sidebar-section h4 { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text2); margin-bottom: 14px; }
-      .check-list { display: flex; flex-direction: column; gap: 10px; }
-      .check-list label { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text); cursor: pointer; user-select: none; }
-      .check-list input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--red); cursor: pointer; flex-shrink: 0; }
-
-      /* ── CONTENT AREA ── */
-      .results-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-      .results-count { font-size: 14px; color: var(--text2); }
+      /* ── FILTERS ── */
+      .filters { display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+      .filter-group { display: flex; flex-direction: column; gap: 4px; }
+      .filter-group label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text2); }
+      .filter-select {
+        appearance: none;
+        background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%23666' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 12px center;
+        border: 1.5px solid var(--border); border-radius: 8px;
+        padding: 10px 36px 10px 14px;
+        font-size: 13px; font-weight: 600; color: var(--text);
+        cursor: pointer; transition: border-color 0.2s;
+        font-family: inherit; min-width: 170px;
+      }
+      .filter-select:focus { outline: none; border-color: var(--red); }
+      .clear-btn { background: none; border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 16px; font-size: 13px; font-weight: 600; color: var(--text2); cursor: pointer; font-family: inherit; transition: border-color 0.2s, color 0.2s; align-self: flex-end; }
+      .clear-btn:hover { border-color: var(--red); color: var(--red); }
+      .results-count { font-size: 14px; color: var(--text2); margin-left: auto; align-self: flex-end; padding-bottom: 2px; }
 
       /* ── PRODUCT GRID ── */
-      .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+      .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
       .product-card { background: var(--white); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s; }
       .product-card:hover { border-color: var(--red); box-shadow: 0 6px 24px rgba(196,30,30,0.1); transform: translateY(-2px); }
       .product-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
@@ -107,8 +108,7 @@
       @media (max-width: 900px) {
         nav { padding: 0 20px; } .nav-links { display: none; } .hamburger { display: flex; }
         .page-hero-content { padding: 32px 20px; }
-        .page-body { grid-template-columns: 1fr; padding: 24px 20px 60px; }
-        .sidebar { position: static; }
+        .page-body { padding: 24px 20px 60px; }
         .product-grid { grid-template-columns: repeat(2, 1fr); }
         footer { padding: 28px 20px; }
       }
@@ -146,41 +146,36 @@
     </div>
 
     <div class="page-body">
-      <aside class="sidebar">
-        <div class="sidebar-header">
-          <h3>Filter</h3>
-          <button class="clear-all" onclick="clearFilters()">Clear all</button>
+      <div class="filters">
+        <div class="filter-group">
+          <label for="typeFilter">Category</label>
+          <select id="typeFilter" class="filter-select" onchange="applyFilters()">
+            <option value="">All Categories</option>
+            <option value="ammo">Ammo</option>
+            <option value="calls">Calls</option>
+            <option value="cameras">Cameras</option>
+            <option value="clothing">Clothing</option>
+            <option value="knives">Knives</option>
+            <option value="optics">Optics</option>
+          </select>
         </div>
-        <div class="sidebar-section">
-          <h4>Category</h4>
-          <div class="check-list" id="typeFilters">
-            <label><input type="checkbox" value="ammo" onchange="applyFilters()"> Ammo</label>
-            <label><input type="checkbox" value="calls" onchange="applyFilters()"> Calls</label>
-            <label><input type="checkbox" value="cameras" onchange="applyFilters()"> Cameras</label>
-            <label><input type="checkbox" value="clothing" onchange="applyFilters()"> Clothing</label>
-            <label><input type="checkbox" value="knives" onchange="applyFilters()"> Knives</label>
-            <label><input type="checkbox" value="optics" onchange="applyFilters()"> Optics</label>
-          </div>
+        <div class="filter-group">
+          <label for="brandFilter">Brand</label>
+          <select id="brandFilter" class="filter-select" onchange="applyFilters()">
+            <option value="">All Brands</option>
+            <option value="buck">Buck</option>
+            <option value="federal">Federal Premium</option>
+            <option value="lacrosse">LaCrosse</option>
+            <option value="primos">Primos</option>
+            <option value="sitka">Sitka</option>
+            <option value="stealth">Stealth Cam</option>
+            <option value="vortex">Vortex</option>
+          </select>
         </div>
-        <div class="sidebar-section">
-          <h4>Brand</h4>
-          <div class="check-list" id="brandFilters">
-            <label><input type="checkbox" value="buck" onchange="applyFilters()"> Buck</label>
-            <label><input type="checkbox" value="federal" onchange="applyFilters()"> Federal Premium</label>
-            <label><input type="checkbox" value="lacrosse" onchange="applyFilters()"> LaCrosse</label>
-            <label><input type="checkbox" value="primos" onchange="applyFilters()"> Primos</label>
-            <label><input type="checkbox" value="sitka" onchange="applyFilters()"> Sitka</label>
-            <label><input type="checkbox" value="stealth" onchange="applyFilters()"> Stealth Cam</label>
-            <label><input type="checkbox" value="vortex" onchange="applyFilters()"> Vortex</label>
-          </div>
-        </div>
-      </aside>
-
-      <div>
-        <div class="results-bar">
-          <span class="results-count" id="resultsCount">8 items</span>
-        </div>
-        <div class="product-grid" id="productGrid">
+        <button class="clear-btn" onclick="clearFilters()">Clear</button>
+        <span class="results-count" id="resultsCount">8 items</span>
+      </div>
+      <div class="product-grid" id="productGrid">
 
           <div class="product-card" data-category="clothing" data-brand="sitka">
             <img class="product-img" src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=600&q=80" alt="Hunting Jacket" loading="lazy"/>
@@ -271,7 +266,6 @@
           </div>
           <a href="index.html#contact" class="cta-btn">Contact Us</a>
         </div>
-      </div>
     </div>
 
     <footer>
@@ -292,13 +286,13 @@
       window.addEventListener("scroll", () => { document.getElementById("navbar").style.boxShadow = window.scrollY > 60 ? "0 2px 20px rgba(0,0,0,0.3)" : ""; });
 
       function applyFilters() {
-        const types = [...document.querySelectorAll("#typeFilters input:checked")].map(el => el.value);
-        const brands = [...document.querySelectorAll("#brandFilters input:checked")].map(el => el.value);
+        const type = document.getElementById("typeFilter").value;
+        const brand = document.getElementById("brandFilter").value;
         const cards = document.querySelectorAll(".product-card");
         let count = 0;
         cards.forEach(card => {
-          const typeMatch = types.length === 0 || types.some(t => card.dataset.category.includes(t));
-          const brandMatch = brands.length === 0 || brands.includes(card.dataset.brand);
+          const typeMatch = !type || card.dataset.category.includes(type);
+          const brandMatch = !brand || card.dataset.brand === brand;
           const show = typeMatch && brandMatch;
           card.style.display = show ? "" : "none";
           if (show) count++;
@@ -307,7 +301,8 @@
       }
 
       function clearFilters() {
-        document.querySelectorAll(".check-list input").forEach(el => el.checked = false);
+        document.getElementById("typeFilter").value = "";
+        document.getElementById("brandFilter").value = "";
         applyFilters();
       }
     </script>
