@@ -788,6 +788,35 @@
         flex-wrap: wrap;
       }
 
+      .social-links {
+        display: flex;
+        gap: 12px;
+        margin-top: 18px;
+      }
+      .social-link {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.12);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: background 0.2s, border-color 0.2s;
+      }
+      .social-link:hover {
+        background: rgba(200,168,75,0.2);
+        border-color: rgba(200,168,75,0.5);
+      }
+      .social-link svg {
+        width: 18px;
+        height: 18px;
+        fill: rgba(255,255,255,0.7);
+        transition: fill 0.2s;
+      }
+      .social-link:hover svg { fill: var(--amber); }
+
       .ffl-disclaimer {
         font-size: 11px;
         color: rgba(255, 255, 255, 0.35);
@@ -1115,7 +1144,7 @@
           <!-- Firearms -->
           <a class="category-card" href="firearms.html">
             <img
-              src="https://images.unsplash.com/photo-1584467541268-b040f83be3fd?w=800&q=80"
+              src="firearms.jpg"
               alt="Firearms"
               loading="lazy"
             />
@@ -1140,7 +1169,7 @@
                   />
                 </svg>
               </div>
-              <div class="category-title">Firearms</div>
+              <div class="category-title">Firearms &amp; Accessories</div>
               <div class="category-sub">
                 Pistols, revolvers, rifles, shotguns &amp; more. New and used.
                 All transfers handled in-house.
@@ -1175,7 +1204,7 @@
           <!-- Fishing -->
           <a class="category-card" href="fishing.html">
             <img
-              src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=800&q=80"
+              src="fishing.jpg"
               alt="Fishing Gear"
               loading="lazy"
             />
@@ -1304,7 +1333,7 @@
           <div class="store-info">
             <div class="info-block">
               <h4>Address</h4>
-              <p>123 Main Street<br />Your Town, ST 00000</p>
+              <p>123 Main Street<br />Pembroke, NC 28372</p>
             </div>
             <div class="info-block">
               <h4>Phone</h4>
@@ -1453,6 +1482,14 @@
               FFL License #00-000-000-00-0X-00000 &bull; All sales subject to
               applicable state and federal law.
             </p>
+            <div class="social-links">
+              <a href="https://facebook.com" target="_blank" rel="noopener" class="social-link" aria-label="Find us on Facebook">
+                <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+              </a>
+              <a href="https://instagram.com" target="_blank" rel="noopener" class="social-link" aria-label="Find us on Instagram">
+                <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.5"/></svg>
+              </a>
+            </div>
           </div>
 
           <div class="footer-col">
@@ -1478,7 +1515,7 @@
           <div class="footer-col">
             <h5>Visit Us</h5>
             <ul>
-              <li><a href="#contact">123 Main Street</a></li>
+              <li><a href="#contact">123 Main Street, Pembroke NC</a></li>
               <li><a href="tel:+15550001234">(555) 000-1234</a></li>
               <li><a href="#contact">Mon–Fri: 9am–6pm</a></li>
               <li><a href="#contact">Sat: 9am–5pm</a></li>
