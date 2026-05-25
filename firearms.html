@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Firearms — Dark Water Sports and Firearms</title>
+    <script>document.documentElement.classList.add("js");</script>
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --bg: #f5f0e8;
+        --bg2: #ede7d9;
+        --green: #2e4c24;
+        --tan: #8b6914;
+        --amber: #c8a84b;
+        --text: #1a1a1a;
+        --text2: #4a4a4a;
+        --white: #ffffff;
+        --nav-h: 72px;
+      }
+
+      html { scroll-behavior: smooth; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
+
+      /* ── NAV ── */
+      nav {
+        position: fixed; top: 0; left: 0; right: 0;
+        height: var(--nav-h);
+        background: rgba(255,255,255,0.97);
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid rgba(0,0,0,0.09);
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 0 48px; z-index: 1000; transition: box-shadow 0.3s;
+      }
+      .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+      .nav-logo-icon { width: 42px; height: 42px; background: var(--green); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+      .nav-logo-icon svg { width: 26px; height: 26px; fill: #fff; }
+      .nav-logo-text { font-size: 18px; font-weight: 800; color: var(--green); letter-spacing: -0.3px; line-height: 1.1; }
+      .nav-logo-sub { font-size: 10px; font-weight: 600; color: var(--tan); letter-spacing: 2.5px; text-transform: uppercase; }
+      .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+      .nav-links a { text-decoration: none; font-size: 14px; font-weight: 600; color: var(--text2); transition: color 0.2s; }
+      .nav-links a:hover { color: var(--green); }
+      .nav-links a.active { color: var(--green); }
+      .nav-cta { background: var(--green); color: var(--white) !important; padding: 10px 22px; border-radius: 8px; transition: background 0.2s !important; }
+      .nav-cta:hover { background: #1e3418 !important; }
+      .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
+      .hamburger span { display: block; width: 24px; height: 2px; background: var(--green); border-radius: 2px; transition: all 0.3s; }
+      .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+      .hamburger.open span:nth-child(2) { opacity: 0; }
+      .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+      .mobile-menu { display: none; position: fixed; top: var(--nav-h); left: 0; right: 0; background: var(--white); border-bottom: 1px solid rgba(0,0,0,0.1); padding: 16px 24px 28px; z-index: 999; flex-direction: column; gap: 2px; }
+      .mobile-menu.open { display: flex; }
+      .mobile-menu a { text-decoration: none; font-size: 16px; font-weight: 600; color: var(--text); padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.06); }
+      .mobile-menu a:last-child { border: none; margin-top: 8px; background: var(--green); color: var(--white); text-align: center; border-radius: 10px; padding: 14px; }
+
+      /* ── PAGE HERO ── */
+      .page-hero { padding-top: var(--nav-h); min-height: 300px; display: flex; align-items: center; position: relative; overflow: hidden; }
+      .page-hero-bg {
+        position: absolute; inset: 0;
+        background:
+          linear-gradient(to right, rgba(15,25,12,0.85) 0%, rgba(15,25,12,0.55) 60%, rgba(15,25,12,0.2) 100%),
+          url("https://images.unsplash.com/photo-1584467541268-b040f83be3fd?w=1400&q=80") center/cover no-repeat;
+      }
+      .page-hero-content { position: relative; max-width: 1200px; margin: 0 auto; padding: 56px 48px; width: 100%; }
+      .breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+      .breadcrumb a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 13px; font-weight: 600; transition: color 0.2s; }
+      .breadcrumb a:hover { color: #fff; }
+      .breadcrumb span { color: rgba(255,255,255,0.35); font-size: 13px; }
+      .page-hero h1 { font-size: clamp(28px, 4vw, 52px); font-weight: 900; color: #fff; line-height: 1.1; margin-bottom: 10px; }
+      .page-hero p { font-size: 15px; color: rgba(255,255,255,0.78); max-width: 480px; line-height: 1.7; }
+
+      /* ── FFL NOTICE ── */
+      .ffl-notice {
+        background: rgba(200,168,75,0.12);
+        border: 1.5px solid rgba(200,168,75,0.4);
+        border-radius: 12px;
+        padding: 14px 20px;
+        font-size: 13px;
+        color: var(--text2);
+        line-height: 1.6;
+        margin-bottom: 32px;
+      }
+      .ffl-notice strong { color: var(--tan); }
+
+      /* ── MAIN ── */
+      main { max-width: 1200px; margin: 0 auto; padding: 52px 48px 88px; }
+
+      /* ── FILTERS ── */
+      .filters { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 36px; }
+      .filter-btn { background: var(--white); border: 1.5px solid #e0d8cc; border-radius: 8px; padding: 8px 18px; font-size: 13px; font-weight: 600; color: var(--text2); cursor: pointer; transition: all 0.2s; font-family: inherit; }
+      .filter-btn:hover, .filter-btn.active { background: var(--green); color: #fff; border-color: var(--green); }
+      .results-count { margin-left: auto; font-size: 13px; color: var(--text2); }
+
+      /* ── PRODUCT GRID ── */
+      .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+      .product-card { background: var(--white); border-radius: 16px; overflow: hidden; border: 1.5px solid #e0d8cc; transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s; cursor: pointer; }
+      .product-card:hover { border-color: var(--green); box-shadow: 0 6px 28px rgba(46,76,36,0.12); transform: translateY(-2px); }
+      .product-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+      .product-body { padding: 16px; }
+      .product-tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--tan); margin-bottom: 6px; }
+      .product-name { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 4px; line-height: 1.3; }
+      .product-brand { font-size: 12px; color: var(--text2); margin-bottom: 12px; }
+      .product-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+      .product-price { font-size: 18px; font-weight: 900; color: var(--green); }
+      .product-price .cents { font-size: 13px; font-weight: 700; }
+      .product-price.call { font-size: 14px; color: var(--tan); font-weight: 700; }
+      .inquire-btn { background: var(--green); color: #fff; border: none; border-radius: 8px; padding: 8px 14px; font-size: 12px; font-weight: 700; cursor: pointer; transition: background 0.2s; font-family: inherit; text-decoration: none; display: inline-block; white-space: nowrap; }
+      .inquire-btn:hover { background: #1e3418; }
+      .badge-new { display: inline-block; background: var(--amber); color: #fff; font-size: 9px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; margin-left: 6px; vertical-align: middle; }
+      .badge-used { display: inline-block; background: #64748b; color: #fff; font-size: 9px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; margin-left: 6px; vertical-align: middle; }
+
+      /* ── CONTACT CTA ── */
+      .cta-banner { background: var(--green); border-radius: 18px; padding: 40px 48px; margin-top: 64px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+      .cta-banner h3 { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 6px; }
+      .cta-banner p { font-size: 14px; color: rgba(255,255,255,0.75); max-width: 480px; line-height: 1.6; }
+      .cta-btn { flex-shrink: 0; background: var(--amber); color: #fff; text-decoration: none; padding: 14px 28px; border-radius: 10px; font-size: 15px; font-weight: 700; transition: background 0.2s; white-space: nowrap; }
+      .cta-btn:hover { background: #b8922e; }
+
+      /* ── FOOTER ── */
+      footer { background: #0e180b; color: rgba(255,255,255,0.55); padding: 40px 48px 28px; }
+      .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; font-size: 13px; }
+      .footer-inner a { color: rgba(255,255,255,0.55); text-decoration: none; }
+      .footer-inner a:hover { color: #fff; }
+      .ffl-disclaimer { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 4px; }
+
+      /* ── REVEAL ── */
+      .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+      .reveal.visible { opacity: 1; transform: translateY(0); }
+
+      /* ── RESPONSIVE ── */
+      @media (max-width: 1024px) { .product-grid { grid-template-columns: repeat(3, 1fr); } }
+      @media (max-width: 900px) {
+        nav { padding: 0 20px; }
+        .nav-links { display: none; }
+        .hamburger { display: flex; }
+        .page-hero-content { padding: 40px 20px; }
+        main { padding: 36px 20px 64px; }
+        .product-grid { grid-template-columns: repeat(2, 1fr); }
+        .cta-banner { padding: 28px 24px; }
+        footer { padding: 28px 20px; }
+      }
+      @media (max-width: 500px) { .product-grid { grid-template-columns: 1fr; } }
+    </style>
+  </head>
+  <body>
+
+    <!-- NAV -->
+    <nav id="navbar">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12 2v4M12 18v4M2 12h4M18 12h4M12 5a7 7 0 100 14A7 7 0 0012 5z" stroke="#fff" stroke-width="1.5" fill="none"/>
+          </svg>
+        </div>
+        <div>
+          <div class="nav-logo-text">Dark Water</div>
+          <div class="nav-logo-sub">Sports &amp; Firearms</div>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html#shop" class="active">Shop</a></li>
+        <li><a href="index.html#services">FFL &amp; Services</a></li>
+        <li><a href="index.html#contact">Find Us</a></li>
+        <li><a href="index.html#contact" class="nav-cta">Contact Us</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html#shop" onclick="closeMenu()">Shop</a>
+      <a href="index.html#services" onclick="closeMenu()">FFL &amp; Services</a>
+      <a href="index.html#contact" onclick="closeMenu()">Find Us</a>
+      <a href="index.html#contact" onclick="closeMenu()">Contact Us</a>
+    </div>
+
+    <!-- PAGE HERO -->
+    <div class="page-hero">
+      <div class="page-hero-bg"></div>
+      <div class="page-hero-content">
+        <div class="breadcrumb">
+          <a href="index.html">Home</a>
+          <span>›</span>
+          <a href="index.html#shop">Shop</a>
+          <span>›</span>
+          <span style="color:rgba(255,255,255,0.85)">Firearms</span>
+        </div>
+        <h1>Firearms</h1>
+        <p>Pistols, revolvers, rifles, and shotguns — new and used. All transfers handled in-house by our licensed FFL dealer.</p>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main>
+
+      <div class="ffl-notice reveal">
+        <strong>FFL Notice:</strong> All firearm purchases require a valid government-issued ID and completed ATF Form 4473. Background checks (NICS) are processed in-store. Call or stop in to confirm availability before making a trip.
+      </div>
+
+      <!-- Filters -->
+      <div class="filters reveal">
+        <button class="filter-btn active" onclick="filterProducts('all', this)">All</button>
+        <button class="filter-btn" onclick="filterProducts('pistol', this)">Pistols</button>
+        <button class="filter-btn" onclick="filterProducts('revolver', this)">Revolvers</button>
+        <button class="filter-btn" onclick="filterProducts('rifle', this)">Rifles</button>
+        <button class="filter-btn" onclick="filterProducts('shotgun', this)">Shotguns</button>
+        <button class="filter-btn" onclick="filterProducts('used', this)">Used</button>
+        <span class="results-count" id="resultsCount">8 items</span>
+      </div>
+
+      <!-- Product Grid -->
+      <div class="product-grid" id="productGrid">
+
+        <div class="product-card reveal" data-category="pistol">
+          <img class="product-img" src="https://images.unsplash.com/photo-1584467541268-b040f83be3fd?w=600&q=80" alt="Pistol" loading="lazy"/>
+          <div class="product-body">
+            <div class="product-tag">Pistol</div>
+            <div class="product-name">M&amp;P Shield Plus 9mm <span class="badge-new">New</span></div>
+            <div class="product-brand">Smith &amp; Wesson</div>
+            <div class="product-footer">
+              <div class="product-price">$549<span class="cents">.99</span></div>
+              <a href="index.html#contact" class="inquire-btn">Inquire</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card reveal" data-category="pistol">
+          <img class="product-img" src="https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=600&q=80" alt="Pistol" loading="lazy"/>
+          <div class="product-body">
+            <div class="product-tag">Pistol</div>
+            <div class="product-name">G19 Gen 5 9mm <span class="badge-new">New</span></div>
+            <div class="product-brand">Glock</div>
+            <div class="product-footer">
+              <div class="product-price">$599<span class="cents">.99</span></div>
+              <a href="index.html#contact" class="inquire-btn">Inquire</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card reveal" data-category="revolver">
+          <img class="product-img" src="https://images.unsplash.com/photo-1584467541268-b040f83be3fd?w=600&q=80" alt="Revolver" loading="lazy"/>
+          <div class="product-body">
+            <div class="product-tag">Revolver</div>
+            <div class="product-name">Model 686 Plus .357 Mag 4"</div>
+            <div class="product-brand">Smith &amp; Wesson</div>
+            <div class="product-footer">
+              <div class="product-price">$849<span class="cents">.99</span></div>
+              <a href="index.html#contact" class="inquire-btn">Inquire</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card reveal" data-category="rifle">
+          <img class="product-img" src="https://images.unsplash.com/photo-1543946207-39bd91e70ca7?w=600&q=80" alt="Rifle" loading="lazy"/>
+          <div class="product-body">
+            <div class="product-tag">Rifle</div>
+            <div class="product-name">Ruger 10/22 Carbine .22 LR <span class="badge-new">New</span></div>
+            <div class="product-brand">Ruger</div>
+            <div class="product-footer">
+              <div class="product-price">$329<span class="cents">.99</span></div>
+              <a href="index.html#contact" class="inquire-btn">Inquire</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card reveal" data-category="shotgun">
+          <img class="product-img" src="https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=600&q=80" alt="Shotgun" loading="lazy"/>
+          <div class="product-body">
+            <div class="product-tag">Shotgun</div>
+            <div class="product-name">500 Field 12ga 28" <span class="badge-new">New</span></div>
+            <div class="product-brand">Mossberg</div>
+            <div class="product-footer">
+              <div class="product-price">$449<span class="cents">.99</span></div>
+              <a href="index.html#contact" class="inquire-btn">Inquire</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card reveal" data-category="rifle">
+          <img class="product-img" src="https://images.unsplash.com/photo-1543946207-39bd91e70ca7?w=600&q=80" alt="Rifle" loading="lazy"/>
+          <div class="product-body">
+            <div class="product-tag">Rifle</div>
+            <div class="product-name">Model 70 Featherweight .308 Win</div>
+            <div class="product-brand">Winchester</div>
+            <div class="product-footer">
+              <div class="product-price">$899<span class="cents">.99</span></div>
+              <a href="index.html#contact" class="inquire-btn">Inquire</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card reveal" data-category="pistol used">
+          <img class="product-img" src="https://images.unsplash.com/photo-1584467541268-b040f83be3fd?w=600&q=80" alt="Used Pistol" loading="lazy"/>
+          <div class="product-body">
+            <div class="product-tag">Pistol</div>
+            <div class="product-name">P320 Compact 9mm <span class="badge-used">Used</span></div>
+            <div class="product-brand">Sig Sauer</div>
+            <div class="product-footer">
+              <div class="product-price">$479<span class="cents">.99</span></div>
+              <a href="index.html#contact" class="inquire-btn">Inquire</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card reveal" data-category="shotgun used">
+          <img class="product-img" src="https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=600&q=80" alt="Used Shotgun" loading="lazy"/>
+          <div class="product-body">
+            <div class="product-tag">Shotgun</div>
+            <div class="product-name">870 Express 12ga 26" <span class="badge-used">Used</span></div>
+            <div class="product-brand">Remington</div>
+            <div class="product-footer">
+              <div class="product-price call">Call for price</div>
+              <a href="index.html#contact" class="inquire-btn">Inquire</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CTA -->
+      <div class="cta-banner reveal">
+        <div>
+          <h3>Don't see what you're looking for?</h3>
+          <p>We can special order any firearm directly for you — usually within a few days. We also accept FFL transfers for online purchases. Give us a call or stop in.</p>
+        </div>
+        <a href="index.html#contact" class="cta-btn">Contact Us</a>
+      </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-inner">
+        <div>
+          <span>&copy; 2026 Dark Water Sports and Firearms. All rights reserved.</span>
+          <div class="ffl-disclaimer">FFL License #00-000-000-00-0X-00000 &bull; All sales subject to applicable state and federal law.</div>
+        </div>
+        <a href="index.html">← Back to Home</a>
+      </div>
+    </footer>
+
+    <script>
+      const hamburger = document.getElementById("hamburger");
+      const mobileMenu = document.getElementById("mobileMenu");
+      hamburger.addEventListener("click", () => {
+        hamburger.classList.toggle("open");
+        mobileMenu.classList.toggle("open");
+      });
+      function closeMenu() {
+        hamburger.classList.remove("open");
+        mobileMenu.classList.remove("open");
+      }
+      window.addEventListener("scroll", () => {
+        document.getElementById("navbar").style.boxShadow =
+          window.scrollY > 60 ? "0 2px 20px rgba(0,0,0,0.1)" : "";
+      });
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: "0px 0px -30px 0px" });
+      document.querySelectorAll(".reveal").forEach((el, i) => {
+        if (el.classList.contains("product-card")) {
+          el.style.transitionDelay = `${(i % 4) * 0.1}s`;
+        }
+        observer.observe(el);
+      });
+
+      function filterProducts(category, btn) {
+        document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const cards = document.querySelectorAll(".product-card");
+        let count = 0;
+        cards.forEach(card => {
+          const show = category === "all" || card.dataset.category.includes(category);
+          card.style.display = show ? "" : "none";
+          if (show) count++;
+        });
+        document.getElementById("resultsCount").textContent = count + " item" + (count !== 1 ? "s" : "");
+      }
+    </script>
+  </body>
+</html>

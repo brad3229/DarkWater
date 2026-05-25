@@ -21,6 +21,11 @@ function handleSubmit(e) {
   setTimeout(() => {
     btn.textContent = "✓ Message Sent!";
     btn.style.background = "#2e7d32";
+    setTimeout(() => {
+      btn.textContent = "Send Message";
+      btn.style.background = "";
+      btn.disabled = false;
+    }, 2500);
   }, 1200);
 }
 
