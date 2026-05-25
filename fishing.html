@@ -74,9 +74,19 @@
       main { max-width: 1200px; margin: 0 auto; padding: 52px 48px 88px; }
 
       /* ── FILTERS ── */
-      .filters { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 36px; }
-      .filter-btn { background: var(--white); border: 1.5px solid #e0d8cc; border-radius: 8px; padding: 8px 18px; font-size: 13px; font-weight: 600; color: var(--text2); cursor: pointer; transition: all 0.2s; font-family: inherit; }
-      .filter-btn:hover, .filter-btn.active { background: var(--green); color: #fff; border-color: var(--green); }
+      .filters { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 32px; }
+      .filter-group { display: flex; flex-direction: column; gap: 4px; }
+      .filter-group label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--tan); }
+      .filter-select {
+        appearance: none;
+        background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%234a4a4a' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 12px center;
+        border: 1.5px solid #e0d8cc; border-radius: 8px;
+        padding: 10px 36px 10px 14px;
+        font-size: 13px; font-weight: 600; color: var(--text);
+        cursor: pointer; transition: border-color 0.2s;
+        font-family: inherit; min-width: 160px;
+      }
+      .filter-select:focus { outline: none; border-color: var(--green); }
       .results-count { margin-left: auto; font-size: 13px; color: var(--text2); }
 
       /* ── PRODUCT GRID ── */
@@ -183,19 +193,37 @@
 
       <!-- Filters -->
       <div class="filters reveal">
-        <button class="filter-btn active" onclick="filterProducts('all', this)">All</button>
-        <button class="filter-btn" onclick="filterProducts('rods', this)">Rods</button>
-        <button class="filter-btn" onclick="filterProducts('reels', this)">Reels</button>
-        <button class="filter-btn" onclick="filterProducts('lures', this)">Lures &amp; Bait</button>
-        <button class="filter-btn" onclick="filterProducts('line', this)">Line</button>
-        <button class="filter-btn" onclick="filterProducts('tackle', this)">Tackle &amp; Hooks</button>
+        <div class="filter-group">
+          <label for="typeFilter">Category</label>
+          <select id="typeFilter" class="filter-select" onchange="setFilter('type', this.value)">
+            <option value="all">All Categories</option>
+            <option value="rods">Rods</option>
+            <option value="reels">Reels</option>
+            <option value="lures">Lures &amp; Bait</option>
+            <option value="line">Line</option>
+            <option value="tackle">Tackle &amp; Hooks</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="brandFilter">Brand</label>
+          <select id="brandFilter" class="filter-select" onchange="setFilter('brand', this.value)">
+            <option value="all">All Brands</option>
+            <option value="berkley">Berkley</option>
+            <option value="eagleclaw">Eagle Claw</option>
+            <option value="plano">Plano</option>
+            <option value="rapala">Rapala</option>
+            <option value="shimano">Shimano</option>
+            <option value="strikeking">Strike King</option>
+            <option value="uglystik">Ugly Stik</option>
+          </select>
+        </div>
         <span class="results-count" id="resultsCount">8 items</span>
       </div>
 
       <!-- Product Grid -->
       <div class="product-grid" id="productGrid">
 
-        <div class="product-card reveal" data-category="rods">
+        <div class="product-card reveal" data-category="rods" data-brand="uglystik">
           <img class="product-img" src="https://images.unsplash.com/photo-1559827291-72f35016f5ba?w=600&q=80" alt="Fishing Rod" loading="lazy"/>
           <div class="product-body">
             <div class="product-tag">Rods</div>
@@ -208,7 +236,7 @@
           </div>
         </div>
 
-        <div class="product-card reveal" data-category="reels">
+        <div class="product-card reveal" data-category="reels" data-brand="shimano">
           <img class="product-img" src="https://images.unsplash.com/photo-1580862302673-466c2d8c5c19?w=600&q=80" alt="Spinning Reel" loading="lazy"/>
           <div class="product-body">
             <div class="product-tag">Reels</div>
@@ -221,7 +249,7 @@
           </div>
         </div>
 
-        <div class="product-card reveal" data-category="lures">
+        <div class="product-card reveal" data-category="lures" data-brand="rapala">
           <img class="product-img" src="https://images.unsplash.com/photo-1545622783-b3e021430fee?w=600&q=80" alt="Fishing Lure" loading="lazy"/>
           <div class="product-body">
             <div class="product-tag">Lures &amp; Bait</div>
@@ -234,7 +262,7 @@
           </div>
         </div>
 
-        <div class="product-card reveal" data-category="lures">
+        <div class="product-card reveal" data-category="lures" data-brand="berkley">
           <img class="product-img" src="https://images.unsplash.com/photo-1516690553959-6e3dc2e00a89?w=600&q=80" alt="PowerBait" loading="lazy"/>
           <div class="product-body">
             <div class="product-tag">Lures &amp; Bait</div>
@@ -247,7 +275,7 @@
           </div>
         </div>
 
-        <div class="product-card reveal" data-category="line">
+        <div class="product-card reveal" data-category="line" data-brand="berkley">
           <img class="product-img" src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80" alt="Fishing Line" loading="lazy"/>
           <div class="product-body">
             <div class="product-tag">Line</div>
@@ -260,7 +288,7 @@
           </div>
         </div>
 
-        <div class="product-card reveal" data-category="tackle">
+        <div class="product-card reveal" data-category="tackle" data-brand="plano">
           <img class="product-img" src="https://images.unsplash.com/photo-1559827291-72f35016f5ba?w=600&q=80" alt="Tackle Box" loading="lazy"/>
           <div class="product-body">
             <div class="product-tag">Tackle &amp; Hooks</div>
@@ -273,7 +301,7 @@
           </div>
         </div>
 
-        <div class="product-card reveal" data-category="tackle">
+        <div class="product-card reveal" data-category="tackle" data-brand="eagleclaw">
           <img class="product-img" src="https://images.unsplash.com/photo-1545622783-b3e021430fee?w=600&q=80" alt="Hooks" loading="lazy"/>
           <div class="product-body">
             <div class="product-tag">Tackle &amp; Hooks</div>
@@ -286,7 +314,7 @@
           </div>
         </div>
 
-        <div class="product-card reveal" data-category="lures">
+        <div class="product-card reveal" data-category="lures" data-brand="strikeking">
           <img class="product-img" src="https://images.unsplash.com/photo-1516690553959-6e3dc2e00a89?w=600&q=80" alt="Spinnerbait" loading="lazy"/>
           <div class="product-body">
             <div class="product-tag">Lures &amp; Bait</div>
@@ -351,13 +379,16 @@
         observer.observe(el);
       });
 
-      function filterProducts(category, btn) {
-        document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
+      const activeFilters = { type: "all", brand: "all" };
+
+      function setFilter(group, value) {
+        activeFilters[group] = value;
         const cards = document.querySelectorAll(".product-card");
         let count = 0;
         cards.forEach(card => {
-          const show = category === "all" || card.dataset.category === category;
+          const typeMatch = activeFilters.type === "all" || card.dataset.category === activeFilters.type;
+          const brandMatch = activeFilters.brand === "all" || card.dataset.brand === activeFilters.brand;
+          const show = typeMatch && brandMatch;
           card.style.display = show ? "" : "none";
           if (show) count++;
         });

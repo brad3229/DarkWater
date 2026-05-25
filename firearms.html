@@ -87,10 +87,20 @@
       main { max-width: 1200px; margin: 0 auto; padding: 52px 48px 88px; }
 
       /* ── FILTERS ── */
-      .filters { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 36px; }
-      .filter-btn { background: var(--white); border: 1.5px solid #e0d8cc; border-radius: 8px; padding: 8px 18px; font-size: 13px; font-weight: 600; color: var(--text2); cursor: pointer; transition: all 0.2s; font-family: inherit; }
-      .filter-btn:hover, .filter-btn.active { background: var(--green); color: #fff; border-color: var(--green); }
-      .results-count { margin-left: auto; font-size: 13px; color: var(--text2); }
+      .filters { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 32px; }
+      .filter-group { display: flex; flex-direction: column; gap: 4px; }
+      .filter-group label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--tan); }
+      .filter-select {
+        appearance: none;
+        background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%234a4a4a' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 12px center;
+        border: 1.5px solid #e0d8cc; border-radius: 8px;
+        padding: 10px 36px 10px 14px;
+        font-size: 13px; font-weight: 600; color: var(--text);
+        cursor: pointer; transition: border-color 0.2s;
+        font-family: inherit; min-width: 160px;
+      }
+      .filter-select:focus { outline: none; border-color: var(--green); }
+      .results-count { margin-left: auto; font-size: 13px; color: var(--text2); align-self: flex-end; padding-bottom: 2px; }
 
       /* ── PRODUCT GRID ── */
       .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
@@ -202,19 +212,37 @@
 
       <!-- Filters -->
       <div class="filters reveal">
-        <button class="filter-btn active" onclick="filterProducts('all', this)">All</button>
-        <button class="filter-btn" onclick="filterProducts('pistol', this)">Pistols</button>
-        <button class="filter-btn" onclick="filterProducts('revolver', this)">Revolvers</button>
-        <button class="filter-btn" onclick="filterProducts('rifle', this)">Rifles</button>
-        <button class="filter-btn" onclick="filterProducts('shotgun', this)">Shotguns</button>
-        <button class="filter-btn" onclick="filterProducts('used', this)">Used</button>
+        <div class="filter-group">
+          <label for="typeFilter">Type</label>
+          <select id="typeFilter" class="filter-select" onchange="setFilter('type', this.value)">
+            <option value="all">All Types</option>
+            <option value="pistol">Pistols</option>
+            <option value="revolver">Revolvers</option>
+            <option value="rifle">Rifles</option>
+            <option value="shotgun">Shotguns</option>
+            <option value="used">Used</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="brandFilter">Brand</label>
+          <select id="brandFilter" class="filter-select" onchange="setFilter('brand', this.value)">
+            <option value="all">All Brands</option>
+            <option value="glock">Glock</option>
+            <option value="mossberg">Mossberg</option>
+            <option value="remington">Remington</option>
+            <option value="ruger">Ruger</option>
+            <option value="sig">Sig Sauer</option>
+            <option value="sw">Smith &amp; Wesson</option>
+            <option value="winchester">Winchester</option>
+          </select>
+        </div>
         <span class="results-count" id="resultsCount">8 items</span>
       </div>
 
       <!-- Product Grid -->
       <div class="product-grid" id="productGrid">
 
-        <div class="product-card reveal" data-category="pistol">
+        <div class="product-card reveal" data-category="pistol" data-brand="sw">
           <img class="product-img" src="https://images.unsplash.com/photo-1584467541268-b040f83be3fd?w=600&q=80" alt="Pistol" loading="lazy"/>
           <div class="product-body">
             <div class="product-tag">Pistol</div>
@@ -227,7 +255,7 @@
           </div>
         </div>
 
-        <div class="product-card reveal" data-category="pistol">
+        <div class="product-card reveal" data-category="pistol" data-brand="glock">
           <img class="product-img" src="https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=600&q=80" alt="Pistol" loading="lazy"/>
           <div class="product-body">
             <div class="product-tag">Pistol</div>
@@ -240,7 +268,7 @@
           </div>
         </div>
 
-        <div class="product-card reveal" data-category="revolver">
+        <div class="product-card reveal" data-category="revolver" data-brand="sw">
           <img class="product-img" src="https://images.unsplash.com/photo-1584467541268-b040f83be3fd?w=600&q=80" alt="Revolver" loading="lazy"/>
           <div class="product-body">
             <div class="product-tag">Revolver</div>
@@ -253,7 +281,7 @@
           </div>
         </div>
 
-        <div class="product-card reveal" data-category="rifle">
+        <div class="product-card reveal" data-category="rifle" data-brand="ruger">
           <img class="product-img" src="https://images.unsplash.com/photo-1543946207-39bd91e70ca7?w=600&q=80" alt="Rifle" loading="lazy"/>
           <div class="product-body">
             <div class="product-tag">Rifle</div>
@@ -266,7 +294,7 @@
           </div>
         </div>
 
-        <div class="product-card reveal" data-category="shotgun">
+        <div class="product-card reveal" data-category="shotgun" data-brand="mossberg">
           <img class="product-img" src="https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=600&q=80" alt="Shotgun" loading="lazy"/>
           <div class="product-body">
             <div class="product-tag">Shotgun</div>
@@ -279,7 +307,7 @@
           </div>
         </div>
 
-        <div class="product-card reveal" data-category="rifle">
+        <div class="product-card reveal" data-category="rifle" data-brand="winchester">
           <img class="product-img" src="https://images.unsplash.com/photo-1543946207-39bd91e70ca7?w=600&q=80" alt="Rifle" loading="lazy"/>
           <div class="product-body">
             <div class="product-tag">Rifle</div>
@@ -292,7 +320,7 @@
           </div>
         </div>
 
-        <div class="product-card reveal" data-category="pistol used">
+        <div class="product-card reveal" data-category="pistol used" data-brand="sig">
           <img class="product-img" src="https://images.unsplash.com/photo-1584467541268-b040f83be3fd?w=600&q=80" alt="Used Pistol" loading="lazy"/>
           <div class="product-body">
             <div class="product-tag">Pistol</div>
@@ -305,7 +333,7 @@
           </div>
         </div>
 
-        <div class="product-card reveal" data-category="shotgun used">
+        <div class="product-card reveal" data-category="shotgun used" data-brand="remington">
           <img class="product-img" src="https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=600&q=80" alt="Used Shotgun" loading="lazy"/>
           <div class="product-body">
             <div class="product-tag">Shotgun</div>
@@ -373,13 +401,20 @@
         observer.observe(el);
       });
 
-      function filterProducts(category, btn) {
-        document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
+      const activeFilters = { type: "all", brand: "all" };
+
+      function setFilter(group, value) {
+        activeFilters[group] = value;
+        applyFilters();
+      }
+
+      function applyFilters() {
         const cards = document.querySelectorAll(".product-card");
         let count = 0;
         cards.forEach(card => {
-          const show = category === "all" || card.dataset.category.includes(category);
+          const typeMatch = activeFilters.type === "all" || card.dataset.category.includes(activeFilters.type);
+          const brandMatch = activeFilters.brand === "all" || card.dataset.brand === activeFilters.brand;
+          const show = typeMatch && brandMatch;
           card.style.display = show ? "" : "none";
           if (show) count++;
         });
