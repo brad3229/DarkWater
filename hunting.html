@@ -9,14 +9,11 @@
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
       :root {
-        --bg: #f5f0e8;
-        --bg2: #ede7d9;
-        --green: #2e4c24;
-        --tan: #8b6914;
-        --amber: #c8a84b;
-        --text: #1a1a1a;
-        --text2: #4a4a4a;
-        --white: #ffffff;
+        --dark: #1a2332; --dark2: #111827;
+        --red: #c41e1e; --red2: #a01818;
+        --bg: #f4f4f4; --white: #ffffff;
+        --text: #1a1a1a; --text2: #666666;
+        --border: #e0e0e0; --amber: #c8a84b;
         --nav-h: 72px;
       }
 
@@ -24,205 +21,105 @@
       body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
 
       /* ── NAV ── */
-      nav {
-        position: fixed; top: 0; left: 0; right: 0;
-        height: var(--nav-h);
-        background: rgba(255,255,255,0.97);
-        backdrop-filter: blur(8px);
-        border-bottom: 1px solid rgba(0,0,0,0.09);
-        display: flex; align-items: center; justify-content: space-between;
-        padding: 0 48px; z-index: 1000; transition: box-shadow 0.3s;
-      }
+      nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); background: var(--dark); display: flex; align-items: center; justify-content: space-between; padding: 0 48px; z-index: 1000; transition: box-shadow 0.3s; }
       .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-      .nav-logo-icon {
-        width: 42px; height: 42px; background: var(--green);
-        border-radius: 10px; display: flex; align-items: center; justify-content: center;
-      }
+      .nav-logo-icon { width: 42px; height: 42px; background: var(--red); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
       .nav-logo-icon svg { width: 26px; height: 26px; fill: #fff; }
-      .nav-logo-text { font-size: 18px; font-weight: 800; color: var(--green); letter-spacing: -0.3px; line-height: 1.1; }
-      .nav-logo-sub { font-size: 10px; font-weight: 600; color: var(--tan); letter-spacing: 2.5px; text-transform: uppercase; }
+      .nav-logo-text { font-size: 18px; font-weight: 800; color: #fff; letter-spacing: -0.3px; line-height: 1.1; }
+      .nav-logo-sub { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.5); letter-spacing: 2.5px; text-transform: uppercase; }
       .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
-      .nav-links a { text-decoration: none; font-size: 14px; font-weight: 600; color: var(--text2); transition: color 0.2s; }
-      .nav-links a:hover { color: var(--green); }
-      .nav-links a.active { color: var(--green); }
-      .nav-cta { background: var(--green); color: var(--white) !important; padding: 10px 22px; border-radius: 8px; transition: background 0.2s !important; }
-      .nav-cta:hover { background: #1e3418 !important; }
+      .nav-links a { text-decoration: none; font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.8); transition: color 0.2s; }
+      .nav-links a:hover, .nav-links a.active { color: #fff; }
+      .nav-cta { background: var(--red) !important; color: #fff !important; padding: 10px 22px; border-radius: 8px; }
+      .nav-cta:hover { background: var(--red2) !important; }
       .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
-      .hamburger span { display: block; width: 24px; height: 2px; background: var(--green); border-radius: 2px; transition: all 0.3s; }
+      .hamburger span { display: block; width: 24px; height: 2px; background: #fff; border-radius: 2px; transition: all 0.3s; }
       .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
       .hamburger.open span:nth-child(2) { opacity: 0; }
       .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-      .mobile-menu {
-        display: none; position: fixed; top: var(--nav-h); left: 0; right: 0;
-        background: var(--white); border-bottom: 1px solid rgba(0,0,0,0.1);
-        padding: 16px 24px 28px; z-index: 999; flex-direction: column; gap: 2px;
-      }
+      .mobile-menu { display: none; position: fixed; top: var(--nav-h); left: 0; right: 0; background: var(--dark2); border-bottom: 1px solid rgba(255,255,255,0.08); padding: 16px 24px 28px; z-index: 999; flex-direction: column; gap: 2px; }
       .mobile-menu.open { display: flex; }
-      .mobile-menu a { text-decoration: none; font-size: 16px; font-weight: 600; color: var(--text); padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.06); }
-      .mobile-menu a:last-child { border: none; margin-top: 8px; background: var(--green); color: var(--white); text-align: center; border-radius: 10px; padding: 14px; }
+      .mobile-menu a { text-decoration: none; font-size: 16px; font-weight: 600; color: rgba(255,255,255,0.8); padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+      .mobile-menu a:last-child { border: none; margin-top: 8px; background: var(--red); color: #fff; text-align: center; border-radius: 10px; padding: 14px; }
 
       /* ── PAGE HERO ── */
-      .page-hero {
-        padding-top: var(--nav-h);
-        min-height: 300px;
-        display: flex;
-        align-items: center;
-        position: relative;
-        overflow: hidden;
-      }
-      .page-hero-bg {
-        position: absolute; inset: 0;
-        background:
-          linear-gradient(to right, rgba(15,25,12,0.82) 0%, rgba(15,25,12,0.5) 60%, rgba(15,25,12,0.2) 100%),
-          url("https://images.unsplash.com/photo-1543946207-39bd91e70ca7?w=1400&q=80") center/cover no-repeat;
-      }
-      .page-hero-content {
-        position: relative; max-width: 1200px; margin: 0 auto;
-        padding: 56px 48px; width: 100%;
-      }
-      .breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
-      .breadcrumb a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 13px; font-weight: 600; transition: color 0.2s; }
+      .page-hero { padding-top: var(--nav-h); min-height: 260px; display: flex; align-items: center; position: relative; overflow: hidden; }
+      .page-hero-bg { position: absolute; inset: 0; background: linear-gradient(to right, rgba(10,16,26,0.9) 0%, rgba(10,16,26,0.6) 60%, rgba(10,16,26,0.25) 100%), url("https://images.unsplash.com/photo-1542382257-80dedb725088?w=1400&q=80") center/cover no-repeat; }
+      .page-hero-content { position: relative; max-width: 1200px; margin: 0 auto; padding: 48px; width: 100%; }
+      .breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+      .breadcrumb a { color: rgba(255,255,255,0.55); text-decoration: none; font-size: 13px; font-weight: 600; transition: color 0.2s; }
       .breadcrumb a:hover { color: #fff; }
-      .breadcrumb span { color: rgba(255,255,255,0.35); font-size: 13px; }
-      .page-hero h1 { font-size: clamp(28px, 4vw, 52px); font-weight: 900; color: #fff; line-height: 1.1; margin-bottom: 10px; }
-      .page-hero p { font-size: 15px; color: rgba(255,255,255,0.78); max-width: 480px; line-height: 1.7; }
+      .breadcrumb span { color: rgba(255,255,255,0.3); font-size: 13px; }
+      .page-hero h1 { font-size: clamp(26px, 4vw, 48px); font-weight: 900; color: #fff; line-height: 1.1; margin-bottom: 8px; }
+      .page-hero p { font-size: 15px; color: rgba(255,255,255,0.72); max-width: 480px; line-height: 1.7; }
 
-      /* ── MAIN ── */
-      main { max-width: 1200px; margin: 0 auto; padding: 52px 48px 88px; }
+      /* ── LAYOUT ── */
+      .page-body { max-width: 1200px; margin: 0 auto; padding: 40px 48px 80px; display: grid; grid-template-columns: 220px 1fr; gap: 32px; align-items: start; }
 
-      /* ── FILTERS ── */
-      .filters { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 32px; }
-      .filter-group { display: flex; flex-direction: column; gap: 4px; }
-      .filter-group label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--tan); }
-      .filter-select {
-        appearance: none;
-        background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%234a4a4a' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 12px center;
-        border: 1.5px solid #e0d8cc; border-radius: 8px;
-        padding: 10px 36px 10px 14px;
-        font-size: 13px; font-weight: 600; color: var(--text);
-        cursor: pointer; transition: border-color 0.2s;
-        font-family: inherit; min-width: 160px;
-      }
-      .filter-select:focus { outline: none; border-color: var(--green); }
-      .results-count { margin-left: auto; font-size: 13px; color: var(--text2); }
+      /* ── SIDEBAR ── */
+      .sidebar { background: var(--white); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; position: sticky; top: calc(var(--nav-h) + 20px); }
+      .sidebar-header { background: var(--dark); padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; }
+      .sidebar-header h3 { font-size: 13px; font-weight: 700; color: #fff; letter-spacing: 1px; text-transform: uppercase; }
+      .clear-all { background: none; border: none; color: rgba(255,255,255,0.55); font-size: 12px; cursor: pointer; font-family: inherit; transition: color 0.2s; }
+      .clear-all:hover { color: #fff; }
+      .sidebar-section { padding: 20px; border-bottom: 1px solid var(--border); }
+      .sidebar-section:last-child { border-bottom: none; }
+      .sidebar-section h4 { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text2); margin-bottom: 14px; }
+      .check-list { display: flex; flex-direction: column; gap: 10px; }
+      .check-list label { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text); cursor: pointer; user-select: none; }
+      .check-list input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--red); cursor: pointer; flex-shrink: 0; }
+
+      /* ── CONTENT AREA ── */
+      .results-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+      .results-count { font-size: 14px; color: var(--text2); }
 
       /* ── PRODUCT GRID ── */
-      .product-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 20px;
-      }
-
-      .product-card {
-        background: var(--white);
-        border-radius: 16px;
-        overflow: hidden;
-        border: 1.5px solid #e0d8cc;
-        transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
-        cursor: pointer;
-      }
-      .product-card:hover {
-        border-color: var(--green);
-        box-shadow: 0 6px 28px rgba(46,76,36,0.12);
-        transform: translateY(-2px);
-      }
-      .product-img {
-        width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block;
-      }
-      .product-body { padding: 16px; }
-      .product-tag {
-        display: inline-block;
-        font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
-        text-transform: uppercase; color: var(--tan);
-        margin-bottom: 6px;
-      }
-      .product-name { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 4px; line-height: 1.3; }
+      .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+      .product-card { background: var(--white); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s; }
+      .product-card:hover { border-color: var(--red); box-shadow: 0 6px 24px rgba(196,30,30,0.1); transform: translateY(-2px); }
+      .product-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+      .product-body { padding: 14px; }
+      .product-tag { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--red); margin-bottom: 5px; display: block; }
+      .product-name { font-size: 14px; font-weight: 800; color: var(--text); margin-bottom: 3px; line-height: 1.3; }
       .product-brand { font-size: 12px; color: var(--text2); margin-bottom: 12px; }
-      .product-footer { display: flex; align-items: center; justify-content: space-between; }
-      .product-price { font-size: 18px; font-weight: 900; color: var(--green); }
-      .product-price .cents { font-size: 13px; font-weight: 700; }
-      .inquire-btn {
-        background: var(--green); color: #fff;
-        border: none; border-radius: 8px;
-        padding: 8px 14px; font-size: 12px; font-weight: 700;
-        cursor: pointer; transition: background 0.2s; font-family: inherit;
-        text-decoration: none; display: inline-block;
-      }
-      .inquire-btn:hover { background: #1e3418; }
+      .product-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+      .product-price { font-size: 17px; font-weight: 900; color: var(--dark); }
+      .product-price .cents { font-size: 12px; font-weight: 700; }
+      .inquire-btn { background: var(--red); color: #fff; border: none; border-radius: 7px; padding: 8px 14px; font-size: 12px; font-weight: 700; cursor: pointer; transition: background 0.2s; font-family: inherit; text-decoration: none; display: inline-block; white-space: nowrap; }
+      .inquire-btn:hover { background: var(--red2); }
+      .badge-new { display: inline-block; background: var(--amber); color: #fff; font-size: 9px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; margin-left: 5px; vertical-align: middle; }
 
-      .badge-new {
-        display: inline-block;
-        background: var(--amber); color: #fff;
-        font-size: 9px; font-weight: 800; letter-spacing: 1px;
-        text-transform: uppercase; padding: 2px 7px; border-radius: 4px;
-        margin-left: 6px; vertical-align: middle;
-      }
-      .badge-sale {
-        display: inline-block;
-        background: #b91c1c; color: #fff;
-        font-size: 9px; font-weight: 800; letter-spacing: 1px;
-        text-transform: uppercase; padding: 2px 7px; border-radius: 4px;
-        margin-left: 6px; vertical-align: middle;
-      }
-
-      /* ── CONTACT CTA ── */
-      .cta-banner {
-        background: var(--green); border-radius: 18px;
-        padding: 40px 48px; margin-top: 64px;
-        display: flex; align-items: center; justify-content: space-between;
-        gap: 24px; flex-wrap: wrap;
-      }
-      .cta-banner h3 { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 6px; }
-      .cta-banner p { font-size: 14px; color: rgba(255,255,255,0.75); max-width: 480px; line-height: 1.6; }
-      .cta-btn {
-        flex-shrink: 0;
-        background: var(--amber); color: #fff;
-        text-decoration: none; padding: 14px 28px;
-        border-radius: 10px; font-size: 15px; font-weight: 700;
-        transition: background 0.2s; white-space: nowrap;
-      }
-      .cta-btn:hover { background: #b8922e; }
+      /* ── CTA ── */
+      .cta-banner { background: var(--dark); border-radius: 12px; padding: 36px 40px; margin-top: 40px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+      .cta-banner h3 { font-size: 20px; font-weight: 900; color: #fff; margin-bottom: 6px; }
+      .cta-banner p { font-size: 14px; color: rgba(255,255,255,0.7); max-width: 480px; line-height: 1.6; }
+      .cta-btn { flex-shrink: 0; background: var(--red); color: #fff; text-decoration: none; padding: 13px 26px; border-radius: 8px; font-size: 14px; font-weight: 700; transition: background 0.2s; white-space: nowrap; }
+      .cta-btn:hover { background: var(--red2); }
 
       /* ── FOOTER ── */
-      footer { background: #0e180b; color: rgba(255,255,255,0.55); padding: 40px 48px 28px; }
+      footer { background: var(--dark2); color: rgba(255,255,255,0.5); padding: 32px 48px; }
       .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; font-size: 13px; }
-      .footer-inner a { color: rgba(255,255,255,0.55); text-decoration: none; }
+      .footer-inner a { color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s; }
       .footer-inner a:hover { color: #fff; }
-
-      /* ── REVEAL ── */
-      .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
-      .reveal.visible { opacity: 1; transform: translateY(0); }
+      .ffl-disclaimer { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 4px; }
 
       /* ── RESPONSIVE ── */
-      @media (max-width: 1024px) { .product-grid { grid-template-columns: repeat(3, 1fr); } }
       @media (max-width: 900px) {
-        nav { padding: 0 20px; }
-        .nav-links { display: none; }
-        .hamburger { display: flex; }
-        .page-hero-content { padding: 40px 20px; }
-        main { padding: 36px 20px 64px; }
+        nav { padding: 0 20px; } .nav-links { display: none; } .hamburger { display: flex; }
+        .page-hero-content { padding: 32px 20px; }
+        .page-body { grid-template-columns: 1fr; padding: 24px 20px 60px; }
+        .sidebar { position: static; }
         .product-grid { grid-template-columns: repeat(2, 1fr); }
-        .cta-banner { padding: 28px 24px; }
         footer { padding: 28px 20px; }
       }
       @media (max-width: 500px) { .product-grid { grid-template-columns: 1fr; } }
     </style>
   </head>
   <body>
-
-    <!-- NAV -->
     <nav id="navbar">
       <a href="index.html" class="nav-logo">
-        <div class="nav-logo-icon">
-          <svg viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="3"/>
-            <path d="M12 2v4M12 18v4M2 12h4M18 12h4M12 5a7 7 0 100 14A7 7 0 0012 5z" stroke="#fff" stroke-width="1.5" fill="none"/>
-          </svg>
-        </div>
-        <div>
-          <div class="nav-logo-text">Dark Water</div>
-          <div class="nav-logo-sub">Sports &amp; Firearms</div>
-        </div>
+        <div class="nav-logo-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M12 5a7 7 0 100 14A7 7 0 0012 5z" stroke="#fff" stroke-width="1.5" fill="none"/></svg></div>
+        <div><div class="nav-logo-text">Dark Water</div><div class="nav-logo-sub">Sports &amp; Firearms</div></div>
       </a>
       <ul class="nav-links">
         <li><a href="index.html#shop" class="active">Shop</a></li>
@@ -230,11 +127,8 @@
         <li><a href="index.html#contact">Find Us</a></li>
         <li><a href="index.html#contact" class="nav-cta">Contact Us</a></li>
       </ul>
-      <button class="hamburger" id="hamburger" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
+      <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
     </nav>
-
     <div class="mobile-menu" id="mobileMenu">
       <a href="index.html#shop" onclick="closeMenu()">Shop</a>
       <a href="index.html#services" onclick="closeMenu()">FFL &amp; Services</a>
@@ -242,231 +136,179 @@
       <a href="index.html#contact" onclick="closeMenu()">Contact Us</a>
     </div>
 
-    <!-- PAGE HERO -->
     <div class="page-hero">
       <div class="page-hero-bg"></div>
       <div class="page-hero-content">
-        <div class="breadcrumb">
-          <a href="index.html">Home</a>
-          <span>›</span>
-          <a href="index.html#shop">Shop</a>
-          <span>›</span>
-          <span style="color:rgba(255,255,255,0.85)">Hunting Gear</span>
-        </div>
+        <div class="breadcrumb"><a href="index.html">Home</a><span>›</span><a href="index.html#shop">Shop</a><span>›</span><span style="color:rgba(255,255,255,0.85)">Hunting Gear</span></div>
         <h1>Hunting Gear</h1>
-        <p>Camo, optics, calls, knives, trail cameras, and everything else you need in the field.</p>
+        <p>Clothing, optics, calls, knives, cameras, ammo, and more — everything you need for the field.</p>
       </div>
     </div>
 
-    <!-- MAIN CONTENT -->
-    <main>
+    <div class="page-body">
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <h3>Filter</h3>
+          <button class="clear-all" onclick="clearFilters()">Clear all</button>
+        </div>
+        <div class="sidebar-section">
+          <h4>Category</h4>
+          <div class="check-list" id="typeFilters">
+            <label><input type="checkbox" value="ammo" onchange="applyFilters()"> Ammo</label>
+            <label><input type="checkbox" value="calls" onchange="applyFilters()"> Calls</label>
+            <label><input type="checkbox" value="cameras" onchange="applyFilters()"> Cameras</label>
+            <label><input type="checkbox" value="clothing" onchange="applyFilters()"> Clothing</label>
+            <label><input type="checkbox" value="knives" onchange="applyFilters()"> Knives</label>
+            <label><input type="checkbox" value="optics" onchange="applyFilters()"> Optics</label>
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <h4>Brand</h4>
+          <div class="check-list" id="brandFilters">
+            <label><input type="checkbox" value="buck" onchange="applyFilters()"> Buck</label>
+            <label><input type="checkbox" value="federal" onchange="applyFilters()"> Federal Premium</label>
+            <label><input type="checkbox" value="lacrosse" onchange="applyFilters()"> LaCrosse</label>
+            <label><input type="checkbox" value="primos" onchange="applyFilters()"> Primos</label>
+            <label><input type="checkbox" value="sitka" onchange="applyFilters()"> Sitka</label>
+            <label><input type="checkbox" value="stealth" onchange="applyFilters()"> Stealth Cam</label>
+            <label><input type="checkbox" value="vortex" onchange="applyFilters()"> Vortex</label>
+          </div>
+        </div>
+      </aside>
 
-      <!-- Filters -->
-      <div class="filters reveal">
-        <div class="filter-group">
-          <label for="typeFilter">Category</label>
-          <select id="typeFilter" class="filter-select" onchange="setFilter('type', this.value)">
-            <option value="all">All Categories</option>
-            <option value="clothing">Clothing &amp; Camo</option>
-            <option value="optics">Optics</option>
-            <option value="calls">Calls &amp; Scents</option>
-            <option value="knives">Knives &amp; Tools</option>
-            <option value="ammo">Ammunition</option>
-            <option value="cameras">Trail Cameras</option>
-          </select>
+      <div>
+        <div class="results-bar">
+          <span class="results-count" id="resultsCount">8 items</span>
         </div>
-        <div class="filter-group">
-          <label for="brandFilter">Brand</label>
-          <select id="brandFilter" class="filter-select" onchange="setFilter('brand', this.value)">
-            <option value="all">All Brands</option>
-            <option value="buck">Buck Knives</option>
-            <option value="federal">Federal Premium</option>
-            <option value="lacrosse">LaCrosse</option>
-            <option value="primos">Primos</option>
-            <option value="sitka">Sitka Gear</option>
-            <option value="stealth">Stealth Cam</option>
-            <option value="vortex">Vortex Optics</option>
-          </select>
+        <div class="product-grid" id="productGrid">
+
+          <div class="product-card" data-category="clothing" data-brand="sitka">
+            <img class="product-img" src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=600&q=80" alt="Hunting Jacket" loading="lazy"/>
+            <div class="product-body">
+              <span class="product-tag">Clothing</span>
+              <div class="product-name">Stratus Jacket <span class="badge-new">New</span></div>
+              <div class="product-brand">Sitka Gear</div>
+              <div class="product-footer"><div class="product-price">$349<span class="cents">.99</span></div><a href="index.html#contact" class="inquire-btn">Inquire</a></div>
+            </div>
+          </div>
+
+          <div class="product-card" data-category="optics" data-brand="vortex">
+            <img class="product-img" src="https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80" alt="Rifle Scope" loading="lazy"/>
+            <div class="product-body">
+              <span class="product-tag">Optics</span>
+              <div class="product-name">Crossfire II 3-9x40 Scope <span class="badge-new">New</span></div>
+              <div class="product-brand">Vortex</div>
+              <div class="product-footer"><div class="product-price">$179<span class="cents">.99</span></div><a href="index.html#contact" class="inquire-btn">Inquire</a></div>
+            </div>
+          </div>
+
+          <div class="product-card" data-category="calls" data-brand="primos">
+            <img class="product-img" src="https://images.unsplash.com/photo-1542382257-80dedb725088?w=600&q=80" alt="Elk Call" loading="lazy"/>
+            <div class="product-body">
+              <span class="product-tag">Calls</span>
+              <div class="product-name">Hoochie Mama Elk Call</div>
+              <div class="product-brand">Primos</div>
+              <div class="product-footer"><div class="product-price">$24<span class="cents">.99</span></div><a href="index.html#contact" class="inquire-btn">Inquire</a></div>
+            </div>
+          </div>
+
+          <div class="product-card" data-category="knives" data-brand="buck">
+            <img class="product-img" src="https://images.unsplash.com/photo-1577401239170-897942555fb3?w=600&q=80" alt="Hunting Knife" loading="lazy"/>
+            <div class="product-body">
+              <span class="product-tag">Knives</span>
+              <div class="product-name">110 Folding Hunter <span class="badge-new">New</span></div>
+              <div class="product-brand">Buck Knives</div>
+              <div class="product-footer"><div class="product-price">$64<span class="cents">.99</span></div><a href="index.html#contact" class="inquire-btn">Inquire</a></div>
+            </div>
+          </div>
+
+          <div class="product-card" data-category="cameras" data-brand="stealth">
+            <img class="product-img" src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&q=80" alt="Trail Camera" loading="lazy"/>
+            <div class="product-body">
+              <span class="product-tag">Cameras</span>
+              <div class="product-name">DS4K No-Glo Trail Camera <span class="badge-new">New</span></div>
+              <div class="product-brand">Stealth Cam</div>
+              <div class="product-footer"><div class="product-price">$89<span class="cents">.99</span></div><a href="index.html#contact" class="inquire-btn">Inquire</a></div>
+            </div>
+          </div>
+
+          <div class="product-card" data-category="ammo" data-brand="federal">
+            <img class="product-img" src="https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=600&q=80" alt="Ammunition" loading="lazy"/>
+            <div class="product-body">
+              <span class="product-tag">Ammo</span>
+              <div class="product-name">Premium 30-06 180gr Nosler Partition</div>
+              <div class="product-brand">Federal Premium</div>
+              <div class="product-footer"><div class="product-price">$54<span class="cents">.99</span></div><a href="index.html#contact" class="inquire-btn">Inquire</a></div>
+            </div>
+          </div>
+
+          <div class="product-card" data-category="optics" data-brand="vortex">
+            <img class="product-img" src="https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80" alt="Binoculars" loading="lazy"/>
+            <div class="product-body">
+              <span class="product-tag">Optics</span>
+              <div class="product-name">Diamondback HD 10x42 Binoculars <span class="badge-new">New</span></div>
+              <div class="product-brand">Vortex</div>
+              <div class="product-footer"><div class="product-price">$199<span class="cents">.99</span></div><a href="index.html#contact" class="inquire-btn">Inquire</a></div>
+            </div>
+          </div>
+
+          <div class="product-card" data-category="clothing" data-brand="lacrosse">
+            <img class="product-img" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80" alt="Hunting Boots" loading="lazy"/>
+            <div class="product-body">
+              <span class="product-tag">Clothing</span>
+              <div class="product-name">Alphaburly Pro 18" Boots</div>
+              <div class="product-brand">LaCrosse</div>
+              <div class="product-footer"><div class="product-price">$219<span class="cents">.99</span></div><a href="index.html#contact" class="inquire-btn">Inquire</a></div>
+            </div>
+          </div>
+
         </div>
-        <span class="results-count" id="resultsCount">8 items</span>
+
+        <div class="cta-banner">
+          <div>
+            <h3>Need something specific?</h3>
+            <p>Don't see what you're looking for? We can special order most hunting gear brands. Come in or give us a call and we'll track it down for you.</p>
+          </div>
+          <a href="index.html#contact" class="cta-btn">Contact Us</a>
+        </div>
       </div>
+    </div>
 
-      <!-- Product Grid -->
-      <div class="product-grid" id="productGrid">
-
-        <div class="product-card reveal" data-category="clothing" data-brand="sitka">
-          <img class="product-img" src="https://images.unsplash.com/photo-1578894381163-e72c17f2d45f?w=600&q=80" alt="Camo Jacket" loading="lazy"/>
-          <div class="product-body">
-            <div class="product-tag">Clothing &amp; Camo</div>
-            <div class="product-name">Heavyweight Camo Jacket <span class="badge-new">New</span></div>
-            <div class="product-brand">Sitka Gear</div>
-            <div class="product-footer">
-              <div class="product-price">$349<span class="cents">.99</span></div>
-              <a href="index.html#contact" class="inquire-btn">Inquire</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="product-card reveal" data-category="optics" data-brand="vortex">
-          <img class="product-img" src="https://images.unsplash.com/photo-1609220136736-443140cffec6?w=600&q=80" alt="Rifle Scope" loading="lazy"/>
-          <div class="product-body">
-            <div class="product-tag">Optics</div>
-            <div class="product-name">Crossfire II 3-9×40 Scope</div>
-            <div class="product-brand">Vortex Optics</div>
-            <div class="product-footer">
-              <div class="product-price">$199<span class="cents">.99</span></div>
-              <a href="index.html#contact" class="inquire-btn">Inquire</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="product-card reveal" data-category="calls" data-brand="primos">
-          <img class="product-img" src="https://images.unsplash.com/photo-1511497584788-876760111969?w=600&q=80" alt="Elk Call" loading="lazy"/>
-          <div class="product-body">
-            <div class="product-tag">Calls &amp; Scents</div>
-            <div class="product-name">Hoochie Mama Elk Call</div>
-            <div class="product-brand">Primos</div>
-            <div class="product-footer">
-              <div class="product-price">$29<span class="cents">.99</span></div>
-              <a href="index.html#contact" class="inquire-btn">Inquire</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="product-card reveal" data-category="knives" data-brand="buck">
-          <img class="product-img" src="https://images.unsplash.com/photo-1611288875785-5af6a9b90e99?w=600&q=80" alt="Hunting Knife" loading="lazy"/>
-          <div class="product-body">
-            <div class="product-tag">Knives &amp; Tools</div>
-            <div class="product-name">110 Folding Hunter Knife <span class="badge-sale">Sale</span></div>
-            <div class="product-brand">Buck Knives</div>
-            <div class="product-footer">
-              <div class="product-price">$49<span class="cents">.99</span></div>
-              <a href="index.html#contact" class="inquire-btn">Inquire</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="product-card reveal" data-category="cameras" data-brand="stealth">
-          <img class="product-img" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80" alt="Trail Camera" loading="lazy"/>
-          <div class="product-body">
-            <div class="product-tag">Trail Cameras</div>
-            <div class="product-name">G42NG No-Glow Trail Camera</div>
-            <div class="product-brand">Stealth Cam</div>
-            <div class="product-footer">
-              <div class="product-price">$89<span class="cents">.99</span></div>
-              <a href="index.html#contact" class="inquire-btn">Inquire</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="product-card reveal" data-category="ammo" data-brand="federal">
-          <img class="product-img" src="https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=600&q=80" alt="Ammunition" loading="lazy"/>
-          <div class="product-body">
-            <div class="product-tag">Ammunition</div>
-            <div class="product-name">Premium .308 Win 168gr (20ct)</div>
-            <div class="product-brand">Federal Premium</div>
-            <div class="product-footer">
-              <div class="product-price">$34<span class="cents">.99</span></div>
-              <a href="index.html#contact" class="inquire-btn">Inquire</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="product-card reveal" data-category="optics" data-brand="vortex">
-          <img class="product-img" src="https://images.unsplash.com/photo-1609220136736-443140cffec6?w=600&q=80" alt="Binoculars" loading="lazy"/>
-          <div class="product-body">
-            <div class="product-tag">Optics</div>
-            <div class="product-name">Diamondback HD 10×42 Binoculars <span class="badge-new">New</span></div>
-            <div class="product-brand">Vortex Optics</div>
-            <div class="product-footer">
-              <div class="product-price">$249<span class="cents">.99</span></div>
-              <a href="index.html#contact" class="inquire-btn">Inquire</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="product-card reveal" data-category="clothing" data-brand="lacrosse">
-          <img class="product-img" src="https://images.unsplash.com/photo-1520367445093-50dc08a59d9d?w=600&q=80" alt="Hunting Boots" loading="lazy"/>
-          <div class="product-body">
-            <div class="product-tag">Clothing &amp; Camo</div>
-            <div class="product-name">Alphaburly Pro 18" Hunting Boot</div>
-            <div class="product-brand">LaCrosse</div>
-            <div class="product-footer">
-              <div class="product-price">$129<span class="cents">.99</span></div>
-              <a href="index.html#contact" class="inquire-btn">Inquire</a>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- CTA -->
-      <div class="cta-banner reveal">
-        <div>
-          <h3>Don't see what you need?</h3>
-          <p>We can special order almost any hunting gear or accessory. Give us a call or send a message and we'll track it down for you.</p>
-        </div>
-        <a href="index.html#contact" class="cta-btn">Contact Us</a>
-      </div>
-
-    </main>
-
-    <!-- FOOTER -->
     <footer>
       <div class="footer-inner">
-        <span>&copy; 2026 Dark Water Sports and Firearms. All rights reserved.</span>
+        <div>
+          <span>&copy; 2026 Dark Water Sports and Firearms. All rights reserved.</span>
+          <div class="ffl-disclaimer">FFL License #00-000-000-00-0X-00000 &bull; All sales subject to applicable state and federal law.</div>
+        </div>
         <a href="index.html">← Back to Home</a>
       </div>
     </footer>
 
     <script>
-      // Nav
       const hamburger = document.getElementById("hamburger");
       const mobileMenu = document.getElementById("mobileMenu");
-      hamburger.addEventListener("click", () => {
-        hamburger.classList.toggle("open");
-        mobileMenu.classList.toggle("open");
-      });
-      function closeMenu() {
-        hamburger.classList.remove("open");
-        mobileMenu.classList.remove("open");
-      }
-      window.addEventListener("scroll", () => {
-        document.getElementById("navbar").style.boxShadow =
-          window.scrollY > 60 ? "0 2px 20px rgba(0,0,0,0.1)" : "";
-      });
+      hamburger.addEventListener("click", () => { hamburger.classList.toggle("open"); mobileMenu.classList.toggle("open"); });
+      function closeMenu() { hamburger.classList.remove("open"); mobileMenu.classList.remove("open"); }
+      window.addEventListener("scroll", () => { document.getElementById("navbar").style.boxShadow = window.scrollY > 60 ? "0 2px 20px rgba(0,0,0,0.3)" : ""; });
 
-      // Scroll reveals
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1, rootMargin: "0px 0px -30px 0px" });
-      document.querySelectorAll(".reveal").forEach((el, i) => {
-        if (el.classList.contains("product-card")) {
-          el.style.transitionDelay = `${(i % 4) * 0.1}s`;
-        }
-        observer.observe(el);
-      });
-
-      // Filter
-      const activeFilters = { type: "all", brand: "all" };
-
-      function setFilter(group, value) {
-        activeFilters[group] = value;
+      function applyFilters() {
+        const types = [...document.querySelectorAll("#typeFilters input:checked")].map(el => el.value);
+        const brands = [...document.querySelectorAll("#brandFilters input:checked")].map(el => el.value);
         const cards = document.querySelectorAll(".product-card");
         let count = 0;
         cards.forEach(card => {
-          const typeMatch = activeFilters.type === "all" || card.dataset.category === activeFilters.type;
-          const brandMatch = activeFilters.brand === "all" || card.dataset.brand === activeFilters.brand;
+          const typeMatch = types.length === 0 || types.some(t => card.dataset.category.includes(t));
+          const brandMatch = brands.length === 0 || brands.includes(card.dataset.brand);
           const show = typeMatch && brandMatch;
           card.style.display = show ? "" : "none";
           if (show) count++;
         });
         document.getElementById("resultsCount").textContent = count + " item" + (count !== 1 ? "s" : "");
+      }
+
+      function clearFilters() {
+        document.querySelectorAll(".check-list input").forEach(el => el.checked = false);
+        applyFilters();
       }
     </script>
   </body>
