@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin — Dark Water Sports and Firearms</title>
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      :root {
+        --bg: #f5f0e8; --bg2: #ede7d9;
+        --green: #2e4c24; --green2: #1e3418;
+        --tan: #8b6914; --amber: #c8a84b;
+        --text: #1a1a1a; --text2: #4a4a4a;
+        --white: #ffffff; --border: #e0d8cc; --red: #b91c1c;
+      }
+      html, body { height: 100%; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+      /* ── LOGIN ── */
+      #loginScreen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--bg); }
+      .login-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 20px; padding: 48px; width: 100%; max-width: 380px; box-shadow: 0 8px 40px rgba(0,0,0,0.08); }
+      .login-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
+      .login-logo-icon { width: 44px; height: 44px; background: var(--green); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 22px; }
+      .login-logo-text { font-size: 18px; font-weight: 800; color: var(--green); }
+      .login-logo-sub { font-size: 11px; color: var(--tan); font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; }
+      .login-card h2 { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+      .login-card > p { font-size: 14px; color: var(--text2); margin-bottom: 28px; }
+      .form-field { margin-bottom: 18px; }
+      .form-field label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--tan); margin-bottom: 6px; }
+      .form-field input { width: 100%; border: 1.5px solid var(--border); border-radius: 10px; padding: 12px 14px; font-size: 15px; font-family: inherit; color: var(--text); background: var(--bg); transition: border-color 0.2s; }
+      .form-field input:focus { outline: none; border-color: var(--green); background: var(--white); }
+      .login-error { background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: var(--red); margin-bottom: 16px; display: none; }
+      .login-btn { width: 100%; background: var(--green); color: #fff; border: none; border-radius: 10px; padding: 14px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; transition: background 0.2s; }
+      .login-btn:hover { background: var(--green2); }
+
+      /* ── ADMIN LAYOUT ── */
+      #adminPanel { display: none; flex-direction: column; min-height: 100vh; }
+      .admin-header { background: var(--green); padding: 0 32px; height: 64px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+      .admin-header-logo { display: flex; align-items: center; gap: 10px; }
+      .admin-header-logo-icon { width: 36px; height: 36px; background: rgba(255,255,255,0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+      .admin-header-title { font-size: 16px; font-weight: 800; color: #fff; }
+      .admin-header-sub { font-size: 11px; color: rgba(255,255,255,0.6); font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; }
+      .header-actions { display: flex; align-items: center; gap: 12px; }
+      .admin-back { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 13px; font-weight: 600; transition: color 0.2s; }
+      .admin-back:hover { color: #fff; }
+      .logout-btn { background: rgba(255,255,255,0.15); border: none; color: #fff; border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: background 0.2s; }
+      .logout-btn:hover { background: rgba(255,255,255,0.25); }
+
+      /* ── TABS ── */
+      .admin-tabs { background: var(--white); border-bottom: 1.5px solid var(--border); padding: 0 32px; display: flex; }
+      .tab-btn { background: none; border: none; border-bottom: 3px solid transparent; padding: 16px 20px; font-size: 14px; font-weight: 600; color: var(--text2); cursor: pointer; font-family: inherit; transition: color 0.2s, border-color 0.2s; margin-bottom: -1.5px; }
+      .tab-btn:hover { color: var(--green); }
+      .tab-btn.active { color: var(--green); border-bottom-color: var(--green); }
+
+      /* ── PANELS ── */
+      .admin-content { flex: 1; max-width: 1100px; margin: 0 auto; padding: 32px; width: 100%; }
+      .panel { display: none; }
+      .panel.active { display: block; }
+      .panel-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 24px; gap: 16px; }
+      .panel-header h2 { font-size: 22px; font-weight: 900; }
+      .panel-header p { font-size: 13px; color: var(--text2); margin-top: 3px; }
+      .add-btn { background: var(--green); color: #fff; border: none; border-radius: 10px; padding: 11px 20px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; transition: background 0.2s; white-space: nowrap; flex-shrink: 0; }
+      .add-btn:hover { background: var(--green2); }
+
+      /* ── PRODUCT TABLE ── */
+      .product-table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 16px; overflow: hidden; border: 1.5px solid var(--border); }
+      .product-table th { background: var(--bg2); padding: 12px 16px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--tan); border-bottom: 1.5px solid var(--border); }
+      .product-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); font-size: 14px; vertical-align: middle; }
+      .product-table tr:last-child td { border-bottom: none; }
+      .product-table tr:hover td { background: var(--bg); }
+      .product-thumb { width: 60px; height: 45px; object-fit: cover; border-radius: 8px; display: block; }
+      .product-thumb-placeholder { width: 60px; height: 45px; border-radius: 8px; background: var(--bg2); display: flex; align-items: center; justify-content: center; font-size: 22px; }
+      .product-name-cell { font-weight: 700; }
+      .badge-sm { display: inline-block; font-size: 9px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; margin-left: 6px; vertical-align: middle; color: #fff; }
+      .badge-sm.new { background: var(--amber); }
+      .badge-sm.used { background: #64748b; }
+      .row-actions { display: flex; gap: 6px; }
+      .edit-btn { background: var(--bg2); border: 1.5px solid var(--border); color: var(--text); border-radius: 7px; padding: 6px 14px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+      .edit-btn:hover { border-color: var(--green); color: var(--green); }
+      .del-btn { background: none; border: 1.5px solid var(--border); color: var(--text2); border-radius: 7px; padding: 6px 14px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+      .del-btn:hover { border-color: var(--red); color: var(--red); }
+      .empty-state { background: var(--white); border: 1.5px solid var(--border); border-radius: 16px; padding: 56px; text-align: center; color: var(--text2); font-size: 14px; }
+      .empty-state p { margin-top: 8px; font-size: 13px; }
+
+      /* ── MODAL ── */
+      .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 500; display: flex; align-items: center; justify-content: center; padding: 20px; }
+      .modal-overlay.hidden { display: none; }
+      .modal { background: var(--white); border-radius: 20px; padding: 32px; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+      .modal h3 { font-size: 20px; font-weight: 900; margin-bottom: 24px; }
+      .form-row { margin-bottom: 18px; }
+      .form-row > label, .form-row > div > label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--tan); margin-bottom: 6px; }
+      .form-row input[type="text"],
+      .form-row input[type="url"],
+      .form-row input[type="number"],
+      .form-row select { width: 100%; border: 1.5px solid var(--border); border-radius: 10px; padding: 11px 14px; font-size: 14px; font-family: inherit; color: var(--text); background: var(--bg); transition: border-color 0.2s; }
+      .form-row input:focus, .form-row select:focus { outline: none; border-color: var(--green); background: var(--white); }
+      .form-row input:disabled { opacity: 0.4; cursor: not-allowed; }
+      .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+      .checkbox-row { display: flex; align-items: center; gap: 8px; padding-top: 8px; }
+      .checkbox-row input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--green); cursor: pointer; flex-shrink: 0; }
+      .checkbox-row span { font-size: 14px; color: var(--text); font-weight: 500; cursor: pointer; }
+      .optional { font-weight: 500; color: var(--text2); text-transform: none; letter-spacing: 0; font-size: 10px; }
+      .form-hint { font-size: 12px; color: var(--text2); margin-top: 5px; }
+      .form-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 28px; padding-top: 20px; border-top: 1.5px solid var(--border); }
+      .cancel-btn { background: none; border: 1.5px solid var(--border); color: var(--text2); border-radius: 10px; padding: 11px 20px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+      .cancel-btn:hover { border-color: var(--text); color: var(--text); }
+      .save-btn { background: var(--green); color: #fff; border: none; border-radius: 10px; padding: 11px 24px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; transition: background 0.2s; }
+      .save-btn:hover { background: var(--green2); }
+
+      /* ── TOAST ── */
+      .toast { position: fixed; bottom: 24px; right: 24px; background: var(--green); color: #fff; border-radius: 10px; padding: 14px 20px; font-size: 14px; font-weight: 600; box-shadow: 0 4px 20px rgba(0,0,0,0.15); z-index: 1000; }
+      .toast.hidden { display: none; }
+    </style>
+  </head>
+  <body>
+
+    <!-- ── LOGIN ── -->
+    <div id="loginScreen">
+      <div class="login-card">
+        <div class="login-logo">
+          <div class="login-logo-icon">🎯</div>
+          <div>
+            <div class="login-logo-text">Dark Water</div>
+            <div class="login-logo-sub">Admin Panel</div>
+          </div>
+        </div>
+        <h2>Sign In</h2>
+        <p>Enter your password to manage inventory.</p>
+        <div class="login-error" id="loginError">Incorrect password. Please try again.</div>
+        <form id="loginForm">
+          <div class="form-field">
+            <label for="passwordInput">Password</label>
+            <input type="password" id="passwordInput" autocomplete="current-password" autofocus />
+          </div>
+          <button type="submit" class="login-btn">Sign In</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ── ADMIN PANEL ── -->
+    <div id="adminPanel">
+      <header class="admin-header">
+        <div class="admin-header-logo">
+          <div class="admin-header-logo-icon">🎯</div>
+          <div>
+            <div class="admin-header-title">Dark Water Admin</div>
+            <div class="admin-header-sub">Inventory Management</div>
+          </div>
+        </div>
+        <div class="header-actions">
+          <a href="index.html" class="admin-back">← Back to Site</a>
+          <button class="logout-btn" onclick="logout()">Log Out</button>
+        </div>
+      </header>
+
+      <div class="admin-tabs">
+        <button class="tab-btn active" onclick="switchTab('firearms', this)">Firearms &amp; Accessories</button>
+        <button class="tab-btn" onclick="switchTab('hunting', this)">Hunting Gear</button>
+        <button class="tab-btn" onclick="switchTab('fishing', this)">Fishing</button>
+      </div>
+
+      <div class="admin-content">
+        <div class="panel active" id="panel-firearms">
+          <div class="panel-header">
+            <div>
+              <h2>Firearms &amp; Accessories</h2>
+              <p>Changes appear immediately on the Firearms page when viewed in this browser.</p>
+            </div>
+            <button class="add-btn" onclick="openForm('firearms')">+ Add Product</button>
+          </div>
+          <div id="list-firearms"></div>
+        </div>
+
+        <div class="panel" id="panel-hunting">
+          <div class="panel-header">
+            <div>
+              <h2>Hunting Gear</h2>
+              <p>Manage clothing, optics, calls, knives, cameras, and ammo.</p>
+            </div>
+            <button class="add-btn" onclick="openForm('hunting')">+ Add Product</button>
+          </div>
+          <div id="list-hunting"></div>
+        </div>
+
+        <div class="panel" id="panel-fishing">
+          <div class="panel-header">
+            <div>
+              <h2>Fishing</h2>
+              <p>Manage rods, reels, lures, line, and tackle.</p>
+            </div>
+            <button class="add-btn" onclick="openForm('fishing')">+ Add Product</button>
+          </div>
+          <div id="list-fishing"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MODAL ── -->
+    <div id="modalOverlay" class="modal-overlay hidden">
+      <div class="modal" onclick="event.stopPropagation()">
+        <h3 id="modalTitle">Add Product</h3>
+        <form id="productForm" onsubmit="saveProduct(event)">
+          <input type="hidden" id="editSection" />
+          <input type="hidden" id="editId" />
+
+          <div class="form-row">
+            <label for="fName">Product Name *</label>
+            <input type="text" id="fName" required placeholder="e.g. G19 Gen 5 9mm" />
+          </div>
+
+          <div class="form-row two-col">
+            <div>
+              <label id="fCategoryLabel" for="fCategory">Type *</label>
+              <select id="fCategory" required></select>
+            </div>
+            <div>
+              <label for="fBrand">Brand *</label>
+              <select id="fBrand" required></select>
+            </div>
+          </div>
+
+          <div class="form-row two-col">
+            <div>
+              <label for="fPrice">Price ($)</label>
+              <input type="number" id="fPrice" min="0" step="0.01" placeholder="0.00" />
+            </div>
+            <div>
+              <label>&nbsp;</label>
+              <div class="checkbox-row">
+                <input type="checkbox" id="fCallForPrice" onchange="togglePriceField()" />
+                <span onclick="document.getElementById('fCallForPrice').click()">Call for price</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row" id="conditionRow">
+            <label for="fCondition">Condition</label>
+            <select id="fCondition">
+              <option value="new">New</option>
+              <option value="used">Used</option>
+              <option value="">No badge</option>
+            </select>
+          </div>
+
+          <div class="form-row" id="badgeRow">
+            <label for="fBadge">Badge</label>
+            <select id="fBadge">
+              <option value="new">New</option>
+              <option value="">No badge</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label for="fImageUrl">Image URL <span class="optional">(optional)</span></label>
+            <input type="url" id="fImageUrl" placeholder="https://..." />
+            <p class="form-hint">Paste a link to a photo. Leave blank to show a placeholder.</p>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
+            <button type="submit" class="save-btn">Save Product</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast hidden" id="toast"></div>
+
+    <script>
+      const PASSWORD = 'darkwater2026';
+
+      const SECTIONS = {
+        firearms: {
+          storageKey: 'dw_firearms',
+          categoryLabel: 'Type',
+          categories: [
+            { value: 'pistol',   label: 'Pistol' },
+            { value: 'revolver', label: 'Revolver' },
+            { value: 'rifle',    label: 'Rifle' },
+            { value: 'shotgun',  label: 'Shotgun' },
+          ],
+          brands: [
+            { value: 'glock',      label: 'Glock' },
+            { value: 'mossberg',   label: 'Mossberg' },
+            { value: 'remington',  label: 'Remington' },
+            { value: 'ruger',      label: 'Ruger' },
+            { value: 'sig',        label: 'Sig Sauer' },
+            { value: 'sw',         label: 'Smith & Wesson' },
+            { value: 'winchester', label: 'Winchester' },
+          ],
+          showCondition: true,
+          defaults: [
+            { id:'f1', name:'M&P Shield Plus 9mm', brand:'sw', brandLabel:'Smith & Wesson', category:'pistol', categoryLabel:'Pistol', price:'549.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1584467541268-b040f83be3fd?w=600&q=80', badge:'new' },
+            { id:'f2', name:'G19 Gen 5 9mm', brand:'glock', brandLabel:'Glock', category:'pistol', categoryLabel:'Pistol', price:'599.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=600&q=80', badge:'new' },
+            { id:'f3', name:'Model 686 Plus .357 Mag 4"', brand:'sw', brandLabel:'Smith & Wesson', category:'revolver', categoryLabel:'Revolver', price:'849.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1584467541268-b040f83be3fd?w=600&q=80', badge:'' },
+            { id:'f4', name:'10/22 Carbine .22 LR', brand:'ruger', brandLabel:'Ruger', category:'rifle', categoryLabel:'Rifle', price:'329.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1543946207-39bd91e70ca7?w=600&q=80', badge:'new' },
+            { id:'f5', name:'500 Field 12ga 28"', brand:'mossberg', brandLabel:'Mossberg', category:'shotgun', categoryLabel:'Shotgun', price:'449.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=600&q=80', badge:'new' },
+            { id:'f6', name:'Model 70 Featherweight .308 Win', brand:'winchester', brandLabel:'Winchester', category:'rifle', categoryLabel:'Rifle', price:'899.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1543946207-39bd91e70ca7?w=600&q=80', badge:'' },
+            { id:'f7', name:'P320 Compact 9mm', brand:'sig', brandLabel:'Sig Sauer', category:'pistol used', categoryLabel:'Pistol', price:'479.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1584467541268-b040f83be3fd?w=600&q=80', badge:'used' },
+            { id:'f8', name:'870 Express 12ga 26"', brand:'remington', brandLabel:'Remington', category:'shotgun used', categoryLabel:'Shotgun', price:'', callForPrice:true, imageUrl:'https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=600&q=80', badge:'used' },
+          ],
+        },
+        hunting: {
+          storageKey: 'dw_hunting',
+          categoryLabel: 'Category',
+          categories: [
+            { value: 'ammo',     label: 'Ammo' },
+            { value: 'calls',    label: 'Calls' },
+            { value: 'cameras',  label: 'Cameras' },
+            { value: 'clothing', label: 'Clothing' },
+            { value: 'knives',   label: 'Knives' },
+            { value: 'optics',   label: 'Optics' },
+          ],
+          brands: [
+            { value: 'buck',    label: 'Buck' },
+            { value: 'federal', label: 'Federal Premium' },
+            { value: 'lacrosse',label: 'LaCrosse' },
+            { value: 'primos',  label: 'Primos' },
+            { value: 'sitka',   label: 'Sitka' },
+            { value: 'stealth', label: 'Stealth Cam' },
+            { value: 'vortex',  label: 'Vortex' },
+          ],
+          showCondition: false,
+          defaults: [
+            { id:'h1', name:'Stratus Jacket', brand:'sitka', brandLabel:'Sitka Gear', category:'clothing', categoryLabel:'Clothing', price:'349.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=600&q=80', badge:'new' },
+            { id:'h2', name:'Crossfire II 3-9x40 Scope', brand:'vortex', brandLabel:'Vortex', category:'optics', categoryLabel:'Optics', price:'179.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80', badge:'new' },
+            { id:'h3', name:'Hoochie Mama Elk Call', brand:'primos', brandLabel:'Primos', category:'calls', categoryLabel:'Calls', price:'24.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1542382257-80dedb725088?w=600&q=80', badge:'' },
+            { id:'h4', name:'110 Folding Hunter', brand:'buck', brandLabel:'Buck Knives', category:'knives', categoryLabel:'Knives', price:'64.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1577401239170-897942555fb3?w=600&q=80', badge:'new' },
+            { id:'h5', name:'DS4K No-Glo Trail Camera', brand:'stealth', brandLabel:'Stealth Cam', category:'cameras', categoryLabel:'Cameras', price:'89.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&q=80', badge:'new' },
+            { id:'h6', name:'Premium 30-06 180gr Nosler Partition', brand:'federal', brandLabel:'Federal Premium', category:'ammo', categoryLabel:'Ammo', price:'54.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=600&q=80', badge:'' },
+            { id:'h7', name:'Diamondback HD 10x42 Binoculars', brand:'vortex', brandLabel:'Vortex', category:'optics', categoryLabel:'Optics', price:'199.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80', badge:'new' },
+            { id:'h8', name:'Alphaburly Pro 18" Boots', brand:'lacrosse', brandLabel:'LaCrosse', category:'clothing', categoryLabel:'Clothing', price:'219.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80', badge:'' },
+          ],
+        },
+        fishing: {
+          storageKey: 'dw_fishing',
+          categoryLabel: 'Category',
+          categories: [
+            { value: 'line',   label: 'Line' },
+            { value: 'lures',  label: 'Lures & Bait' },
+            { value: 'reels',  label: 'Reels' },
+            { value: 'rods',   label: 'Rods' },
+            { value: 'tackle', label: 'Tackle & Accessories' },
+          ],
+          brands: [
+            { value: 'berkley',    label: 'Berkley' },
+            { value: 'eagleclaw', label: 'Eagle Claw' },
+            { value: 'plano',      label: 'Plano' },
+            { value: 'rapala',     label: 'Rapala' },
+            { value: 'shimano',    label: 'Shimano' },
+            { value: 'strikeking', label: 'Strike King' },
+            { value: 'uglystik',   label: 'Ugly Stik' },
+          ],
+          showCondition: false,
+          defaults: [
+            { id:'fi1', name:"GX2 7' Medium Spinning Rod", brand:'uglystik', brandLabel:'Ugly Stik', category:'rods', categoryLabel:'Rods', price:'49.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80', badge:'new' },
+            { id:'fi2', name:'Stradic FL 2500 Spinning Reel', brand:'shimano', brandLabel:'Shimano', category:'reels', categoryLabel:'Reels', price:'199.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1599940824399-b87987ceb72a?w=600&q=80', badge:'new' },
+            { id:'fi3', name:'Original Floating F11 Lure', brand:'rapala', brandLabel:'Rapala', category:'lures', categoryLabel:'Lures & Bait', price:'9.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=600&q=80', badge:'' },
+            { id:'fi4', name:'PowerBait Power Worm 7"', brand:'berkley', brandLabel:'Berkley', category:'lures', categoryLabel:'Lures & Bait', price:'6.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80', badge:'' },
+            { id:'fi5', name:'Trilene XL 300yd 10lb Monofilament', brand:'berkley', brandLabel:'Berkley', category:'line', categoryLabel:'Line', price:'11.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1599940824399-b87987ceb72a?w=600&q=80', badge:'' },
+            { id:'fi6', name:'3700 ProLatch StowAway Tackle Box', brand:'plano', brandLabel:'Plano', category:'tackle', categoryLabel:'Tackle & Accessories', price:'14.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=600&q=80', badge:'new' },
+            { id:'fi7', name:'Lazer Sharp Circle Hook Kit (50pk)', brand:'eagleclaw', brandLabel:'Eagle Claw', category:'tackle', categoryLabel:'Tackle & Accessories', price:'7.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80', badge:'' },
+            { id:'fi8', name:'KVD 1/2oz Spinnerbait', brand:'strikeking', brandLabel:'Strike King', category:'lures', categoryLabel:'Lures & Bait', price:'8.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=600&q=80', badge:'' },
+          ],
+        },
+      };
+
+      // ── AUTH ──
+      document.getElementById('loginForm').addEventListener('submit', e => {
+        e.preventDefault();
+        if (document.getElementById('passwordInput').value === PASSWORD) {
+          sessionStorage.setItem('dw_admin', '1');
+          showAdmin();
+        } else {
+          document.getElementById('loginError').style.display = 'block';
+          document.getElementById('passwordInput').select();
+        }
+      });
+
+      function logout() {
+        sessionStorage.removeItem('dw_admin');
+        document.getElementById('adminPanel').style.display = 'none';
+        document.getElementById('loginScreen').style.display = 'flex';
+        document.getElementById('passwordInput').value = '';
+        document.getElementById('loginError').style.display = 'none';
+      }
+
+      function showAdmin() {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('adminPanel').style.display = 'flex';
+        renderAllLists();
+      }
+
+      if (sessionStorage.getItem('dw_admin') === '1') showAdmin();
+
+      // ── TABS ──
+      function switchTab(section, btn) {
+        document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('panel-' + section).classList.add('active');
+      }
+
+      // ── DATA ──
+      function getProducts(section) {
+        const stored = localStorage.getItem(SECTIONS[section].storageKey);
+        return stored ? JSON.parse(stored) : SECTIONS[section].defaults;
+      }
+
+      function saveToStorage(section, products) {
+        localStorage.setItem(SECTIONS[section].storageKey, JSON.stringify(products));
+      }
+
+      function escHtml(str) {
+        return String(str)
+          .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+          .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      }
+
+      // ── RENDER LIST ──
+      function renderList(section) {
+        const products = getProducts(section);
+        const el = document.getElementById('list-' + section);
+        if (!products.length) {
+          el.innerHTML = '<div class="empty-state"><strong>No products yet.</strong><p>Click "+ Add Product" to get started.</p></div>';
+          return;
+        }
+        el.innerHTML = `
+          <table class="product-table">
+            <thead>
+              <tr>
+                <th style="width:76px">Image</th>
+                <th>Name</th>
+                <th>Brand</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th style="width:130px">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${products.map(p => `
+                <tr>
+                  <td>${p.imageUrl
+                    ? `<img class="product-thumb" src="${escHtml(p.imageUrl)}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'product-thumb-placeholder',textContent:'📦'}))">`
+                    : `<div class="product-thumb-placeholder">📦</div>`}
+                  </td>
+                  <td>
+                    <span class="product-name-cell">${escHtml(p.name)}</span>
+                    ${p.badge === 'new' ? '<span class="badge-sm new">New</span>' : p.badge === 'used' ? '<span class="badge-sm used">Used</span>' : ''}
+                  </td>
+                  <td>${escHtml(p.brandLabel)}</td>
+                  <td>${escHtml(p.categoryLabel)}</td>
+                  <td>${p.callForPrice ? '<em>Call for price</em>' : '$' + parseFloat(p.price).toFixed(2)}</td>
+                  <td>
+                    <div class="row-actions">
+                      <button class="edit-btn" onclick="openForm('${section}','${p.id}')">Edit</button>
+                      <button class="del-btn" onclick="deleteProduct('${section}','${p.id}')">Delete</button>
+                    </div>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>`;
+      }
+
+      function renderAllLists() {
+        Object.keys(SECTIONS).forEach(renderList);
+      }
+
+      // ── MODAL ──
+      function openForm(section, id = null) {
+        const cfg = SECTIONS[section];
+        document.getElementById('editSection').value = section;
+        document.getElementById('editId').value = id || '';
+        document.getElementById('modalTitle').textContent = id ? 'Edit Product' : 'Add Product';
+        document.getElementById('fCategoryLabel').textContent = cfg.categoryLabel + ' *';
+
+        document.getElementById('fCategory').innerHTML = cfg.categories
+          .map(c => `<option value="${c.value}">${c.label}</option>`).join('');
+        document.getElementById('fBrand').innerHTML = cfg.brands
+          .map(b => `<option value="${b.value}">${b.label}</option>`).join('');
+
+        document.getElementById('conditionRow').style.display = cfg.showCondition ? '' : 'none';
+        document.getElementById('badgeRow').style.display = cfg.showCondition ? 'none' : '';
+
+        if (id) {
+          const p = getProducts(section).find(x => x.id === id);
+          if (p) {
+            document.getElementById('fName').value = p.name;
+            document.getElementById('fPrice').value = p.price || '';
+            document.getElementById('fCallForPrice').checked = p.callForPrice;
+            document.getElementById('fImageUrl').value = p.imageUrl || '';
+            document.getElementById('fCategory').value = p.category.replace(' used', '');
+            document.getElementById('fBrand').value = p.brand;
+            if (cfg.showCondition) document.getElementById('fCondition').value = p.badge || '';
+            else document.getElementById('fBadge').value = p.badge || '';
+          }
+        } else {
+          document.getElementById('fName').value = '';
+          document.getElementById('fPrice').value = '';
+          document.getElementById('fCallForPrice').checked = false;
+          document.getElementById('fImageUrl').value = '';
+          if (cfg.showCondition) document.getElementById('fCondition').value = 'new';
+          else document.getElementById('fBadge').value = 'new';
+        }
+
+        togglePriceField();
+        document.getElementById('modalOverlay').classList.remove('hidden');
+        document.getElementById('fName').focus();
+      }
+
+      function closeModal() {
+        document.getElementById('modalOverlay').classList.add('hidden');
+      }
+
+      document.getElementById('modalOverlay').addEventListener('click', e => {
+        if (e.target === document.getElementById('modalOverlay')) closeModal();
+      });
+
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') closeModal();
+      });
+
+      function togglePriceField() {
+        const call = document.getElementById('fCallForPrice').checked;
+        document.getElementById('fPrice').disabled = call;
+        if (call) document.getElementById('fPrice').value = '';
+      }
+
+      // ── SAVE ──
+      function saveProduct(e) {
+        e.preventDefault();
+        const section = document.getElementById('editSection').value;
+        const id = document.getElementById('editId').value;
+        const cfg = SECTIONS[section];
+        const catValue = document.getElementById('fCategory').value;
+        const catLabel = cfg.categories.find(c => c.value === catValue)?.label || catValue;
+        const brandValue = document.getElementById('fBrand').value;
+        const brandLabel = cfg.brands.find(b => b.value === brandValue)?.label || brandValue;
+        const callForPrice = document.getElementById('fCallForPrice').checked;
+
+        let badge, category;
+        if (cfg.showCondition) {
+          const condition = document.getElementById('fCondition').value;
+          badge = condition;
+          category = condition === 'used' ? `${catValue} used` : catValue;
+        } else {
+          badge = document.getElementById('fBadge').value;
+          category = catValue;
+        }
+
+        const product = {
+          id: id || (Date.now().toString(36) + Math.random().toString(36).slice(2)),
+          name: document.getElementById('fName').value.trim(),
+          brand: brandValue, brandLabel,
+          category, categoryLabel: catLabel,
+          price: callForPrice ? '' : (parseFloat(document.getElementById('fPrice').value) || 0).toFixed(2),
+          callForPrice,
+          imageUrl: document.getElementById('fImageUrl').value.trim(),
+          badge,
+        };
+
+        const products = getProducts(section);
+        if (id) {
+          const idx = products.findIndex(p => p.id === id);
+          if (idx !== -1) products[idx] = product; else products.push(product);
+        } else {
+          products.push(product);
+        }
+
+        saveToStorage(section, products);
+        renderList(section);
+        closeModal();
+        showToast(id ? 'Product updated!' : 'Product added!');
+      }
+
+      // ── DELETE ──
+      function deleteProduct(section, id) {
+        if (!confirm('Delete this product? This cannot be undone.')) return;
+        saveToStorage(section, getProducts(section).filter(p => p.id !== id));
+        renderList(section);
+        showToast('Product deleted.');
+      }
+
+      // ── TOAST ──
+      function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.remove('hidden');
+        setTimeout(() => t.classList.add('hidden'), 2500);
+      }
+    </script>
+  </body>
+</html>
