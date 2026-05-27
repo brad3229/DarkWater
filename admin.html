@@ -107,6 +107,16 @@
       .save-btn { background: var(--green); color: #fff; border: none; border-radius: 10px; padding: 11px 24px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; transition: background 0.2s; }
       .save-btn:hover { background: var(--green2); }
 
+      /* ── SUMMARY BAR ── */
+      .summary-bar { background: var(--bg2); border-bottom: 1.5px solid var(--border); padding: 18px 32px; display: flex; align-items: center; gap: 0; flex-wrap: wrap; }
+      .summary-stat { padding: 0 28px; border-right: 1.5px solid var(--border); }
+      .summary-stat:first-child { padding-left: 0; }
+      .summary-stat:last-child { border-right: none; }
+      .summary-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--tan); margin-bottom: 3px; }
+      .summary-value { font-size: 16px; font-weight: 900; color: var(--text); }
+      .summary-stat.total .summary-value { font-size: 22px; color: var(--green); }
+      .summary-sub { font-size: 11px; color: var(--text2); margin-top: 1px; font-weight: 500; }
+
       /* ── TOAST ── */
       .toast { position: fixed; bottom: 24px; right: 24px; background: var(--green); color: #fff; border-radius: 10px; padding: 14px 20px; font-size: 14px; font-weight: 600; box-shadow: 0 4px 20px rgba(0,0,0,0.15); z-index: 1000; }
       .toast.hidden { display: none; }
@@ -157,6 +167,34 @@
         <button class="tab-btn active" onclick="switchTab('firearms', this)">Firearms &amp; Accessories</button>
         <button class="tab-btn" onclick="switchTab('hunting', this)">Hunting Gear</button>
         <button class="tab-btn" onclick="switchTab('fishing', this)">Fishing</button>
+      </div>
+
+      <div class="summary-bar">
+        <div class="summary-stat total">
+          <div class="summary-label">Total Inventory Value</div>
+          <div class="summary-value" id="statTotal">$0.00</div>
+          <div class="summary-sub" id="statTotalSub">across all departments</div>
+        </div>
+        <div class="summary-stat">
+          <div class="summary-label">Total Units</div>
+          <div class="summary-value" id="statUnits">0</div>
+          <div class="summary-sub" id="statSkus">0 SKUs</div>
+        </div>
+        <div class="summary-stat">
+          <div class="summary-label">🔫 Firearms</div>
+          <div class="summary-value" id="statFirearms">$0.00</div>
+          <div class="summary-sub" id="statFirearmsSub">0 units</div>
+        </div>
+        <div class="summary-stat">
+          <div class="summary-label">🦌 Hunting</div>
+          <div class="summary-value" id="statHunting">$0.00</div>
+          <div class="summary-sub" id="statHuntingSub">0 units</div>
+        </div>
+        <div class="summary-stat">
+          <div class="summary-label">🎣 Fishing</div>
+          <div class="summary-value" id="statFishing">$0.00</div>
+          <div class="summary-sub" id="statFishingSub">0 units</div>
+        </div>
       </div>
 
       <div class="admin-content">
@@ -476,6 +514,30 @@
 
       function renderAllLists() {
         Object.keys(SECTIONS).forEach(renderList);
+        renderSummary();
+      }
+
+      function renderSummary() {
+        const fmt = (n) => n.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+        let grandValue = 0, grandUnits = 0, grandSkus = 0;
+        Object.keys(SECTIONS).forEach(section => {
+          const products = getProducts(section);
+          let secValue = 0, secUnits = 0;
+          products.forEach(p => {
+            const qty = p.quantity ?? 1;
+            secUnits += qty;
+            if (!p.callForPrice && p.price) secValue += parseFloat(p.price) * qty;
+          });
+          grandValue += secValue;
+          grandUnits += secUnits;
+          grandSkus  += products.length;
+          document.getElementById('stat' + section.charAt(0).toUpperCase() + section.slice(1)).textContent = fmt(secValue);
+          document.getElementById('stat' + section.charAt(0).toUpperCase() + section.slice(1) + 'Sub').textContent = secUnits + ' unit' + (secUnits !== 1 ? 's' : '') + ' · ' + products.length + ' SKU' + (products.length !== 1 ? 's' : '');
+        });
+        document.getElementById('statTotal').textContent = fmt(grandValue);
+        document.getElementById('statTotalSub').textContent = grandSkus + ' SKUs across all departments';
+        document.getElementById('statUnits').textContent = grandUnits.toLocaleString();
+        document.getElementById('statSkus').textContent = grandSkus + ' SKU' + (grandSkus !== 1 ? 's' : '');
       }
 
       // ── MODAL ──
@@ -584,6 +646,7 @@
 
         saveToStorage(section, products);
         renderList(section);
+        renderSummary();
         closeModal();
         showToast(id ? 'Product updated!' : 'Product added!');
       }
@@ -593,6 +656,7 @@
         if (!confirm('Delete this product? This cannot be undone.')) return;
         saveToStorage(section, getProducts(section).filter(p => p.id !== id));
         renderList(section);
+        renderSummary();
         showToast('Product deleted.');
       }
 
