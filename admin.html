@@ -225,11 +225,15 @@
               <input type="number" id="fPrice" min="0" step="0.01" placeholder="0.00" />
             </div>
             <div>
-              <label>&nbsp;</label>
-              <div class="checkbox-row">
-                <input type="checkbox" id="fCallForPrice" onchange="togglePriceField()" />
-                <span onclick="document.getElementById('fCallForPrice').click()">Call for price</span>
-              </div>
+              <label for="fQty">Qty in Stock</label>
+              <input type="number" id="fQty" min="0" step="1" placeholder="0" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="checkbox-row">
+              <input type="checkbox" id="fCallForPrice" onchange="togglePriceField()" />
+              <span onclick="document.getElementById('fCallForPrice').click()">Call for price</span>
             </div>
           </div>
 
@@ -291,14 +295,14 @@
           ],
           showCondition: true,
           defaults: [
-            { id:'f1', name:'M&P Shield Plus 9mm', brand:'sw', brandLabel:'Smith & Wesson', category:'pistol', categoryLabel:'Pistol', price:'549.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1584467541268-b040f83be3fd?w=600&q=80', badge:'new' },
-            { id:'f2', name:'G19 Gen 5 9mm', brand:'glock', brandLabel:'Glock', category:'pistol', categoryLabel:'Pistol', price:'599.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=600&q=80', badge:'new' },
-            { id:'f3', name:'Model 686 Plus .357 Mag 4"', brand:'sw', brandLabel:'Smith & Wesson', category:'revolver', categoryLabel:'Revolver', price:'849.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1584467541268-b040f83be3fd?w=600&q=80', badge:'' },
-            { id:'f4', name:'10/22 Carbine .22 LR', brand:'ruger', brandLabel:'Ruger', category:'rifle', categoryLabel:'Rifle', price:'329.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1543946207-39bd91e70ca7?w=600&q=80', badge:'new' },
-            { id:'f5', name:'500 Field 12ga 28"', brand:'mossberg', brandLabel:'Mossberg', category:'shotgun', categoryLabel:'Shotgun', price:'449.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=600&q=80', badge:'new' },
-            { id:'f6', name:'Model 70 Featherweight .308 Win', brand:'winchester', brandLabel:'Winchester', category:'rifle', categoryLabel:'Rifle', price:'899.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1543946207-39bd91e70ca7?w=600&q=80', badge:'' },
-            { id:'f7', name:'P320 Compact 9mm', brand:'sig', brandLabel:'Sig Sauer', category:'pistol used', categoryLabel:'Pistol', price:'479.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1584467541268-b040f83be3fd?w=600&q=80', badge:'used' },
-            { id:'f8', name:'870 Express 12ga 26"', brand:'remington', brandLabel:'Remington', category:'shotgun used', categoryLabel:'Shotgun', price:'', callForPrice:true, imageUrl:'https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=600&q=80', badge:'used' },
+            { id:'f1', name:'M&P Shield Plus 9mm', brand:'sw', brandLabel:'Smith & Wesson', category:'pistol', categoryLabel:'Pistol', price:'549.99', callForPrice:false, quantity:2, imageUrl:'https://images.unsplash.com/photo-1584467541268-b040f83be3fd?w=600&q=80', badge:'new' },
+            { id:'f2', name:'G19 Gen 5 9mm', brand:'glock', brandLabel:'Glock', category:'pistol', categoryLabel:'Pistol', price:'599.99', callForPrice:false, quantity:3, imageUrl:'https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=600&q=80', badge:'new' },
+            { id:'f3', name:'Model 686 Plus .357 Mag 4"', brand:'sw', brandLabel:'Smith & Wesson', category:'revolver', categoryLabel:'Revolver', price:'849.99', callForPrice:false, quantity:1, imageUrl:'https://images.unsplash.com/photo-1584467541268-b040f83be3fd?w=600&q=80', badge:'' },
+            { id:'f4', name:'10/22 Carbine .22 LR', brand:'ruger', brandLabel:'Ruger', category:'rifle', categoryLabel:'Rifle', price:'329.99', callForPrice:false, quantity:2, imageUrl:'https://images.unsplash.com/photo-1543946207-39bd91e70ca7?w=600&q=80', badge:'new' },
+            { id:'f5', name:'500 Field 12ga 28"', brand:'mossberg', brandLabel:'Mossberg', category:'shotgun', categoryLabel:'Shotgun', price:'449.99', callForPrice:false, quantity:2, imageUrl:'https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=600&q=80', badge:'new' },
+            { id:'f6', name:'Model 70 Featherweight .308 Win', brand:'winchester', brandLabel:'Winchester', category:'rifle', categoryLabel:'Rifle', price:'899.99', callForPrice:false, quantity:1, imageUrl:'https://images.unsplash.com/photo-1543946207-39bd91e70ca7?w=600&q=80', badge:'' },
+            { id:'f7', name:'P320 Compact 9mm', brand:'sig', brandLabel:'Sig Sauer', category:'pistol used', categoryLabel:'Pistol', price:'479.99', callForPrice:false, quantity:1, imageUrl:'https://images.unsplash.com/photo-1584467541268-b040f83be3fd?w=600&q=80', badge:'used' },
+            { id:'f8', name:'870 Express 12ga 26"', brand:'remington', brandLabel:'Remington', category:'shotgun used', categoryLabel:'Shotgun', price:'', callForPrice:true, quantity:1, imageUrl:'https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=600&q=80', badge:'used' },
           ],
         },
         hunting: {
@@ -323,14 +327,14 @@
           ],
           showCondition: false,
           defaults: [
-            { id:'h1', name:'Stratus Jacket', brand:'sitka', brandLabel:'Sitka Gear', category:'clothing', categoryLabel:'Clothing', price:'349.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=600&q=80', badge:'new' },
-            { id:'h2', name:'Crossfire II 3-9x40 Scope', brand:'vortex', brandLabel:'Vortex', category:'optics', categoryLabel:'Optics', price:'179.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80', badge:'new' },
-            { id:'h3', name:'Hoochie Mama Elk Call', brand:'primos', brandLabel:'Primos', category:'calls', categoryLabel:'Calls', price:'24.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1542382257-80dedb725088?w=600&q=80', badge:'' },
-            { id:'h4', name:'110 Folding Hunter', brand:'buck', brandLabel:'Buck Knives', category:'knives', categoryLabel:'Knives', price:'64.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1577401239170-897942555fb3?w=600&q=80', badge:'new' },
-            { id:'h5', name:'DS4K No-Glo Trail Camera', brand:'stealth', brandLabel:'Stealth Cam', category:'cameras', categoryLabel:'Cameras', price:'89.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&q=80', badge:'new' },
-            { id:'h6', name:'Premium 30-06 180gr Nosler Partition', brand:'federal', brandLabel:'Federal Premium', category:'ammo', categoryLabel:'Ammo', price:'54.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=600&q=80', badge:'' },
-            { id:'h7', name:'Diamondback HD 10x42 Binoculars', brand:'vortex', brandLabel:'Vortex', category:'optics', categoryLabel:'Optics', price:'199.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80', badge:'new' },
-            { id:'h8', name:'Alphaburly Pro 18" Boots', brand:'lacrosse', brandLabel:'LaCrosse', category:'clothing', categoryLabel:'Clothing', price:'219.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80', badge:'' },
+            { id:'h1', name:'Stratus Jacket', brand:'sitka', brandLabel:'Sitka Gear', category:'clothing', categoryLabel:'Clothing', price:'349.99', callForPrice:false, quantity:3, imageUrl:'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=600&q=80', badge:'new' },
+            { id:'h2', name:'Crossfire II 3-9x40 Scope', brand:'vortex', brandLabel:'Vortex', category:'optics', categoryLabel:'Optics', price:'179.99', callForPrice:false, quantity:2, imageUrl:'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80', badge:'new' },
+            { id:'h3', name:'Hoochie Mama Elk Call', brand:'primos', brandLabel:'Primos', category:'calls', categoryLabel:'Calls', price:'24.99', callForPrice:false, quantity:5, imageUrl:'https://images.unsplash.com/photo-1542382257-80dedb725088?w=600&q=80', badge:'' },
+            { id:'h4', name:'110 Folding Hunter', brand:'buck', brandLabel:'Buck Knives', category:'knives', categoryLabel:'Knives', price:'64.99', callForPrice:false, quantity:4, imageUrl:'https://images.unsplash.com/photo-1577401239170-897942555fb3?w=600&q=80', badge:'new' },
+            { id:'h5', name:'DS4K No-Glo Trail Camera', brand:'stealth', brandLabel:'Stealth Cam', category:'cameras', categoryLabel:'Cameras', price:'89.99', callForPrice:false, quantity:2, imageUrl:'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&q=80', badge:'new' },
+            { id:'h6', name:'Premium 30-06 180gr Nosler Partition', brand:'federal', brandLabel:'Federal Premium', category:'ammo', categoryLabel:'Ammo', price:'54.99', callForPrice:false, quantity:10, imageUrl:'https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=600&q=80', badge:'' },
+            { id:'h7', name:'Diamondback HD 10x42 Binoculars', brand:'vortex', brandLabel:'Vortex', category:'optics', categoryLabel:'Optics', price:'199.99', callForPrice:false, quantity:2, imageUrl:'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80', badge:'new' },
+            { id:'h8', name:'Alphaburly Pro 18" Boots', brand:'lacrosse', brandLabel:'LaCrosse', category:'clothing', categoryLabel:'Clothing', price:'219.99', callForPrice:false, quantity:3, imageUrl:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80', badge:'' },
           ],
         },
         fishing: {
@@ -354,14 +358,14 @@
           ],
           showCondition: false,
           defaults: [
-            { id:'fi1', name:"GX2 7' Medium Spinning Rod", brand:'uglystik', brandLabel:'Ugly Stik', category:'rods', categoryLabel:'Rods', price:'49.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80', badge:'new' },
-            { id:'fi2', name:'Stradic FL 2500 Spinning Reel', brand:'shimano', brandLabel:'Shimano', category:'reels', categoryLabel:'Reels', price:'199.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1599940824399-b87987ceb72a?w=600&q=80', badge:'new' },
-            { id:'fi3', name:'Original Floating F11 Lure', brand:'rapala', brandLabel:'Rapala', category:'lures', categoryLabel:'Lures & Bait', price:'9.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=600&q=80', badge:'' },
-            { id:'fi4', name:'PowerBait Power Worm 7"', brand:'berkley', brandLabel:'Berkley', category:'lures', categoryLabel:'Lures & Bait', price:'6.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80', badge:'' },
-            { id:'fi5', name:'Trilene XL 300yd 10lb Monofilament', brand:'berkley', brandLabel:'Berkley', category:'line', categoryLabel:'Line', price:'11.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1599940824399-b87987ceb72a?w=600&q=80', badge:'' },
-            { id:'fi6', name:'3700 ProLatch StowAway Tackle Box', brand:'plano', brandLabel:'Plano', category:'tackle', categoryLabel:'Tackle & Accessories', price:'14.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=600&q=80', badge:'new' },
-            { id:'fi7', name:'Lazer Sharp Circle Hook Kit (50pk)', brand:'eagleclaw', brandLabel:'Eagle Claw', category:'tackle', categoryLabel:'Tackle & Accessories', price:'7.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80', badge:'' },
-            { id:'fi8', name:'KVD 1/2oz Spinnerbait', brand:'strikeking', brandLabel:'Strike King', category:'lures', categoryLabel:'Lures & Bait', price:'8.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=600&q=80', badge:'' },
+            { id:'fi1', name:"GX2 7' Medium Spinning Rod", brand:'uglystik', brandLabel:'Ugly Stik', category:'rods', categoryLabel:'Rods', price:'49.99', callForPrice:false, quantity:4, imageUrl:'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80', badge:'new' },
+            { id:'fi2', name:'Stradic FL 2500 Spinning Reel', brand:'shimano', brandLabel:'Shimano', category:'reels', categoryLabel:'Reels', price:'199.99', callForPrice:false, quantity:2, imageUrl:'https://images.unsplash.com/photo-1599940824399-b87987ceb72a?w=600&q=80', badge:'new' },
+            { id:'fi3', name:'Original Floating F11 Lure', brand:'rapala', brandLabel:'Rapala', category:'lures', categoryLabel:'Lures & Bait', price:'9.99', callForPrice:false, quantity:8, imageUrl:'https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=600&q=80', badge:'' },
+            { id:'fi4', name:'PowerBait Power Worm 7"', brand:'berkley', brandLabel:'Berkley', category:'lures', categoryLabel:'Lures & Bait', price:'6.99', callForPrice:false, quantity:6, imageUrl:'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80', badge:'' },
+            { id:'fi5', name:'Trilene XL 300yd 10lb Monofilament', brand:'berkley', brandLabel:'Berkley', category:'line', categoryLabel:'Line', price:'11.99', callForPrice:false, quantity:5, imageUrl:'https://images.unsplash.com/photo-1599940824399-b87987ceb72a?w=600&q=80', badge:'' },
+            { id:'fi6', name:'3700 ProLatch StowAway Tackle Box', brand:'plano', brandLabel:'Plano', category:'tackle', categoryLabel:'Tackle & Accessories', price:'14.99', callForPrice:false, quantity:3, imageUrl:'https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=600&q=80', badge:'new' },
+            { id:'fi7', name:'Lazer Sharp Circle Hook Kit (50pk)', brand:'eagleclaw', brandLabel:'Eagle Claw', category:'tackle', categoryLabel:'Tackle & Accessories', price:'7.99', callForPrice:false, quantity:5, imageUrl:'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80', badge:'' },
+            { id:'fi8', name:'KVD 1/2oz Spinnerbait', brand:'strikeking', brandLabel:'Strike King', category:'lures', categoryLabel:'Lures & Bait', price:'8.99', callForPrice:false, quantity:4, imageUrl:'https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=600&q=80', badge:'' },
           ],
         },
       };
@@ -435,6 +439,7 @@
                 <th>Brand</th>
                 <th>Category</th>
                 <th>Price</th>
+                <th style="width:60px;text-align:center">Qty</th>
                 <th style="width:130px">Actions</th>
               </tr>
             </thead>
@@ -452,6 +457,11 @@
                   <td>${escHtml(p.brandLabel)}</td>
                   <td>${escHtml(p.categoryLabel)}</td>
                   <td>${p.callForPrice ? '<em>Call for price</em>' : '$' + parseFloat(p.price).toFixed(2)}</td>
+                  <td style="text-align:center">
+                    ${(p.quantity ?? 1) === 0
+                      ? '<span style="color:#b91c1c;font-weight:700;font-size:12px">OOS</span>'
+                      : `<span style="font-weight:700">${p.quantity ?? 1}</span>`}
+                  </td>
                   <td>
                     <div class="row-actions">
                       <button class="edit-btn" onclick="openForm('${section}','${p.id}')">Edit</button>
@@ -489,6 +499,7 @@
           if (p) {
             document.getElementById('fName').value = p.name;
             document.getElementById('fPrice').value = p.price || '';
+            document.getElementById('fQty').value = p.quantity ?? 1;
             document.getElementById('fCallForPrice').checked = p.callForPrice;
             document.getElementById('fImageUrl').value = p.imageUrl || '';
             document.getElementById('fCategory').value = p.category.replace(' used', '');
@@ -499,6 +510,7 @@
         } else {
           document.getElementById('fName').value = '';
           document.getElementById('fPrice').value = '';
+          document.getElementById('fQty').value = 1;
           document.getElementById('fCallForPrice').checked = false;
           document.getElementById('fImageUrl').value = '';
           if (cfg.showCondition) document.getElementById('fCondition').value = 'new';
@@ -557,6 +569,7 @@
           category, categoryLabel: catLabel,
           price: callForPrice ? '' : (parseFloat(document.getElementById('fPrice').value) || 0).toFixed(2),
           callForPrice,
+          quantity: parseInt(document.getElementById('fQty').value, 10) || 0,
           imageUrl: document.getElementById('fImageUrl').value.trim(),
           badge,
         };

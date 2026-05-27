@@ -164,6 +164,14 @@
         text-transform: uppercase; padding: 2px 7px; border-radius: 4px;
         margin-left: 6px; vertical-align: middle;
       }
+      .badge-oos {
+        display: inline-block;
+        background: #64748b; color: #fff;
+        font-size: 9px; font-weight: 800; letter-spacing: 1px;
+        text-transform: uppercase; padding: 2px 7px; border-radius: 4px;
+        margin-left: 6px; vertical-align: middle;
+      }
+      .card-oos { opacity: 0.6; }
 
       /* ── CONTACT CTA ── */
       .cta-banner {
@@ -390,11 +398,13 @@
             : p.badge === "sale"
             ? `<span class="badge-sale">Sale</span>`
             : "";
-          return `<div class="product-card reveal" data-category="${escHtml(p.category)}" data-brand="${escHtml(p.brand)}">
+          const qty = p.quantity ?? 1;
+          const oosHtml = qty === 0 ? `<span class="badge-oos">Out of Stock</span>` : '';
+          return `<div class="product-card reveal${qty === 0 ? ' card-oos' : ''}" data-category="${escHtml(p.category)}" data-brand="${escHtml(p.brand)}">
             <img class="product-img" src="${escHtml(p.imageUrl)}" alt="${escHtml(p.name)}" loading="lazy"/>
             <div class="product-body">
               <div class="product-tag">${escHtml(p.categoryLabel)}</div>
-              <div class="product-name">${escHtml(p.name)}${badgeHtml}</div>
+              <div class="product-name">${escHtml(p.name)}${badgeHtml}${oosHtml}</div>
               <div class="product-brand">${escHtml(p.brandLabel)}</div>
               <div class="product-footer">
                 ${priceHtml}
