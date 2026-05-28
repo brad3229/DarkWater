@@ -107,6 +107,31 @@
       .save-btn { background: var(--green); color: #fff; border: none; border-radius: 10px; padding: 11px 24px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; transition: background 0.2s; }
       .save-btn:hover { background: var(--green2); }
 
+      /* ── RAFFLE ── */
+      .raffle-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+      @media (max-width: 900px) { .raffle-layout { grid-template-columns: 1fr; } }
+      .raffle-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 16px; padding: 28px; }
+      .raffle-card h3 { font-size: 16px; font-weight: 900; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1.5px solid var(--border); display: flex; align-items: center; gap: 10px; }
+      .raffle-active-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; padding: 14px 16px; background: var(--bg2); border-radius: 10px; border: 1.5px solid var(--border); }
+      .raffle-active-row label { font-size: 14px; font-weight: 700; }
+      .toggle { position: relative; display: inline-block; width: 44px; height: 24px; }
+      .toggle input { opacity: 0; width: 0; height: 0; }
+      .toggle-slider { position: absolute; inset: 0; background: #ccc; border-radius: 24px; cursor: pointer; transition: background 0.2s; }
+      .toggle-slider::before { content: ''; position: absolute; height: 18px; width: 18px; left: 3px; bottom: 3px; background: #fff; border-radius: 50%; transition: transform 0.2s; }
+      .toggle input:checked + .toggle-slider { background: var(--green); }
+      .toggle input:checked + .toggle-slider::before { transform: translateX(20px); }
+      .form-row textarea { width: 100%; border: 1.5px solid var(--border); border-radius: 10px; padding: 11px 14px; font-size: 14px; font-family: inherit; color: var(--text); background: var(--bg); transition: border-color 0.2s; resize: vertical; min-height: 80px; }
+      .form-row textarea:focus { outline: none; border-color: var(--green); background: var(--white); }
+      .raffle-save-btn { width: 100%; background: var(--green); color: #fff; border: none; border-radius: 10px; padding: 13px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; transition: background 0.2s; margin-top: 8px; }
+      .raffle-save-btn:hover { background: var(--green2); }
+      .winners-table { width: 100%; border-collapse: collapse; }
+      .winners-table th { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--tan); padding: 8px 0; text-align: left; border-bottom: 1.5px solid var(--border); }
+      .winners-table td { padding: 12px 0; font-size: 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+      .winners-table tr:last-child td { border-bottom: none; }
+      .winner-add-btn { background: var(--bg2); border: 1.5px solid var(--border); color: var(--text); border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+      .winner-add-btn:hover { border-color: var(--green); color: var(--green); }
+      .no-winners { text-align: center; padding: 32px 0; color: var(--text2); font-size: 14px; }
+
       /* ── SUMMARY BAR ── */
       .summary-bar { background: var(--bg2); border-bottom: 1.5px solid var(--border); padding: 18px 32px; display: flex; align-items: center; gap: 0; flex-wrap: wrap; }
       .summary-stat { padding: 0 28px; border-right: 1.5px solid var(--border); }
@@ -167,6 +192,7 @@
         <button class="tab-btn active" onclick="switchTab('firearms', this)">Firearms &amp; Accessories</button>
         <button class="tab-btn" onclick="switchTab('hunting', this)">Hunting Gear</button>
         <button class="tab-btn" onclick="switchTab('fishing', this)">Fishing</button>
+        <button class="tab-btn" onclick="switchTab('raffle', this)">🎟️ Raffle</button>
       </div>
 
       <div class="summary-bar">
@@ -230,6 +256,91 @@
           </div>
           <div id="list-fishing"></div>
         </div>
+        <div class="panel" id="panel-raffle">
+          <div class="panel-header">
+            <div>
+              <h2>🎟️ Raffle</h2>
+              <p>Set up the current raffle and log past winners. Changes appear instantly on raffle.html in this browser.</p>
+            </div>
+            <a href="raffle.html" target="_blank" class="add-btn" style="text-decoration:none">View Page ↗</a>
+          </div>
+
+          <div class="raffle-layout">
+            <!-- Current Raffle Form -->
+            <div class="raffle-card">
+              <h3>🏆 Current Raffle</h3>
+              <div class="raffle-active-row">
+                <label for="rActive">Raffle is live on the website</label>
+                <label class="toggle"><input type="checkbox" id="rActive" /><span class="toggle-slider"></span></label>
+              </div>
+              <div class="form-row">
+                <label for="rPrizeName">Prize Name *</label>
+                <input type="text" id="rPrizeName" placeholder="e.g. Glock 19 Gen 5 9mm" />
+              </div>
+              <div class="form-row">
+                <label for="rPrizeDesc">Prize Description</label>
+                <textarea id="rPrizeDesc" placeholder="Describe what the winner gets..."></textarea>
+              </div>
+              <div class="form-row two-col">
+                <div>
+                  <label for="rPrizeValue">Retail Value ($)</label>
+                  <input type="number" id="rPrizeValue" min="0" step="0.01" placeholder="0.00" />
+                </div>
+                <div>
+                  <label for="rTicketPrice">Ticket Price ($)</label>
+                  <input type="number" id="rTicketPrice" min="0" step="0.01" placeholder="5.00" />
+                </div>
+              </div>
+              <div class="form-row two-col">
+                <div>
+                  <label for="rTotalTickets">Total Tickets</label>
+                  <input type="number" id="rTotalTickets" min="1" step="1" placeholder="200" />
+                </div>
+                <div>
+                  <label for="rTicketsSold">Tickets Sold</label>
+                  <input type="number" id="rTicketsSold" min="0" step="1" placeholder="0" />
+                </div>
+              </div>
+              <div class="form-row">
+                <label for="rDrawingDate">Drawing Date</label>
+                <input type="date" id="rDrawingDate" />
+              </div>
+              <div class="form-row">
+                <label for="rPrizeImage">Prize Image URL <span class="optional">(optional)</span></label>
+                <input type="url" id="rPrizeImage" placeholder="https://..." />
+              </div>
+              <div class="form-row" style="margin-bottom:6px">
+                <label>Payment Methods</label>
+              </div>
+              <div class="form-row two-col">
+                <div>
+                  <label for="rVenmo">Venmo Handle</label>
+                  <input type="text" id="rVenmo" placeholder="@DarkWaterSports" />
+                </div>
+                <div>
+                  <label for="rPaypal">PayPal.me Handle</label>
+                  <input type="text" id="rPaypal" placeholder="DarkWaterSports" />
+                </div>
+              </div>
+              <div class="form-row">
+                <label for="rCashapp">CashApp Handle</label>
+                <input type="text" id="rCashapp" placeholder="$DarkWater" />
+              </div>
+              <div class="form-row">
+                <label for="rPayNote">Payment Note Instructions</label>
+                <textarea id="rPayNote" placeholder="Include your name and phone number in the payment note so we can contact you if you win."></textarea>
+              </div>
+              <button class="raffle-save-btn" onclick="saveRaffle()">Save Raffle</button>
+            </div>
+
+            <!-- Past Winners -->
+            <div class="raffle-card">
+              <h3 style="justify-content:space-between">🥇 Past Winners <button class="winner-add-btn" onclick="openWinnerForm()">+ Add Winner</button></h3>
+              <div id="winnersList"></div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -303,6 +414,30 @@
             <button type="submit" class="save-btn">Save Product</button>
           </div>
         </form>
+      </div>
+    </div>
+
+    <!-- WINNER MODAL -->
+    <div id="winnerModalOverlay" class="modal-overlay hidden">
+      <div class="modal" style="max-width:400px" onclick="event.stopPropagation()">
+        <h3 id="winnerModalTitle">Add Winner</h3>
+        <div class="form-row">
+          <label for="wName">Winner Name *</label>
+          <input type="text" id="wName" placeholder="e.g. John D." />
+        </div>
+        <div class="form-row">
+          <label for="wPrize">Prize Won *</label>
+          <input type="text" id="wPrize" placeholder="e.g. Glock 19 Gen 5" />
+        </div>
+        <div class="form-row">
+          <label for="wDate">Drawing Date *</label>
+          <input type="date" id="wDate" />
+        </div>
+        <input type="hidden" id="wEditId" />
+        <div class="form-actions">
+          <button type="button" class="cancel-btn" onclick="closeWinnerModal()">Cancel</button>
+          <button type="button" class="save-btn" onclick="saveWinner()">Save Winner</button>
+        </div>
       </div>
     </div>
 
@@ -432,6 +567,8 @@
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('adminPanel').style.display = 'flex';
         renderAllLists();
+        loadRaffleForm();
+        renderWinners();
       }
 
       if (sessionStorage.getItem('dw_admin') === '1') showAdmin();
@@ -658,6 +795,147 @@
         renderList(section);
         renderSummary();
         showToast('Product deleted.');
+      }
+
+      // ── RAFFLE DATA ──
+      const RAFFLE_KEY = 'dw_raffle';
+      const WINNERS_KEY = 'dw_raffle_winners';
+
+      const defaultRaffle = {
+        active: false, prizeName: '', prizeDescription: '', prizeValue: '',
+        prizeImage: '', ticketPrice: '', totalTickets: '', ticketsSold: 0,
+        drawingDate: '', paymentVenmo: '', paymentPaypal: '', paymentCashapp: '',
+        paymentNote: 'Include your name and phone number in the payment note so we can contact you if you win.',
+      };
+
+      function getRaffle() {
+        try { const s = localStorage.getItem(RAFFLE_KEY); if (s) return JSON.parse(s); } catch(e) {}
+        return { ...defaultRaffle };
+      }
+
+      function getWinners() {
+        try { const s = localStorage.getItem(WINNERS_KEY); if (s) return JSON.parse(s); } catch(e) {}
+        return [];
+      }
+
+      function loadRaffleForm() {
+        const r = getRaffle();
+        document.getElementById('rActive').checked = r.active;
+        document.getElementById('rPrizeName').value = r.prizeName || '';
+        document.getElementById('rPrizeDesc').value = r.prizeDescription || '';
+        document.getElementById('rPrizeValue').value = r.prizeValue || '';
+        document.getElementById('rTicketPrice').value = r.ticketPrice || '';
+        document.getElementById('rTotalTickets').value = r.totalTickets || '';
+        document.getElementById('rTicketsSold').value = r.ticketsSold || 0;
+        document.getElementById('rDrawingDate').value = r.drawingDate || '';
+        document.getElementById('rPrizeImage').value = r.prizeImage || '';
+        document.getElementById('rVenmo').value = r.paymentVenmo || '';
+        document.getElementById('rPaypal').value = r.paymentPaypal || '';
+        document.getElementById('rCashapp').value = r.paymentCashapp || '';
+        document.getElementById('rPayNote').value = r.paymentNote || '';
+      }
+
+      function saveRaffle() {
+        const r = {
+          active: document.getElementById('rActive').checked,
+          prizeName: document.getElementById('rPrizeName').value.trim(),
+          prizeDescription: document.getElementById('rPrizeDesc').value.trim(),
+          prizeValue: document.getElementById('rPrizeValue').value,
+          prizeImage: document.getElementById('rPrizeImage').value.trim(),
+          ticketPrice: document.getElementById('rTicketPrice').value,
+          totalTickets: document.getElementById('rTotalTickets').value,
+          ticketsSold: parseInt(document.getElementById('rTicketsSold').value, 10) || 0,
+          drawingDate: document.getElementById('rDrawingDate').value,
+          paymentVenmo: document.getElementById('rVenmo').value.trim(),
+          paymentPaypal: document.getElementById('rPaypal').value.trim(),
+          paymentCashapp: document.getElementById('rCashapp').value.trim(),
+          paymentNote: document.getElementById('rPayNote').value.trim(),
+        };
+        localStorage.setItem(RAFFLE_KEY, JSON.stringify(r));
+        showToast('Raffle saved!');
+      }
+
+      // ── WINNERS ──
+      function renderWinners() {
+        const winners = getWinners();
+        const el = document.getElementById('winnersList');
+        if (!winners.length) {
+          el.innerHTML = '<div class="no-winners">No winners logged yet.</div>';
+          return;
+        }
+        el.innerHTML = `<table class="winners-table">
+          <thead><tr><th>Name</th><th>Prize</th><th>Date</th><th style="width:80px"></th></tr></thead>
+          <tbody>${winners.map(w => `
+            <tr>
+              <td style="font-weight:700">${escHtml(w.name)}</td>
+              <td>${escHtml(w.prize)}</td>
+              <td style="color:var(--text2)">${w.date || '—'}</td>
+              <td>
+                <div class="row-actions">
+                  <button class="edit-btn" onclick="openWinnerForm('${w.id}')">Edit</button>
+                  <button class="del-btn" onclick="deleteWinner('${w.id}')">Del</button>
+                </div>
+              </td>
+            </tr>`).join('')}
+          </tbody></table>`;
+      }
+
+      function openWinnerForm(id = null) {
+        document.getElementById('winnerModalTitle').textContent = id ? 'Edit Winner' : 'Add Winner';
+        document.getElementById('wEditId').value = id || '';
+        if (id) {
+          const w = getWinners().find(x => x.id === id);
+          if (w) {
+            document.getElementById('wName').value = w.name;
+            document.getElementById('wPrize').value = w.prize;
+            document.getElementById('wDate').value = w.date || '';
+          }
+        } else {
+          document.getElementById('wName').value = '';
+          document.getElementById('wPrize').value = getRaffle().prizeName || '';
+          document.getElementById('wDate').value = '';
+        }
+        document.getElementById('winnerModalOverlay').classList.remove('hidden');
+        document.getElementById('wName').focus();
+      }
+
+      function closeWinnerModal() {
+        document.getElementById('winnerModalOverlay').classList.add('hidden');
+      }
+
+      document.getElementById('winnerModalOverlay').addEventListener('click', e => {
+        if (e.target === document.getElementById('winnerModalOverlay')) closeWinnerModal();
+      });
+
+      function saveWinner() {
+        const name = document.getElementById('wName').value.trim();
+        const prize = document.getElementById('wPrize').value.trim();
+        if (!name || !prize) { alert('Name and Prize are required.'); return; }
+        const id = document.getElementById('wEditId').value;
+        const winner = {
+          id: id || Date.now().toString(36),
+          name,
+          prize,
+          date: document.getElementById('wDate').value,
+        };
+        const winners = getWinners();
+        if (id) {
+          const idx = winners.findIndex(w => w.id === id);
+          if (idx !== -1) winners[idx] = winner; else winners.push(winner);
+        } else {
+          winners.unshift(winner);
+        }
+        localStorage.setItem(WINNERS_KEY, JSON.stringify(winners));
+        renderWinners();
+        closeWinnerModal();
+        showToast(id ? 'Winner updated!' : 'Winner added!');
+      }
+
+      function deleteWinner(id) {
+        if (!confirm('Remove this winner?')) return;
+        localStorage.setItem(WINNERS_KEY, JSON.stringify(getWinners().filter(w => w.id !== id)));
+        renderWinners();
+        showToast('Winner removed.');
       }
 
       // ── TOAST ──

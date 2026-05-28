@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Raffle — Dark Water Sports and Firearms</title>
+    <script>document.documentElement.classList.add("js");</script>
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --bg: #f5f0e8; --bg2: #ede7d9;
+        --green: #2e4c24; --tan: #8b6914; --amber: #c8a84b;
+        --text: #1a1a1a; --text2: #4a4a4a;
+        --white: #ffffff; --nav-h: 72px;
+      }
+
+      html { scroll-behavior: smooth; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
+
+      /* ── NAV ── */
+      nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); background: rgba(255,255,255,0.97); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(0,0,0,0.09); display: flex; align-items: center; justify-content: space-between; padding: 0 48px; z-index: 1000; transition: box-shadow 0.3s; }
+      .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+      .nav-logo-icon { width: 42px; height: 42px; background: var(--green); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+      .nav-logo-icon svg { width: 26px; height: 26px; fill: #fff; }
+      .nav-logo-text { font-size: 18px; font-weight: 800; color: var(--green); letter-spacing: -0.3px; line-height: 1.1; }
+      .nav-logo-sub { font-size: 10px; font-weight: 600; color: var(--tan); letter-spacing: 2.5px; text-transform: uppercase; }
+      .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+      .nav-links a { text-decoration: none; font-size: 14px; font-weight: 600; color: var(--text2); transition: color 0.2s; }
+      .nav-links a:hover { color: var(--green); }
+      .nav-links a.active { color: var(--green); }
+      .nav-cta { background: var(--green); color: var(--white) !important; padding: 10px 22px; border-radius: 8px; transition: background 0.2s !important; }
+      .nav-cta:hover { background: #1e3418 !important; }
+      .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
+      .hamburger span { display: block; width: 24px; height: 2px; background: var(--green); border-radius: 2px; transition: all 0.3s; }
+      .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+      .hamburger.open span:nth-child(2) { opacity: 0; }
+      .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+      .mobile-menu { display: none; position: fixed; top: var(--nav-h); left: 0; right: 0; background: var(--white); border-bottom: 1px solid rgba(0,0,0,0.1); padding: 16px 24px 28px; z-index: 999; flex-direction: column; gap: 2px; }
+      .mobile-menu.open { display: flex; }
+      .mobile-menu a { text-decoration: none; font-size: 16px; font-weight: 600; color: var(--text); padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.06); }
+      .mobile-menu a:last-child { border: none; margin-top: 8px; background: var(--green); color: var(--white); text-align: center; border-radius: 10px; padding: 14px; }
+
+      /* ── PAGE HERO ── */
+      .page-hero { padding-top: var(--nav-h); min-height: 280px; display: flex; align-items: center; position: relative; overflow: hidden; }
+      .page-hero-bg { position: absolute; inset: 0; background: linear-gradient(to right, rgba(15,25,12,0.88) 0%, rgba(15,25,12,0.6) 60%, rgba(15,25,12,0.25) 100%), url("https://images.unsplash.com/photo-1548438294-1ad5d5f4f063?w=1400&q=80") center/cover no-repeat; }
+      .page-hero-content { position: relative; padding: 48px 64px; }
+      .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 13px; color: rgba(255,255,255,0.6); margin-bottom: 16px; }
+      .breadcrumb a { color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
+      .breadcrumb a:hover { color: #fff; }
+      .page-hero-content h1 { font-size: clamp(32px, 5vw, 52px); font-weight: 900; color: #fff; line-height: 1.1; margin-bottom: 12px; }
+      .page-hero-content p { font-size: 17px; color: rgba(255,255,255,0.75); max-width: 560px; line-height: 1.6; }
+
+      /* ── MAIN ── */
+      main { max-width: 1100px; margin: 0 auto; padding: 56px 48px 80px; }
+
+      /* ── NO RAFFLE ── */
+      .no-raffle { text-align: center; padding: 80px 32px; background: var(--white); border-radius: 20px; border: 1.5px solid #e0d8cc; }
+      .no-raffle-icon { font-size: 56px; margin-bottom: 20px; }
+      .no-raffle h2 { font-size: 26px; font-weight: 900; margin-bottom: 10px; }
+      .no-raffle p { font-size: 16px; color: var(--text2); max-width: 400px; margin: 0 auto 28px; line-height: 1.6; }
+      .no-raffle a { background: var(--green); color: #fff; text-decoration: none; padding: 14px 28px; border-radius: 10px; font-size: 15px; font-weight: 700; display: inline-block; transition: background 0.2s; }
+      .no-raffle a:hover { background: #1e3418; }
+
+      /* ── RAFFLE CONTENT ── */
+      .raffle-grid { display: grid; grid-template-columns: 1fr 380px; gap: 32px; align-items: start; }
+      @media (max-width: 900px) { .raffle-grid { grid-template-columns: 1fr; } }
+
+      /* Prize card */
+      .prize-card { background: var(--white); border-radius: 20px; border: 1.5px solid #e0d8cc; overflow: hidden; }
+      .prize-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; background: var(--bg2); }
+      .prize-img-placeholder { width: 100%; aspect-ratio: 16/9; background: var(--bg2); display: flex; align-items: center; justify-content: center; font-size: 72px; }
+      .prize-body { padding: 28px; }
+      .prize-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--tan); margin-bottom: 8px; }
+      .prize-name { font-size: 26px; font-weight: 900; margin-bottom: 10px; line-height: 1.2; }
+      .prize-value { display: inline-block; background: var(--amber); color: #fff; font-size: 13px; font-weight: 800; padding: 4px 12px; border-radius: 6px; margin-bottom: 16px; }
+      .prize-desc { font-size: 15px; color: var(--text2); line-height: 1.7; }
+
+      /* Sidebar */
+      .raffle-sidebar { display: flex; flex-direction: column; gap: 20px; }
+
+      /* Stats */
+      .stats-card { background: var(--white); border-radius: 16px; border: 1.5px solid #e0d8cc; padding: 24px; }
+      .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      .stat-box { text-align: center; padding: 16px 8px; background: var(--bg2); border-radius: 12px; }
+      .stat-value { font-size: 24px; font-weight: 900; color: var(--green); }
+      .stat-label { font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
+      .ticket-bar { margin-top: 16px; }
+      .ticket-bar-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--text2); margin-bottom: 6px; font-weight: 600; }
+      .ticket-bar-track { background: var(--bg2); border-radius: 6px; height: 10px; overflow: hidden; }
+      .ticket-bar-fill { height: 100%; background: var(--green); border-radius: 6px; transition: width 0.6s ease; }
+
+      /* Countdown */
+      .countdown-card { background: var(--green); border-radius: 16px; padding: 24px; text-align: center; }
+      .countdown-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.65); margin-bottom: 16px; }
+      .countdown-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+      .countdown-unit { background: rgba(255,255,255,0.12); border-radius: 10px; padding: 12px 4px; }
+      .countdown-num { font-size: 28px; font-weight: 900; color: #fff; line-height: 1; }
+      .countdown-sub { font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.55); margin-top: 4px; }
+      .drawing-date-text { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 14px; }
+
+      /* How to enter */
+      .enter-card { background: var(--white); border-radius: 16px; border: 1.5px solid #e0d8cc; padding: 24px; }
+      .enter-card h3 { font-size: 16px; font-weight: 900; margin-bottom: 18px; }
+      .enter-steps { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+      .enter-steps li { display: flex; gap: 12px; align-items: flex-start; font-size: 14px; color: var(--text2); line-height: 1.5; }
+      .step-num { width: 24px; height: 24px; background: var(--green); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; flex-shrink: 0; margin-top: 1px; }
+      .pay-buttons { display: flex; flex-direction: column; gap: 10px; }
+      .pay-btn { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 13px 16px; border-radius: 10px; font-size: 14px; font-weight: 700; text-decoration: none; transition: opacity 0.2s; }
+      .pay-btn:hover { opacity: 0.85; }
+      .pay-btn.venmo { background: #008CFF; color: #fff; }
+      .pay-btn.paypal { background: #003087; color: #fff; }
+      .pay-btn.cashapp { background: #00D64F; color: #fff; }
+      .pay-note { font-size: 12px; color: var(--text2); line-height: 1.6; margin-top: 14px; padding: 12px; background: var(--bg2); border-radius: 8px; }
+
+      /* Winners */
+      .winners-section { margin-top: 56px; }
+      .winners-section h2 { font-size: 24px; font-weight: 900; margin-bottom: 24px; }
+      .winners-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+      .winner-card { background: var(--white); border-radius: 14px; border: 1.5px solid #e0d8cc; padding: 20px; display: flex; align-items: center; gap: 16px; }
+      .winner-icon { width: 44px; height: 44px; background: var(--amber); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+      .winner-name { font-size: 15px; font-weight: 800; }
+      .winner-prize { font-size: 12px; color: var(--text2); margin-top: 2px; }
+      .winner-date { font-size: 11px; color: var(--tan); font-weight: 600; margin-top: 4px; }
+
+      /* CTA */
+      .cta-banner { background: var(--green); border-radius: 18px; padding: 40px 48px; margin-top: 56px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+      .cta-banner h3 { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 6px; }
+      .cta-banner p { font-size: 14px; color: rgba(255,255,255,0.75); max-width: 480px; line-height: 1.6; }
+      .cta-btn { flex-shrink: 0; background: var(--amber); color: #fff; text-decoration: none; padding: 14px 28px; border-radius: 10px; font-size: 15px; font-weight: 700; transition: background 0.2s; white-space: nowrap; }
+      .cta-btn:hover { background: #b8922e; }
+
+      /* Footer */
+      footer { background: #0e180b; color: rgba(255,255,255,0.55); padding: 40px 48px 28px; }
+      .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; font-size: 13px; }
+      .footer-inner a { color: rgba(255,255,255,0.55); text-decoration: none; }
+      .footer-inner a:hover { color: #fff; }
+
+      /* Reveal */
+      .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+      .reveal.visible { opacity: 1; transform: translateY(0); }
+
+      @media (max-width: 900px) {
+        nav { padding: 0 20px; }
+        .page-hero-content { padding: 40px 20px; }
+        main { padding: 36px 20px 64px; }
+        .cta-banner { padding: 28px 24px; }
+        footer { padding: 28px 20px; }
+      }
+      @media (max-width: 600px) {
+        .nav-links { display: none; }
+        .hamburger { display: flex; }
+        .stats-grid { grid-template-columns: 1fr 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- NAV -->
+    <nav id="navbar">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12 2v4M12 18v4M2 12h4M18 12h4M12 5a7 7 0 100 14A7 7 0 0012 5z" stroke="#fff" stroke-width="1.5" fill="none"/>
+          </svg>
+        </div>
+        <div>
+          <div class="nav-logo-text">Dark Water</div>
+          <div class="nav-logo-sub">Sports &amp; Firearms</div>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html#shop">Shop</a></li>
+        <li><a href="index.html#services">FFL &amp; Services</a></li>
+        <li><a href="raffle.html" class="active">Raffle</a></li>
+        <li><a href="index.html#contact" class="nav-cta">Contact Us</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html#shop" onclick="closeMenu()">Shop</a>
+      <a href="index.html#services" onclick="closeMenu()">FFL &amp; Services</a>
+      <a href="raffle.html" onclick="closeMenu()">Raffle</a>
+      <a href="index.html#contact" onclick="closeMenu()">Contact Us</a>
+    </div>
+
+    <!-- PAGE HERO -->
+    <div class="page-hero">
+      <div class="page-hero-bg"></div>
+      <div class="page-hero-content">
+        <div class="breadcrumb">
+          <a href="index.html">Home</a>
+          <span>›</span>
+          <span style="color:rgba(255,255,255,0.85)">Raffle</span>
+        </div>
+        <h1>🎟️ Dark Water Raffle</h1>
+        <p>Enter for a chance to win. Tickets available in-store and online. All proceeds support the local community.</p>
+      </div>
+    </div>
+
+    <!-- MAIN -->
+    <main id="raffleMain">
+      <!-- rendered by JS -->
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-inner">
+        <span>&copy; 2026 Dark Water Sports and Firearms. All rights reserved.</span>
+        <a href="index.html">← Back to Home</a>
+      </div>
+    </footer>
+
+    <script>
+      const hamburger = document.getElementById("hamburger");
+      const mobileMenu = document.getElementById("mobileMenu");
+      hamburger.addEventListener("click", () => {
+        hamburger.classList.toggle("open");
+        mobileMenu.classList.toggle("open");
+      });
+      function closeMenu() {
+        hamburger.classList.remove("open");
+        mobileMenu.classList.remove("open");
+      }
+      window.addEventListener("scroll", () => {
+        document.getElementById("navbar").style.boxShadow =
+          window.scrollY > 60 ? "0 2px 20px rgba(0,0,0,0.1)" : "";
+      });
+
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) { entry.target.classList.add("visible"); revealObserver.unobserve(entry.target); }
+        });
+      }, { threshold: 0.1, rootMargin: "0px 0px -30px 0px" });
+
+      function escHtml(s) {
+        return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+      }
+
+      function getRaffle() {
+        try { const s = localStorage.getItem('dw_raffle'); if (s) return JSON.parse(s); } catch(e) {}
+        return null;
+      }
+
+      function getWinners() {
+        try { const s = localStorage.getItem('dw_raffle_winners'); if (s) return JSON.parse(s); } catch(e) {}
+        return [];
+      }
+
+      function formatDate(dateStr) {
+        if (!dateStr) return '';
+        const d = new Date(dateStr + 'T12:00:00');
+        return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      }
+
+      let countdownInterval = null;
+
+      function startCountdown(dateStr) {
+        function tick() {
+          const now = new Date();
+          const target = new Date(dateStr + 'T12:00:00');
+          const diff = target - now;
+          if (diff <= 0) {
+            document.getElementById('cdDays').textContent = '0';
+            document.getElementById('cdHrs').textContent = '00';
+            document.getElementById('cdMin').textContent = '00';
+            document.getElementById('cdSec').textContent = '00';
+            return;
+          }
+          const days = Math.floor(diff / 86400000);
+          const hrs  = Math.floor((diff % 86400000) / 3600000);
+          const min  = Math.floor((diff % 3600000) / 60000);
+          const sec  = Math.floor((diff % 60000) / 1000);
+          document.getElementById('cdDays').textContent = days;
+          document.getElementById('cdHrs').textContent  = String(hrs).padStart(2,'0');
+          document.getElementById('cdMin').textContent  = String(min).padStart(2,'0');
+          document.getElementById('cdSec').textContent  = String(sec).padStart(2,'0');
+        }
+        tick();
+        countdownInterval = setInterval(tick, 1000);
+      }
+
+      function renderPage() {
+        const raffle = getRaffle();
+        const winners = getWinners();
+        const main = document.getElementById('raffleMain');
+
+        if (!raffle || !raffle.active || !raffle.prizeName) {
+          main.innerHTML = `
+            <div class="no-raffle reveal">
+              <div class="no-raffle-icon">🎟️</div>
+              <h2>No Active Raffle Right Now</h2>
+              <p>Check back soon — we run raffles throughout the year. Follow us or stop in to stay in the loop.</p>
+              <a href="index.html#contact">Contact Us</a>
+            </div>
+            ${winnersHtml(winners)}`;
+          document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+          return;
+        }
+
+        const total  = parseInt(raffle.totalTickets) || 0;
+        const sold   = parseInt(raffle.ticketsSold)  || 0;
+        const remaining = Math.max(0, total - sold);
+        const pct = total > 0 ? Math.round((sold / total) * 100) : 0;
+
+        const imgHtml = raffle.prizeImage
+          ? `<img class="prize-img" src="${escHtml(raffle.prizeImage)}" alt="${escHtml(raffle.prizeName)}" />`
+          : `<div class="prize-img-placeholder">🏆</div>`;
+
+        const valueHtml = raffle.prizeValue
+          ? `<div class="prize-value">Retail Value: $${parseFloat(raffle.prizeValue).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})}</div>`
+          : '';
+
+        const ticketPriceDisplay = raffle.ticketPrice
+          ? `$${parseFloat(raffle.ticketPrice).toFixed(2)} / ticket`
+          : 'See store for pricing';
+
+        const ticketBarHtml = total > 0 ? `
+          <div class="ticket-bar">
+            <div class="ticket-bar-label"><span>${sold} sold</span><span>${remaining} remaining</span></div>
+            <div class="ticket-bar-track"><div class="ticket-bar-fill" style="width:${pct}%"></div></div>
+          </div>` : '';
+
+        const payButtons = buildPayButtons(raffle);
+
+        const payNoteHtml = raffle.paymentNote
+          ? `<p class="pay-note">📝 ${escHtml(raffle.paymentNote)}</p>`
+          : '';
+
+        main.innerHTML = `
+          <div class="raffle-grid reveal">
+            <div class="prize-card">
+              ${imgHtml}
+              <div class="prize-body">
+                <div class="prize-label">Current Prize</div>
+                <div class="prize-name">${escHtml(raffle.prizeName)}</div>
+                ${valueHtml}
+                ${raffle.prizeDescription ? `<p class="prize-desc">${escHtml(raffle.prizeDescription)}</p>` : ''}
+              </div>
+            </div>
+
+            <div class="raffle-sidebar">
+              <div class="stats-card">
+                <div class="stats-grid">
+                  <div class="stat-box">
+                    <div class="stat-value">${ticketPriceDisplay.startsWith('$') ? ticketPriceDisplay.replace(' / ticket','') : '—'}</div>
+                    <div class="stat-label">Per Ticket</div>
+                  </div>
+                  <div class="stat-box">
+                    <div class="stat-value">${remaining > 0 ? remaining.toLocaleString() : 'SOLD OUT'}</div>
+                    <div class="stat-label">${remaining > 0 ? 'Remaining' : ''}</div>
+                  </div>
+                </div>
+                ${ticketBarHtml}
+              </div>
+
+              ${raffle.drawingDate ? `
+              <div class="countdown-card">
+                <div class="countdown-label">Drawing Countdown</div>
+                <div class="countdown-grid">
+                  <div class="countdown-unit"><div class="countdown-num" id="cdDays">—</div><div class="countdown-sub">Days</div></div>
+                  <div class="countdown-unit"><div class="countdown-num" id="cdHrs">—</div><div class="countdown-sub">Hrs</div></div>
+                  <div class="countdown-unit"><div class="countdown-num" id="cdMin">—</div><div class="countdown-sub">Min</div></div>
+                  <div class="countdown-unit"><div class="countdown-num" id="cdSec">—</div><div class="countdown-sub">Sec</div></div>
+                </div>
+                <div class="drawing-date-text">Drawing: ${escHtml(formatDate(raffle.drawingDate))}</div>
+              </div>` : ''}
+
+              <div class="enter-card">
+                <h3>How to Enter</h3>
+                <ol class="enter-steps">
+                  <li><span class="step-num">1</span><span>Choose how many tickets you want (${escHtml(ticketPriceDisplay)})</span></li>
+                  <li><span class="step-num">2</span><span>Send payment using one of the methods below</span></li>
+                  <li><span class="step-num">3</span><span>We'll confirm your entry and contact you if you win!</span></li>
+                </ol>
+                <div class="pay-buttons">${payButtons}</div>
+                ${payNoteHtml}
+              </div>
+            </div>
+          </div>
+
+          ${winnersHtml(winners)}
+
+          <div class="cta-banner reveal">
+            <div>
+              <h3>Questions about the raffle?</h3>
+              <p>Stop in or give us a call — we're happy to answer any questions and get you entered.</p>
+            </div>
+            <a href="index.html#contact" class="cta-btn">Contact Us</a>
+          </div>`;
+
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        if (raffle.drawingDate) startCountdown(raffle.drawingDate);
+      }
+
+      function buildPayButtons(raffle) {
+        const price = raffle.ticketPrice ? parseFloat(raffle.ticketPrice).toFixed(2) : '0.00';
+        let btns = '';
+        if (raffle.paymentVenmo) {
+          const handle = raffle.paymentVenmo.replace(/^@/, '');
+          btns += `<a class="pay-btn venmo" href="https://venmo.com/${encodeURIComponent(handle)}" target="_blank" rel="noopener">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.5 2c.6 1 .9 2.1.9 3.4 0 4.2-3.6 9.7-6.5 13.6H7.4L4.5 2h5.6l1.5 12 5.5-12H19.5z"/></svg>
+            Pay with Venmo (@${escHtml(handle)})</a>`;
+        }
+        if (raffle.paymentPaypal) {
+          const handle = raffle.paymentPaypal.replace(/^@/, '');
+          btns += `<a class="pay-btn paypal" href="https://paypal.me/${encodeURIComponent(handle)}/${price}" target="_blank" rel="noopener">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M7.3 21.8l.4-2.4.1-.7h.1c.7 2.4 2.8 3.3 5.4 3.3 5.5 0 9.7-4.5 9.7-10.2C23 6.4 19.8 3 14.3 3H6.2L3 21.8h4.3zm2-14.6h3.5c2.8 0 4.5 1.5 4.5 4 0 3.2-2.2 5-5.5 5H9.6l1.7-9z"/></svg>
+            Pay with PayPal</a>`;
+        }
+        if (raffle.paymentCashapp) {
+          const handle = raffle.paymentCashapp.replace(/^\$/, '');
+          btns += `<a class="pay-btn cashapp" href="https://cash.app/$${encodeURIComponent(handle)}/${price}" target="_blank" rel="noopener">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            Pay with Cash App ($${escHtml(handle)})</a>`;
+        }
+        if (!btns) btns = `<p style="font-size:14px;color:var(--text2);text-align:center;padding:16px 0">Stop in or call us to purchase tickets.</p>`;
+        return btns;
+      }
+
+      function winnersHtml(winners) {
+        if (!winners.length) return '';
+        return `<div class="winners-section reveal">
+          <h2>🥇 Past Winners</h2>
+          <div class="winners-grid">
+            ${winners.map(w => `
+              <div class="winner-card">
+                <div class="winner-icon">🏆</div>
+                <div>
+                  <div class="winner-name">${escHtml(w.name)}</div>
+                  <div class="winner-prize">${escHtml(w.prize)}</div>
+                  ${w.date ? `<div class="winner-date">${escHtml(formatDate(w.date))}</div>` : ''}
+                </div>
+              </div>`).join('')}
+          </div>
+        </div>`;
+      }
+
+      renderPage();
+    </script>
+  </body>
+</html>
