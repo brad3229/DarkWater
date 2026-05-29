@@ -392,7 +392,7 @@
             </div>
           </div>`;
         }).join("");
-        observeReveal(grid);
+        requestAnimationFrame(() => observeReveal(grid));
         applyFilters();
       }
 
