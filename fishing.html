@@ -315,7 +315,7 @@
             </div>
           </div>`;
         }).join("");
-        requestAnimationFrame(() => observeReveal(grid));
+        grid.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
         applyFilters();
       }
 
