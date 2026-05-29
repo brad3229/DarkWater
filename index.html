@@ -1008,6 +1008,27 @@
         transform: translateY(0);
       }
 
+      /* ── RAFFLE BANNER ── */
+      #raffleBanner { display: none; background: linear-gradient(135deg, #1a2e14 0%, #2e4c24 60%, #3d6030 100%); padding: 48px 0; }
+      .raffle-banner-inner { max-width: 1100px; margin: 0 auto; padding: 0 48px; display: flex; align-items: center; gap: 40px; flex-wrap: wrap; }
+      .raffle-banner-badge { background: var(--amber); color: #fff; font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; display: inline-block; margin-bottom: 10px; }
+      .raffle-banner-text { flex: 1; min-width: 240px; }
+      .raffle-banner-text h2 { font-size: clamp(22px, 3vw, 30px); font-weight: 900; color: #fff; margin-bottom: 6px; line-height: 1.2; }
+      .raffle-banner-text p { font-size: 15px; color: rgba(255,255,255,0.7); line-height: 1.5; }
+      .raffle-banner-countdown { display: flex; gap: 12px; flex-shrink: 0; }
+      .rcd-unit { background: rgba(255,255,255,0.1); border-radius: 12px; padding: 14px 16px; text-align: center; min-width: 64px; }
+      .rcd-num { font-size: 28px; font-weight: 900; color: #fff; line-height: 1; }
+      .rcd-label { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-top: 4px; }
+      .raffle-banner-cta { flex-shrink: 0; }
+      .raffle-banner-btn { display: inline-block; background: var(--amber); color: #fff; text-decoration: none; padding: 16px 32px; border-radius: 12px; font-size: 16px; font-weight: 800; transition: background 0.2s, transform 0.15s; white-space: nowrap; }
+      .raffle-banner-btn:hover { background: #b8922e; transform: translateY(-1px); }
+      @media (max-width: 700px) {
+        .raffle-banner-inner { padding: 0 20px; gap: 24px; }
+        .raffle-banner-countdown { gap: 8px; }
+        .rcd-unit { min-width: 52px; padding: 10px 10px; }
+        .rcd-num { font-size: 22px; }
+      }
+
       @media (max-width: 600px) {
         .hero-content {
           padding: 0 20px;
@@ -1126,6 +1147,26 @@
         <div class="hero-actions">
           <a href="#shop" class="btn btn-green">Browse Our Inventory</a>
           <a href="#contact" class="btn btn-ghost">Get Directions</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- RAFFLE BANNER (shown only when a raffle is active) -->
+    <section id="raffleBanner">
+      <div class="raffle-banner-inner">
+        <div class="raffle-banner-text">
+          <div class="raffle-banner-badge">🎟️ Raffle Live Now</div>
+          <h2 id="rbPrizeName">Win Big — Enter Today</h2>
+          <p id="rbPrizeDesc">Tickets available now. Drawing coming up soon.</p>
+        </div>
+        <div class="raffle-banner-countdown" id="rbCountdown">
+          <div class="rcd-unit"><div class="rcd-num" id="rbDays">—</div><div class="rcd-label">Days</div></div>
+          <div class="rcd-unit"><div class="rcd-num" id="rbHrs">—</div><div class="rcd-label">Hrs</div></div>
+          <div class="rcd-unit"><div class="rcd-num" id="rbMin">—</div><div class="rcd-label">Min</div></div>
+          <div class="rcd-unit"><div class="rcd-num" id="rbSec">—</div><div class="rcd-label">Sec</div></div>
+        </div>
+        <div class="raffle-banner-cta">
+          <a href="raffle.html" class="raffle-banner-btn">Get Tickets →</a>
         </div>
       </div>
     </section>
@@ -1533,5 +1574,36 @@
     </footer>
 
     <script src="main.js"></script>
+    <script>
+      (function () {
+        var raffle;
+        try { var s = localStorage.getItem('dw_raffle'); if (s) raffle = JSON.parse(s); } catch(e) {}
+        if (!raffle || !raffle.active || !raffle.prizeName) return;
+
+        document.getElementById('raffleBanner').style.display = 'block';
+        document.getElementById('rbPrizeName').textContent = 'Win a ' + raffle.prizeName;
+        if (raffle.ticketPrice) {
+          document.getElementById('rbPrizeDesc').textContent =
+            '$' + parseFloat(raffle.ticketPrice).toFixed(2) + ' per ticket' +
+            (raffle.drawingDate ? ' · Drawing ' + new Date(raffle.drawingDate + 'T12:00:00').toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'}) : '');
+        }
+
+        if (!raffle.drawingDate) {
+          document.getElementById('rbCountdown').style.display = 'none';
+          return;
+        }
+
+        function tick() {
+          var diff = new Date(raffle.drawingDate + 'T12:00:00') - new Date();
+          if (diff <= 0) { document.getElementById('rbCountdown').style.display = 'none'; return; }
+          document.getElementById('rbDays').textContent = Math.floor(diff / 86400000);
+          document.getElementById('rbHrs').textContent  = String(Math.floor((diff % 86400000) / 3600000)).padStart(2,'0');
+          document.getElementById('rbMin').textContent  = String(Math.floor((diff % 3600000) / 60000)).padStart(2,'0');
+          document.getElementById('rbSec').textContent  = String(Math.floor((diff % 60000) / 1000)).padStart(2,'0');
+        }
+        tick();
+        setInterval(tick, 1000);
+      })();
+    </script>
   </body>
 </html>
