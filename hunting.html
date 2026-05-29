@@ -362,7 +362,7 @@
         const parts = String(price).split(".");
         const dollars = parts[0];
         const cents = parts[1] ? "." + parts[1] : "";
-        return `$${DB.DB.escHtml(dollars)}<span class="cents">${DB.DB.escHtml(cents)}</span>`;
+        return `$${DB.escHtml(dollars)}<span class="cents">${DB.escHtml(cents)}</span>`;
       }
 
       async function renderProducts() {
