@@ -360,8 +360,11 @@
       .product-brand {
         font-size: 12px;
         color: var(--text2);
-        margin-bottom: 12px;
+        margin-bottom: 6px;
       }
+      .stock-count { font-size: 11px; font-weight: 600; margin-bottom: 10px; }
+      .stock-count.low { color: var(--tan); }
+      .stock-count.ok { color: #888; }
       .product-footer {
         display: flex;
         align-items: center;
@@ -752,6 +755,7 @@
               <div class="product-tag">${DB.escHtml(p.categoryLabel)}</div>
               <div class="product-name">${DB.escHtml(p.name)}${badgeHtml}${oosHtml}</div>
               <div class="product-brand">${DB.escHtml(p.brandLabel)}</div>
+              ${qty === 0 ? '' : qty === 1 ? `<div class="stock-count low">Only 1 left!</div>` : `<div class="stock-count ok">${qty} in stock</div>`}
               <div class="product-footer">
                 ${priceHtml}
                 <a href="index.html#contact" class="inquire-btn">Inquire</a>
