@@ -246,6 +246,8 @@
       </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="db.js"></script>
     <script>
       const hamburger = document.getElementById("hamburger");
       const mobileMenu = document.getElementById("mobileMenu");
@@ -279,38 +281,15 @@
         });
       }
 
-      const defaultProducts = [
-        { id:'fi1', name:"GX2 7' Medium Spinning Rod", brand:'uglystik', brandLabel:'Ugly Stik', category:'rods', categoryLabel:'Rods', price:'49.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80', badge:'new' },
-        { id:'fi2', name:'Stradic FL 2500 Spinning Reel', brand:'shimano', brandLabel:'Shimano', category:'reels', categoryLabel:'Reels', price:'199.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1599940824399-b87987ceb72a?w=600&q=80', badge:'new' },
-        { id:'fi3', name:'Original Floating F11 Lure', brand:'rapala', brandLabel:'Rapala', category:'lures', categoryLabel:'Lures & Bait', price:'9.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=600&q=80', badge:'' },
-        { id:'fi4', name:'PowerBait Power Worm 7"', brand:'berkley', brandLabel:'Berkley', category:'lures', categoryLabel:'Lures & Bait', price:'6.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80', badge:'' },
-        { id:'fi5', name:'Trilene XL 300yd 10lb Monofilament', brand:'berkley', brandLabel:'Berkley', category:'line', categoryLabel:'Line', price:'11.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1599940824399-b87987ceb72a?w=600&q=80', badge:'' },
-        { id:'fi6', name:'3700 ProLatch StowAway Tackle Box', brand:'plano', brandLabel:'Plano', category:'tackle', categoryLabel:'Tackle & Accessories', price:'14.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=600&q=80', badge:'new' },
-        { id:'fi7', name:'Lazer Sharp Circle Hook Kit (50pk)', brand:'eagleclaw', brandLabel:'Eagle Claw', category:'tackle', categoryLabel:'Tackle & Accessories', price:'7.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80', badge:'' },
-        { id:'fi8', name:'KVD 1/2oz Spinnerbait', brand:'strikeking', brandLabel:'Strike King', category:'lures', categoryLabel:'Lures & Bait', price:'8.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=600&q=80', badge:'' },
-      ];
-
-      function escHtml(s) {
-        return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-      }
-
       function formatPrice(price) {
         const parts = String(price).split(".");
         const dollars = parts[0];
         const cents = parts[1] ? "." + parts[1] : "";
-        return `$${escHtml(dollars)}<span class="cents">${escHtml(cents)}</span>`;
+        return `$${DB.DB.escHtml(dollars)}<span class="cents">${DB.DB.escHtml(cents)}</span>`;
       }
 
-      function getProducts() {
-        try {
-          const stored = localStorage.getItem("dw_fishing");
-          if (stored) return JSON.parse(stored);
-        } catch(e) {}
-        return defaultProducts;
-      }
-
-      function renderProducts() {
-        const products = getProducts();
+      async function renderProducts() {
+        const products = await DB.getProducts('fishing');
         const grid = document.getElementById("productGrid");
         grid.innerHTML = products.map((p, i) => {
           const priceHtml = p.callForPrice
@@ -323,12 +302,12 @@
             : "";
           const qty = p.quantity ?? 1;
           const oosHtml = qty === 0 ? `<span class="badge-oos">Out of Stock</span>` : '';
-          return `<div class="product-card reveal${qty === 0 ? ' card-oos' : ''}" data-category="${escHtml(p.category)}" data-brand="${escHtml(p.brand)}">
-            <img class="product-img" src="${escHtml(p.imageUrl)}" alt="${escHtml(p.name)}" loading="lazy"/>
+          return `<div class="product-card reveal${qty === 0 ? ' card-oos' : ''}" data-category="${DB.escHtml(p.category)}" data-brand="${DB.escHtml(p.brand)}">
+            <img class="product-img" src="${DB.escHtml(p.imageUrl)}" alt="${DB.escHtml(p.name)}" loading="lazy"/>
             <div class="product-body">
-              <div class="product-tag">${escHtml(p.categoryLabel)}</div>
-              <div class="product-name">${escHtml(p.name)}${badgeHtml}${oosHtml}</div>
-              <div class="product-brand">${escHtml(p.brandLabel)}</div>
+              <div class="product-tag">${DB.escHtml(p.categoryLabel)}</div>
+              <div class="product-name">${DB.escHtml(p.name)}${badgeHtml}${oosHtml}</div>
+              <div class="product-brand">${DB.escHtml(p.brandLabel)}</div>
               <div class="product-footer">
                 ${priceHtml}
                 <a href="index.html#contact" class="inquire-btn">Inquire</a>

@@ -694,6 +694,8 @@
       </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="db.js"></script>
     <script>
       const hamburger = document.getElementById("hamburger");
       const mobileMenu = document.getElementById("mobileMenu");
@@ -730,36 +732,13 @@
         });
       }
 
-      const defaultProducts = [
-        { id: 1, name: "Glock 19 Gen 5", brand: "glock", brandLabel: "Glock", category: "pistol", categoryLabel: "Pistol", price: 549, callForPrice: false, badge: "", imageUrl: "https://images.gunstores.com/images/products/100000/glock-19-gen5-9mm-luger-4in-matte-black-pistol-151-rounds-100067408-1-Square.jpg" },
-        { id: 2, name: "Sig Sauer P365", brand: "sig", brandLabel: "Sig Sauer", category: "pistol", categoryLabel: "Pistol", price: 499, callForPrice: false, badge: "", imageUrl: "https://images.gunstores.com/images/products/100000/sig-sauer-p365-9mm-luger-31in-nitron-pistol-101-rounds-100491888-1-Square.jpg" },
-        { id: 3, name: "Smith & Wesson M&P Shield Plus", brand: "sw", brandLabel: "Smith & Wesson", category: "pistol", categoryLabel: "Pistol", price: 479, callForPrice: false, badge: "", imageUrl: "https://images.gunstores.com/images/products/100000/smith-wesson-mp-shield-plus-9mm-luger-31in-matte-black-pistol-131-rounds-100818697-1-Square.jpg" },
-        { id: 4, name: "Ruger 10/22 Carbine", brand: "ruger", brandLabel: "Ruger", category: "rifle", categoryLabel: "Rifle", price: 329, callForPrice: false, badge: "", imageUrl: "https://images.gunstores.com/images/products/100000/ruger-1022-carbine-22-lr-1868in-satin-black-semi-automatic-rifle-10-rounds-100002629-1-Square.jpg" },
-        { id: 5, name: "Mossberg 500 Field", brand: "mossberg", brandLabel: "Mossberg", category: "shotgun", categoryLabel: "Shotgun", price: 399, callForPrice: false, badge: "", imageUrl: "https://images.gunstores.com/images/products/100000/mossberg-500-field-12-gauge-28in-matte-blued-pump-action-shotgun-6-rounds-100001404-1-Square.jpg" },
-        { id: 6, name: "Winchester SXP Defender", brand: "winchester", brandLabel: "Winchester", category: "shotgun", categoryLabel: "Shotgun", price: 349, callForPrice: false, badge: "", imageUrl: "https://images.gunstores.com/images/products/100000/winchester-sxp-defender-12-gauge-18in-matte-black-pump-action-shotgun-6-rounds-100001624-1-Square.jpg" },
-        { id: 7, name: "Remington 870 Express", brand: "remington", brandLabel: "Remington", category: "shotgun used", categoryLabel: "Shotgun", price: 279, callForPrice: false, badge: "used", imageUrl: "https://images.gunstores.com/images/products/100000/remington-870-express-12-gauge-28in-matte-blued-pump-action-shotgun-4-rounds-100000494-1-Square.jpg" },
-        { id: 8, name: "Ruger GP100 .357", brand: "ruger", brandLabel: "Ruger", category: "revolver", categoryLabel: "Revolver", price: 699, callForPrice: false, badge: "", imageUrl: "https://images.gunstores.com/images/products/100000/ruger-gp100-357-magnum-42in-satin-stainless-revolver-6-rounds-100002820-1-Square.jpg" }
-      ];
-
-      function escHtml(s) {
-        return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-      }
-
-      function getProducts() {
-        try {
-          const stored = localStorage.getItem("dw_firearms");
-          if (stored) return JSON.parse(stored);
-        } catch(e) {}
-        return defaultProducts;
-      }
-
-      function renderProducts() {
-        const products = getProducts();
+      async function renderProducts() {
+        const products = await DB.getProducts('firearms');
         const grid = document.getElementById("productGrid");
         grid.innerHTML = products.map((p, i) => {
           const priceHtml = p.callForPrice
             ? `<div class="product-price call">Call for Price</div>`
-            : `<div class="product-price">$${escHtml(String(p.price))}</div>`;
+            : `<div class="product-price">$${DB.escHtml(String(p.price))}</div>`;
           const badgeHtml = p.badge === "used"
             ? `<span class="badge-used">Used</span>`
             : p.badge === "new"
@@ -767,12 +746,12 @@
             : "";
           const qty = p.quantity ?? 1;
           const oosHtml = qty === 0 ? `<span class="badge-oos">Out of Stock</span>` : '';
-          return `<div class="product-card reveal${qty === 0 ? ' card-oos' : ''}" data-category="${escHtml(p.category)}" data-brand="${escHtml(p.brand)}" style="transition-delay:${(i % 4) * 0.1}s">
-            <img class="product-img" src="${escHtml(p.imageUrl)}" alt="${escHtml(p.name)}" loading="lazy"/>
+          return `<div class="product-card reveal${qty === 0 ? ' card-oos' : ''}" data-category="${DB.escHtml(p.category)}" data-brand="${DB.escHtml(p.brand)}" style="transition-delay:${(i % 4) * 0.1}s">
+            <img class="product-img" src="${DB.escHtml(p.imageUrl)}" alt="${DB.escHtml(p.name)}" loading="lazy"/>
             <div class="product-body">
-              <div class="product-tag">${escHtml(p.categoryLabel)}</div>
-              <div class="product-name">${escHtml(p.name)}${badgeHtml}${oosHtml}</div>
-              <div class="product-brand">${escHtml(p.brandLabel)}</div>
+              <div class="product-tag">${DB.escHtml(p.categoryLabel)}</div>
+              <div class="product-name">${DB.escHtml(p.name)}${badgeHtml}${oosHtml}</div>
+              <div class="product-brand">${DB.escHtml(p.brandLabel)}</div>
               <div class="product-footer">
                 ${priceHtml}
                 <a href="index.html#contact" class="inquire-btn">Inquire</a>

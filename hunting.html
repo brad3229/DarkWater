@@ -323,6 +323,8 @@
       </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="db.js"></script>
     <script>
       const hamburger = document.getElementById("hamburger");
       const mobileMenu = document.getElementById("mobileMenu");
@@ -356,38 +358,15 @@
         });
       }
 
-      const defaultProducts = [
-        { id:'h1', name:'Stratus Jacket', brand:'sitka', brandLabel:'Sitka Gear', category:'clothing', categoryLabel:'Clothing', price:'349.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=600&q=80', badge:'new' },
-        { id:'h2', name:'Crossfire II 3-9x40 Scope', brand:'vortex', brandLabel:'Vortex', category:'optics', categoryLabel:'Optics', price:'179.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80', badge:'new' },
-        { id:'h3', name:'Hoochie Mama Elk Call', brand:'primos', brandLabel:'Primos', category:'calls', categoryLabel:'Calls', price:'24.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1542382257-80dedb725088?w=600&q=80', badge:'' },
-        { id:'h4', name:'110 Folding Hunter', brand:'buck', brandLabel:'Buck Knives', category:'knives', categoryLabel:'Knives', price:'64.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1577401239170-897942555fb3?w=600&q=80', badge:'new' },
-        { id:'h5', name:'DS4K No-Glo Trail Camera', brand:'stealth', brandLabel:'Stealth Cam', category:'cameras', categoryLabel:'Cameras', price:'89.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&q=80', badge:'new' },
-        { id:'h6', name:'Premium 30-06 180gr Nosler Partition', brand:'federal', brandLabel:'Federal Premium', category:'ammo', categoryLabel:'Ammo', price:'54.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=600&q=80', badge:'' },
-        { id:'h7', name:'Diamondback HD 10x42 Binoculars', brand:'vortex', brandLabel:'Vortex', category:'optics', categoryLabel:'Optics', price:'199.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&q=80', badge:'new' },
-        { id:'h8', name:'Alphaburly Pro 18" Boots', brand:'lacrosse', brandLabel:'LaCrosse', category:'clothing', categoryLabel:'Clothing', price:'219.99', callForPrice:false, imageUrl:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80', badge:'' },
-      ];
-
-      function escHtml(s) {
-        return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-      }
-
       function formatPrice(price) {
         const parts = String(price).split(".");
         const dollars = parts[0];
         const cents = parts[1] ? "." + parts[1] : "";
-        return `$${escHtml(dollars)}<span class="cents">${escHtml(cents)}</span>`;
+        return `$${DB.DB.escHtml(dollars)}<span class="cents">${DB.DB.escHtml(cents)}</span>`;
       }
 
-      function getProducts() {
-        try {
-          const stored = localStorage.getItem("dw_hunting");
-          if (stored) return JSON.parse(stored);
-        } catch(e) {}
-        return defaultProducts;
-      }
-
-      function renderProducts() {
-        const products = getProducts();
+      async function renderProducts() {
+        const products = await DB.getProducts('hunting');
         const grid = document.getElementById("productGrid");
         grid.innerHTML = products.map((p, i) => {
           const priceHtml = p.callForPrice
@@ -400,12 +379,12 @@
             : "";
           const qty = p.quantity ?? 1;
           const oosHtml = qty === 0 ? `<span class="badge-oos">Out of Stock</span>` : '';
-          return `<div class="product-card reveal${qty === 0 ? ' card-oos' : ''}" data-category="${escHtml(p.category)}" data-brand="${escHtml(p.brand)}">
-            <img class="product-img" src="${escHtml(p.imageUrl)}" alt="${escHtml(p.name)}" loading="lazy"/>
+          return `<div class="product-card reveal${qty === 0 ? ' card-oos' : ''}" data-category="${DB.escHtml(p.category)}" data-brand="${DB.escHtml(p.brand)}">
+            <img class="product-img" src="${DB.escHtml(p.imageUrl)}" alt="${DB.escHtml(p.name)}" loading="lazy"/>
             <div class="product-body">
-              <div class="product-tag">${escHtml(p.categoryLabel)}</div>
-              <div class="product-name">${escHtml(p.name)}${badgeHtml}${oosHtml}</div>
-              <div class="product-brand">${escHtml(p.brandLabel)}</div>
+              <div class="product-tag">${DB.escHtml(p.categoryLabel)}</div>
+              <div class="product-name">${DB.escHtml(p.name)}${badgeHtml}${oosHtml}</div>
+              <div class="product-brand">${DB.escHtml(p.brandLabel)}</div>
               <div class="product-footer">
                 ${priceHtml}
                 <a href="index.html#contact" class="inquire-btn">Inquire</a>

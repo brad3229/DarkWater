@@ -223,6 +223,8 @@
       </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="db.js"></script>
     <script>
       const hamburger = document.getElementById("hamburger");
       const mobileMenu = document.getElementById("mobileMenu");
@@ -244,20 +246,6 @@
           if (entry.isIntersecting) { entry.target.classList.add("visible"); revealObserver.unobserve(entry.target); }
         });
       }, { threshold: 0.1, rootMargin: "0px 0px -30px 0px" });
-
-      function escHtml(s) {
-        return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-      }
-
-      function getRaffle() {
-        try { const s = localStorage.getItem('dw_raffle'); if (s) return JSON.parse(s); } catch(e) {}
-        return null;
-      }
-
-      function getWinners() {
-        try { const s = localStorage.getItem('dw_raffle_winners'); if (s) return JSON.parse(s); } catch(e) {}
-        return [];
-      }
 
       function formatDate(dateStr) {
         if (!dateStr) return '';
@@ -292,9 +280,8 @@
         countdownInterval = setInterval(tick, 1000);
       }
 
-      function renderPage() {
-        const raffle = getRaffle();
-        const winners = getWinners();
+      async function renderPage() {
+        const [raffle, winners] = await Promise.all([DB.getRaffle(), DB.getWinners()]);
         const main = document.getElementById('raffleMain');
 
         if (!raffle || !raffle.active || !raffle.prizeName) {
@@ -316,7 +303,7 @@
         const pct = total > 0 ? Math.round((sold / total) * 100) : 0;
 
         const imgHtml = raffle.prizeImage
-          ? `<img class="prize-img" src="${escHtml(raffle.prizeImage)}" alt="${escHtml(raffle.prizeName)}" />`
+          ? `<img class="prize-img" src="${DB.escHtml(raffle.prizeImage)}" alt="${DB.escHtml(raffle.prizeName)}" />`
           : `<div class="prize-img-placeholder">🏆</div>`;
 
         const valueHtml = raffle.prizeValue
@@ -336,7 +323,7 @@
         const payButtons = buildPayButtons(raffle);
 
         const payNoteHtml = raffle.paymentNote
-          ? `<p class="pay-note">📝 ${escHtml(raffle.paymentNote)}</p>`
+          ? `<p class="pay-note">📝 ${DB.escHtml(raffle.paymentNote)}</p>`
           : '';
 
         main.innerHTML = `
@@ -345,9 +332,9 @@
               ${imgHtml}
               <div class="prize-body">
                 <div class="prize-label">Current Prize</div>
-                <div class="prize-name">${escHtml(raffle.prizeName)}</div>
+                <div class="prize-name">${DB.escHtml(raffle.prizeName)}</div>
                 ${valueHtml}
-                ${raffle.prizeDescription ? `<p class="prize-desc">${escHtml(raffle.prizeDescription)}</p>` : ''}
+                ${raffle.prizeDescription ? `<p class="prize-desc">${DB.escHtml(raffle.prizeDescription)}</p>` : ''}
               </div>
             </div>
 
@@ -375,7 +362,7 @@
                   <div class="countdown-unit"><div class="countdown-num" id="cdMin">—</div><div class="countdown-sub">Min</div></div>
                   <div class="countdown-unit"><div class="countdown-num" id="cdSec">—</div><div class="countdown-sub">Sec</div></div>
                 </div>
-                <div class="drawing-date-text">Drawing: ${escHtml(formatDate(raffle.drawingDate))}</div>
+                <div class="drawing-date-text">Drawing: ${DB.escHtml(formatDate(raffle.drawingDate))}</div>
               </div>` : ''}
 
               <div class="enter-card">
@@ -425,7 +412,7 @@
           const handle = raffle.paymentVenmo.replace(/^@/, '');
           btns += `<a class="pay-btn venmo" id="payVenmo" href="https://venmo.com/${encodeURIComponent(handle)}" target="_blank" rel="noopener">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.5 2c.6 1 .9 2.1.9 3.4 0 4.2-3.6 9.7-6.5 13.6H7.4L4.5 2h5.6l1.5 12 5.5-12H19.5z"/></svg>
-            Pay with Venmo (@${escHtml(handle)})</a>`;
+            Pay with Venmo (@${DB.escHtml(handle)})</a>`;
         }
         if (raffle.paymentPaypal) {
           const handle = raffle.paymentPaypal.replace(/^@/, '');
@@ -437,7 +424,7 @@
           const handle = raffle.paymentCashapp.replace(/^\$/, '');
           btns += `<a class="pay-btn cashapp" id="payCashapp" href="https://cash.app/$${encodeURIComponent(handle)}/${price}" target="_blank" rel="noopener">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-            Pay with Cash App ($${escHtml(handle)})</a>`;
+            Pay with Cash App ($${DB.escHtml(handle)})</a>`;
         }
         if (!btns) btns = `<p style="font-size:14px;color:var(--text2);text-align:center;padding:16px 0">Stop in or call us to purchase tickets.</p>`;
         return btns;
@@ -501,9 +488,9 @@
               <div class="winner-card">
                 <div class="winner-icon">🏆</div>
                 <div>
-                  <div class="winner-name">${escHtml(w.name)}</div>
-                  <div class="winner-prize">${escHtml(w.prize)}</div>
-                  ${w.date ? `<div class="winner-date">${escHtml(formatDate(w.date))}</div>` : ''}
+                  <div class="winner-name">${DB.escHtml(w.name)}</div>
+                  <div class="winner-prize">${DB.escHtml(w.prize)}</div>
+                  ${w.date ? `<div class="winner-date">${DB.escHtml(formatDate(w.date))}</div>` : ''}
                 </div>
               </div>`).join('')}
           </div>

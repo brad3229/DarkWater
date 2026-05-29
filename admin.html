@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin — Dark Water Sports and Firearms</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
       :root {
@@ -160,12 +161,16 @@
           </div>
         </div>
         <h2>Sign In</h2>
-        <p>Enter your password to manage inventory.</p>
-        <div class="login-error" id="loginError">Incorrect password. Please try again.</div>
+        <p>Sign in to manage inventory.</p>
+        <div class="login-error" id="loginError">Incorrect email or password.</div>
         <form id="loginForm">
           <div class="form-field">
+            <label for="emailInput">Email</label>
+            <input type="email" id="emailInput" autocomplete="email" autofocus />
+          </div>
+          <div class="form-field">
             <label for="passwordInput">Password</label>
-            <input type="password" id="passwordInput" autocomplete="current-password" autofocus />
+            <input type="password" id="passwordInput" autocomplete="current-password" />
           </div>
           <button type="submit" class="login-btn">Sign In</button>
         </form>
@@ -330,7 +335,7 @@
                 <label for="rPayNote">Payment Note Instructions</label>
                 <textarea id="rPayNote" placeholder="Include your name and phone number in the payment note so we can contact you if you win."></textarea>
               </div>
-              <button class="raffle-save-btn" onclick="saveRaffle()">Save Raffle</button>
+              <button class="raffle-save-btn" onclick="handleSaveRaffle()">Save Raffle</button>
             </div>
 
             <!-- Past Winners -->
@@ -436,7 +441,7 @@
         <input type="hidden" id="wEditId" />
         <div class="form-actions">
           <button type="button" class="cancel-btn" onclick="closeWinnerModal()">Cancel</button>
-          <button type="button" class="save-btn" onclick="saveWinner()">Save Winner</button>
+          <button type="button" class="save-btn" onclick="handleSaveWinner()">Save Winner</button>
         </div>
       </div>
     </div>
@@ -444,9 +449,8 @@
     <!-- TOAST -->
     <div class="toast hidden" id="toast"></div>
 
+    <script src="db.js"></script>
     <script>
-      const PASSWORD = 'darkwater2026';
-
       const SECTIONS = {
         firearms: {
           storageKey: 'dw_firearms',
@@ -543,35 +547,42 @@
         },
       };
 
+      // ── CACHE ──
+      const _cache = {};
+      let _winnersCache = [];
+
       // ── AUTH ──
-      document.getElementById('loginForm').addEventListener('submit', e => {
+      document.getElementById('loginForm').addEventListener('submit', async e => {
         e.preventDefault();
-        if (document.getElementById('passwordInput').value === PASSWORD) {
-          sessionStorage.setItem('dw_admin', '1');
-          showAdmin();
-        } else {
+        const email = document.getElementById('emailInput').value.trim();
+        const password = document.getElementById('passwordInput').value;
+        const err = await DB.signIn(email, password);
+        if (err) {
+          document.getElementById('loginError').textContent = err;
           document.getElementById('loginError').style.display = 'block';
-          document.getElementById('passwordInput').select();
+        } else {
+          showAdmin();
         }
       });
 
-      function logout() {
-        sessionStorage.removeItem('dw_admin');
+      async function logout() {
+        await DB.signOut();
         document.getElementById('adminPanel').style.display = 'none';
         document.getElementById('loginScreen').style.display = 'flex';
+        document.getElementById('emailInput').value = '';
         document.getElementById('passwordInput').value = '';
         document.getElementById('loginError').style.display = 'none';
       }
 
-      function showAdmin() {
+      async function showAdmin() {
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('adminPanel').style.display = 'flex';
-        renderAllLists();
-        loadRaffleForm();
-        renderWinners();
+        await renderAllLists();
+        await loadRaffleForm();
+        await renderWinners();
       }
 
-      if (sessionStorage.getItem('dw_admin') === '1') showAdmin();
+      DB.getSession().then(s => { if (s) showAdmin(); });
 
       // ── TABS ──
       function switchTab(section, btn) {
@@ -581,95 +592,57 @@
         document.getElementById('panel-' + section).classList.add('active');
       }
 
-      // ── DATA ──
-      function getProducts(section) {
-        const stored = localStorage.getItem(SECTIONS[section].storageKey);
-        return stored ? JSON.parse(stored) : SECTIONS[section].defaults;
-      }
-
-      function saveToStorage(section, products) {
-        localStorage.setItem(SECTIONS[section].storageKey, JSON.stringify(products));
-      }
-
-      function escHtml(str) {
-        return String(str)
-          .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-          .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-      }
-
       // ── RENDER LIST ──
-      function renderList(section) {
-        const products = getProducts(section);
+      async function renderList(section) {
+        const products = await DB.getProducts(section);
+        _cache[section] = products;
         const el = document.getElementById('list-' + section);
         if (!products.length) {
-          el.innerHTML = '<div class="empty-state"><strong>No products yet.</strong><p>Click "+ Add Product" to get started.</p></div>';
+          el.innerHTML = '<div class="empty-state"><strong>No products yet.</strong><p>Click &ldquo;+ Add Product&rdquo; to get started.</p></div>';
           return;
         }
-        el.innerHTML = `
-          <table class="product-table">
-            <thead>
-              <tr>
-                <th style="width:76px">Image</th>
-                <th>Name</th>
-                <th>Brand</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th style="width:60px;text-align:center">Qty</th>
-                <th style="width:130px">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${products.map(p => `
-                <tr>
-                  <td>${p.imageUrl
-                    ? `<img class="product-thumb" src="${escHtml(p.imageUrl)}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'product-thumb-placeholder',textContent:'📦'}))">`
-                    : `<div class="product-thumb-placeholder">📦</div>`}
-                  </td>
-                  <td>
-                    <span class="product-name-cell">${escHtml(p.name)}</span>
-                    ${p.badge === 'new' ? '<span class="badge-sm new">New</span>' : p.badge === 'used' ? '<span class="badge-sm used">Used</span>' : ''}
-                  </td>
-                  <td>${escHtml(p.brandLabel)}</td>
-                  <td>${escHtml(p.categoryLabel)}</td>
-                  <td>${p.callForPrice ? '<em>Call for price</em>' : '$' + parseFloat(p.price).toFixed(2)}</td>
-                  <td style="text-align:center">
-                    ${(p.quantity ?? 1) === 0
-                      ? '<span style="color:#b91c1c;font-weight:700;font-size:12px">OOS</span>'
-                      : `<span style="font-weight:700">${p.quantity ?? 1}</span>`}
-                  </td>
-                  <td>
-                    <div class="row-actions">
-                      <button class="edit-btn" onclick="openForm('${section}','${p.id}')">Edit</button>
-                      <button class="del-btn" onclick="deleteProduct('${section}','${p.id}')">Delete</button>
-                    </div>
-                  </td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>`;
+        el.innerHTML = `<table class="product-table">
+          <thead><tr>
+            <th style="width:76px">Image</th><th>Name</th><th>Brand</th>
+            <th>Category</th><th>Price</th>
+            <th style="width:60px;text-align:center">Qty</th>
+            <th style="width:130px">Actions</th>
+          </tr></thead>
+          <tbody>${products.map(p => `<tr>
+            <td>${p.imageUrl ? `<img class="product-thumb" src="${DB.escHtml(p.imageUrl)}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'product-thumb-placeholder',textContent:'📦'}))">` : `<div class="product-thumb-placeholder">📦</div>`}</td>
+            <td><span class="product-name-cell">${DB.escHtml(p.name)}</span>
+              ${p.badge === 'new' ? '<span class="badge-sm new">New</span>' : p.badge === 'used' ? '<span class="badge-sm used">Used</span>' : ''}</td>
+            <td>${DB.escHtml(p.brandLabel)}</td>
+            <td>${DB.escHtml(p.categoryLabel)}</td>
+            <td>${p.callForPrice ? '<em>Call for price</em>' : '$' + parseFloat(p.price).toFixed(2)}</td>
+            <td style="text-align:center">${(p.quantity ?? 1) === 0 ? '<span style="color:#b91c1c;font-weight:700;font-size:12px">OOS</span>' : `<span style="font-weight:700">${p.quantity ?? 1}</span>`}</td>
+            <td><div class="row-actions">
+              <button class="edit-btn" onclick="openForm('${section}','${p.id}')">Edit</button>
+              <button class="del-btn" onclick="handleDeleteProduct('${section}','${p.id}')">Delete</button>
+            </div></td>
+          </tr>`).join('')}</tbody></table>`;
       }
 
-      function renderAllLists() {
-        Object.keys(SECTIONS).forEach(renderList);
+      async function renderAllLists() {
+        await Promise.all(Object.keys(SECTIONS).map(renderList));
         renderSummary();
       }
 
       function renderSummary() {
-        const fmt = (n) => n.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+        const fmt = n => n.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
         let grandValue = 0, grandUnits = 0, grandSkus = 0;
         Object.keys(SECTIONS).forEach(section => {
-          const products = getProducts(section);
+          const products = _cache[section] || [];
           let secValue = 0, secUnits = 0;
           products.forEach(p => {
             const qty = p.quantity ?? 1;
             secUnits += qty;
             if (!p.callForPrice && p.price) secValue += parseFloat(p.price) * qty;
           });
-          grandValue += secValue;
-          grandUnits += secUnits;
-          grandSkus  += products.length;
-          document.getElementById('stat' + section.charAt(0).toUpperCase() + section.slice(1)).textContent = fmt(secValue);
-          document.getElementById('stat' + section.charAt(0).toUpperCase() + section.slice(1) + 'Sub').textContent = secUnits + ' unit' + (secUnits !== 1 ? 's' : '') + ' · ' + products.length + ' SKU' + (products.length !== 1 ? 's' : '');
+          grandValue += secValue; grandUnits += secUnits; grandSkus += products.length;
+          const cap = section.charAt(0).toUpperCase() + section.slice(1);
+          document.getElementById('stat' + cap).textContent = fmt(secValue);
+          document.getElementById('stat' + cap + 'Sub').textContent = secUnits + ' unit' + (secUnits !== 1 ? 's' : '') + ' · ' + products.length + ' SKU' + (products.length !== 1 ? 's' : '');
         });
         document.getElementById('statTotal').textContent = fmt(grandValue);
         document.getElementById('statTotalSub').textContent = grandSkus + ' SKUs across all departments';
@@ -684,17 +657,13 @@
         document.getElementById('editId').value = id || '';
         document.getElementById('modalTitle').textContent = id ? 'Edit Product' : 'Add Product';
         document.getElementById('fCategoryLabel').textContent = cfg.categoryLabel + ' *';
-
-        document.getElementById('fCategory').innerHTML = cfg.categories
-          .map(c => `<option value="${c.value}">${c.label}</option>`).join('');
-        document.getElementById('fBrand').innerHTML = cfg.brands
-          .map(b => `<option value="${b.value}">${b.label}</option>`).join('');
-
+        document.getElementById('fCategory').innerHTML = cfg.categories.map(c => `<option value="${c.value}">${c.label}</option>`).join('');
+        document.getElementById('fBrand').innerHTML = cfg.brands.map(b => `<option value="${b.value}">${b.label}</option>`).join('');
         document.getElementById('conditionRow').style.display = cfg.showCondition ? '' : 'none';
         document.getElementById('badgeRow').style.display = cfg.showCondition ? 'none' : '';
 
         if (id) {
-          const p = getProducts(section).find(x => x.id === id);
+          const p = (_cache[section] || []).find(x => x.id === id);
           if (p) {
             document.getElementById('fName').value = p.name;
             document.getElementById('fPrice').value = p.price || '';
@@ -715,23 +684,14 @@
           if (cfg.showCondition) document.getElementById('fCondition').value = 'new';
           else document.getElementById('fBadge').value = 'new';
         }
-
         togglePriceField();
         document.getElementById('modalOverlay').classList.remove('hidden');
         document.getElementById('fName').focus();
       }
 
-      function closeModal() {
-        document.getElementById('modalOverlay').classList.add('hidden');
-      }
-
-      document.getElementById('modalOverlay').addEventListener('click', e => {
-        if (e.target === document.getElementById('modalOverlay')) closeModal();
-      });
-
-      document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') closeModal();
-      });
+      function closeModal() { document.getElementById('modalOverlay').classList.add('hidden'); }
+      document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target === document.getElementById('modalOverlay')) closeModal(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeWinnerModal(); } });
 
       function togglePriceField() {
         const call = document.getElementById('fCallForPrice').checked;
@@ -739,8 +699,8 @@
         if (call) document.getElementById('fPrice').value = '';
       }
 
-      // ── SAVE ──
-      function saveProduct(e) {
+      // ── SAVE PRODUCT ──
+      async function saveProduct(e) {
         e.preventDefault();
         const section = document.getElementById('editSection').value;
         const id = document.getElementById('editId').value;
@@ -750,7 +710,6 @@
         const brandValue = document.getElementById('fBrand').value;
         const brandLabel = cfg.brands.find(b => b.value === brandValue)?.label || brandValue;
         const callForPrice = document.getElementById('fCallForPrice').checked;
-
         let badge, category;
         if (cfg.showCondition) {
           const condition = document.getElementById('fCondition').value;
@@ -760,66 +719,36 @@
           badge = document.getElementById('fBadge').value;
           category = catValue;
         }
-
         const product = {
-          id: id || (Date.now().toString(36) + Math.random().toString(36).slice(2)),
+          id: id || null,
           name: document.getElementById('fName').value.trim(),
-          brand: brandValue, brandLabel,
-          category, categoryLabel: catLabel,
+          brand: brandValue, brandLabel, category, categoryLabel: catLabel,
           price: callForPrice ? '' : (parseFloat(document.getElementById('fPrice').value) || 0).toFixed(2),
           callForPrice,
           quantity: parseInt(document.getElementById('fQty').value, 10) || 0,
           imageUrl: document.getElementById('fImageUrl').value.trim(),
           badge,
         };
-
-        const products = getProducts(section);
-        if (id) {
-          const idx = products.findIndex(p => p.id === id);
-          if (idx !== -1) products[idx] = product; else products.push(product);
-        } else {
-          products.push(product);
-        }
-
-        saveToStorage(section, products);
-        renderList(section);
+        await DB.upsertProduct(section, product);
+        await renderList(section);
         renderSummary();
         closeModal();
         showToast(id ? 'Product updated!' : 'Product added!');
       }
 
-      // ── DELETE ──
-      function deleteProduct(section, id) {
+      // ── DELETE PRODUCT ──
+      async function handleDeleteProduct(section, id) {
         if (!confirm('Delete this product? This cannot be undone.')) return;
-        saveToStorage(section, getProducts(section).filter(p => p.id !== id));
-        renderList(section);
+        await DB.deleteProduct(id);
+        await renderList(section);
         renderSummary();
         showToast('Product deleted.');
       }
 
-      // ── RAFFLE DATA ──
-      const RAFFLE_KEY = 'dw_raffle';
-      const WINNERS_KEY = 'dw_raffle_winners';
-
-      const defaultRaffle = {
-        active: false, prizeName: '', prizeDescription: '', prizeValue: '',
-        prizeImage: '', ticketPrice: '', totalTickets: '', ticketsSold: 0,
-        drawingDate: '', paymentVenmo: '', paymentPaypal: '', paymentCashapp: '',
-        paymentNote: 'Include your name and phone number in the payment note so we can contact you if you win.',
-      };
-
-      function getRaffle() {
-        try { const s = localStorage.getItem(RAFFLE_KEY); if (s) return JSON.parse(s); } catch(e) {}
-        return { ...defaultRaffle };
-      }
-
-      function getWinners() {
-        try { const s = localStorage.getItem(WINNERS_KEY); if (s) return JSON.parse(s); } catch(e) {}
-        return [];
-      }
-
-      function loadRaffleForm() {
-        const r = getRaffle();
+      // ── RAFFLE ──
+      async function loadRaffleForm() {
+        const r = await DB.getRaffle();
+        if (!r) return;
         document.getElementById('rActive').checked = r.active;
         document.getElementById('rPrizeName').value = r.prizeName || '';
         document.getElementById('rPrizeDesc').value = r.prizeDescription || '';
@@ -835,8 +764,8 @@
         document.getElementById('rPayNote').value = r.paymentNote || '';
       }
 
-      function saveRaffle() {
-        const r = {
+      async function handleSaveRaffle() {
+        await DB.saveRaffle({
           active: document.getElementById('rActive').checked,
           prizeName: document.getElementById('rPrizeName').value.trim(),
           prizeDescription: document.getElementById('rPrizeDesc').value.trim(),
@@ -850,91 +779,62 @@
           paymentPaypal: document.getElementById('rPaypal').value.trim(),
           paymentCashapp: document.getElementById('rCashapp').value.trim(),
           paymentNote: document.getElementById('rPayNote').value.trim(),
-        };
-        localStorage.setItem(RAFFLE_KEY, JSON.stringify(r));
+        });
         showToast('Raffle saved!');
       }
 
       // ── WINNERS ──
-      function renderWinners() {
-        const winners = getWinners();
+      async function renderWinners() {
+        const winners = await DB.getWinners();
+        _winnersCache = winners;
         const el = document.getElementById('winnersList');
-        if (!winners.length) {
-          el.innerHTML = '<div class="no-winners">No winners logged yet.</div>';
-          return;
-        }
+        if (!winners.length) { el.innerHTML = '<div class="no-winners">No winners logged yet.</div>'; return; }
         el.innerHTML = `<table class="winners-table">
           <thead><tr><th>Name</th><th>Prize</th><th>Date</th><th style="width:80px"></th></tr></thead>
-          <tbody>${winners.map(w => `
-            <tr>
-              <td style="font-weight:700">${escHtml(w.name)}</td>
-              <td>${escHtml(w.prize)}</td>
-              <td style="color:var(--text2)">${w.date || '—'}</td>
-              <td>
-                <div class="row-actions">
-                  <button class="edit-btn" onclick="openWinnerForm('${w.id}')">Edit</button>
-                  <button class="del-btn" onclick="deleteWinner('${w.id}')">Del</button>
-                </div>
-              </td>
-            </tr>`).join('')}
-          </tbody></table>`;
+          <tbody>${winners.map(w => `<tr>
+            <td style="font-weight:700">${DB.escHtml(w.name)}</td>
+            <td>${DB.escHtml(w.prize)}</td>
+            <td style="color:var(--text2)">${w.date || '—'}</td>
+            <td><div class="row-actions">
+              <button class="edit-btn" onclick="openWinnerForm('${w.id}')">Edit</button>
+              <button class="del-btn" onclick="handleDeleteWinner('${w.id}')">Del</button>
+            </div></td>
+          </tr>`).join('')}</tbody></table>`;
       }
 
       function openWinnerForm(id = null) {
         document.getElementById('winnerModalTitle').textContent = id ? 'Edit Winner' : 'Add Winner';
         document.getElementById('wEditId').value = id || '';
         if (id) {
-          const w = getWinners().find(x => x.id === id);
-          if (w) {
-            document.getElementById('wName').value = w.name;
-            document.getElementById('wPrize').value = w.prize;
-            document.getElementById('wDate').value = w.date || '';
-          }
+          const w = _winnersCache.find(x => x.id === id);
+          if (w) { document.getElementById('wName').value = w.name; document.getElementById('wPrize').value = w.prize; document.getElementById('wDate').value = w.date || ''; }
         } else {
           document.getElementById('wName').value = '';
-          document.getElementById('wPrize').value = getRaffle().prizeName || '';
+          document.getElementById('wPrize').value = document.getElementById('rPrizeName').value || '';
           document.getElementById('wDate').value = '';
         }
         document.getElementById('winnerModalOverlay').classList.remove('hidden');
         document.getElementById('wName').focus();
       }
 
-      function closeWinnerModal() {
-        document.getElementById('winnerModalOverlay').classList.add('hidden');
-      }
+      function closeWinnerModal() { document.getElementById('winnerModalOverlay').classList.add('hidden'); }
+      document.getElementById('winnerModalOverlay').addEventListener('click', e => { if (e.target === document.getElementById('winnerModalOverlay')) closeWinnerModal(); });
 
-      document.getElementById('winnerModalOverlay').addEventListener('click', e => {
-        if (e.target === document.getElementById('winnerModalOverlay')) closeWinnerModal();
-      });
-
-      function saveWinner() {
+      async function handleSaveWinner() {
         const name = document.getElementById('wName').value.trim();
         const prize = document.getElementById('wPrize').value.trim();
         if (!name || !prize) { alert('Name and Prize are required.'); return; }
         const id = document.getElementById('wEditId').value;
-        const winner = {
-          id: id || Date.now().toString(36),
-          name,
-          prize,
-          date: document.getElementById('wDate').value,
-        };
-        const winners = getWinners();
-        if (id) {
-          const idx = winners.findIndex(w => w.id === id);
-          if (idx !== -1) winners[idx] = winner; else winners.push(winner);
-        } else {
-          winners.unshift(winner);
-        }
-        localStorage.setItem(WINNERS_KEY, JSON.stringify(winners));
-        renderWinners();
+        await DB.upsertWinner({ id: id || null, name, prize, date: document.getElementById('wDate').value });
+        await renderWinners();
         closeWinnerModal();
         showToast(id ? 'Winner updated!' : 'Winner added!');
       }
 
-      function deleteWinner(id) {
+      async function handleDeleteWinner(id) {
         if (!confirm('Remove this winner?')) return;
-        localStorage.setItem(WINNERS_KEY, JSON.stringify(getWinners().filter(w => w.id !== id)));
-        renderWinners();
+        await DB.deleteWinner(id);
+        await renderWinners();
         showToast('Winner removed.');
       }
 
