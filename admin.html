@@ -167,67 +167,80 @@
       .toast.hidden { display: none; }
 
       /* ── RESPONSIVE ── */
+      html, body { max-width: 100%; overflow-x: hidden; }
 
-      /* Tablet (≤900px) */
-      @media (max-width: 900px) {
-        .admin-header { padding: 0 20px; height: 58px; }
-        .admin-header-sub { display: none; }
-        .admin-back { display: none; }
-        .admin-tabs { padding: 0 16px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-        .tab-btn { padding: 14px 16px; font-size: 13px; white-space: nowrap; }
-        .admin-content { padding: 20px 16px; }
-        .summary-bar { padding: 14px 16px; gap: 0; }
-        .summary-stat { padding: 8px 16px; }
-        .summary-stat.total .summary-value { font-size: 18px; }
-        .panel-header { flex-direction: column; align-items: flex-start; gap: 10px; }
-        .panel-header .add-btn { align-self: stretch; text-align: center; }
-        .raffle-card { padding: 20px; }
-        .modal { padding: 24px 20px; }
-        .two-col { grid-template-columns: 1fr; gap: 0; }
+      /* Tablet (≤1024px) */
+      @media (max-width: 1024px) {
+        .admin-content { padding: 24px 20px; }
+        .summary-bar { padding: 14px 20px; }
+        .summary-stat { padding: 0 18px; }
       }
 
-      /* Mobile (≤600px) */
-      @media (max-width: 600px) {
-        .admin-header { padding: 0 16px; height: 54px; }
+      /* Tablet portrait (≤768px) */
+      @media (max-width: 768px) {
+        .admin-header { padding: 0 16px; height: 56px; }
+        .admin-header-sub { display: none; }
+        .admin-back { display: none; }
+        .admin-tabs { padding: 0 16px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+        .admin-tabs::-webkit-scrollbar { display: none; }
+        .tab-btn { padding: 14px 14px; font-size: 13px; white-space: nowrap; }
+        .admin-content { padding: 16px; }
+        .panel-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+        .panel-header .add-btn { width: 100%; text-align: center; }
+        .two-col { grid-template-columns: 1fr; }
+        .summary-bar { padding: 12px 16px; flex-wrap: wrap; gap: 8px 0; }
+        .summary-stat { padding: 6px 14px; }
+        .raffle-layout { grid-template-columns: 1fr; }
+        .raffle-card { padding: 18px; }
+        /* Table scrolls horizontally */
+        .product-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; white-space: nowrap; }
+        .product-table th, .product-table td { white-space: normal; }
+        .product-table th:nth-child(3),
+        .product-table td:nth-child(3) { display: none; } /* hide Brand column */
+      }
+
+      /* Phone (≤480px) */
+      @media (max-width: 480px) {
+        .admin-header { padding: 0 12px; }
         .admin-header-title { font-size: 14px; }
-        .logout-btn { padding: 6px 12px; font-size: 12px; }
+        .admin-header-logo-icon { width: 30px; height: 30px; font-size: 15px; }
+        .logout-btn { padding: 6px 10px; font-size: 12px; }
+        .admin-content { padding: 12px; }
 
-        /* Tabs scroll horizontally */
-        .admin-tabs { padding: 0 12px; }
-        .tab-btn { padding: 12px 14px; font-size: 12px; }
-
-        .admin-content { padding: 16px 12px; }
-
-        /* Summary bar stacks into 2 columns */
-        .summary-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 16px 12px; }
+        /* Summary: 2-column grid */
+        .summary-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px; border-bottom: none; }
         .summary-stat { padding: 12px; border-right: none; border: 1.5px solid var(--border); border-radius: 10px; background: var(--white); }
         .summary-stat:first-child { grid-column: 1 / -1; background: #f0f5ee; border-color: var(--green); }
-        .summary-stat.total .summary-value { font-size: 20px; }
+        .summary-stat.total .summary-value { font-size: 18px; }
+        .summary-sub { font-size: 10px; }
 
-        /* Product table: wrap into card-style rows */
-        .product-table, .product-table thead, .product-table tbody,
-        .product-table th, .product-table td, .product-table tr { display: block; }
+        /* Product table: card layout */
+        .product-table, .product-table tbody,
+        .product-table td, .product-table tr { display: block; width: 100%; }
         .product-table thead { display: none; }
-        .product-table tr { background: var(--white); border: 1.5px solid var(--border); border-radius: 12px; margin-bottom: 12px; padding: 14px; position: relative; }
+        .product-table tr { background: var(--white); border: 1.5px solid var(--border); border-radius: 12px; margin-bottom: 10px; padding: 12px 12px 8px; position: relative; overflow: hidden; }
         .product-table tr:hover td { background: transparent; }
-        .product-table td { padding: 4px 0; border: none; font-size: 13px; }
-        .product-table td:first-child { position: absolute; top: 14px; right: 14px; }
-        .product-thumb { width: 48px; height: 36px; }
-        .product-thumb-placeholder { width: 48px; height: 36px; font-size: 18px; }
-        .row-actions { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); justify-content: flex-end; }
+        .product-table td { padding: 3px 0; border: none; font-size: 13px; padding-right: 70px; }
+        .product-table td:first-child { position: absolute; top: 12px; right: 12px; padding-right: 0; width: auto; }
+        .product-thumb { width: 52px; height: 40px; }
+        .product-thumb-placeholder { width: 52px; height: 40px; font-size: 20px; }
+        .row-actions { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); justify-content: flex-end; padding-right: 0; }
+        .edit-btn, .del-btn { padding: 8px 16px; font-size: 13px; }
 
-        /* Modal full-screen on mobile */
+        /* Modal slides up from bottom */
         .modal-overlay { padding: 0; align-items: flex-end; }
-        .modal { border-radius: 20px 20px 0 0; max-height: 92vh; padding: 20px 16px; }
-        .form-actions { flex-direction: column; }
-        .cancel-btn, .save-btn { width: 100%; text-align: center; }
+        .modal { border-radius: 20px 20px 0 0; max-height: 92vh; padding: 20px 16px 32px; max-width: 100%; }
+        .form-actions { flex-direction: column-reverse; gap: 8px; }
+        .cancel-btn, .save-btn { width: 100%; padding: 13px; text-align: center; }
 
         /* Raffle */
-        .raffle-card { padding: 16px; }
-        .raffle-card h3 { font-size: 15px; flex-wrap: wrap; gap: 6px; }
+        .raffle-card { padding: 14px; }
+        .raffle-card h3 { font-size: 14px; flex-wrap: wrap; }
+        .raffle-active-row { flex-wrap: wrap; gap: 10px; }
 
-        /* Login card */
-        .login-card { padding: 28px 20px; margin: 16px; }
+        /* Login */
+        .login-card { padding: 24px 16px; margin: 12px; border-radius: 16px; }
+        #loginScreen { align-items: flex-start; padding-top: 40px; }
       }
     </style>
   </head>
