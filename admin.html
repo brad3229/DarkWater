@@ -330,8 +330,26 @@
                 <input type="date" id="rDrawingDate" />
               </div>
               <div class="form-row">
-                <label for="rPrizeImage">Prize Image URL <span class="optional">(optional)</span></label>
-                <input type="url" id="rPrizeImage" placeholder="https://..." />
+                <label>Prize Image <span class="optional">(optional)</span></label>
+                <div class="img-drop-zone" id="rImgDropZone">
+                  <input type="file" id="rImageFile" accept="image/*" />
+                  <div id="rImgPrompt">
+                    <div class="img-drop-icon">🖼️</div>
+                    <div class="img-drop-text">Drag &amp; drop image here<br>or <strong>click to browse</strong></div>
+                    <div class="img-drop-hint">JPG, PNG, WEBP · max 5MB</div>
+                  </div>
+                  <div class="img-uploading" id="rImgUploading" style="display:none">
+                    <div class="img-spinner"></div> Uploading…
+                  </div>
+                </div>
+                <div class="img-preview-wrap" id="rImgPreviewWrap" style="display:none">
+                  <img id="rImgPreviewImg" src="" alt="Preview" />
+                  <div class="img-preview-actions">
+                    <button type="button" class="img-replace-btn" onclick="triggerRaffleImagePick()">Replace Image</button>
+                    <button type="button" class="img-remove-btn" onclick="clearRaffleImage()">Remove</button>
+                  </div>
+                </div>
+                <input type="hidden" id="rPrizeImage" />
               </div>
               <div class="form-row" style="margin-bottom:6px">
                 <label>Payment Methods</label>
@@ -793,7 +811,7 @@
         document.getElementById('rTotalTickets').value = r.totalTickets || '';
         document.getElementById('rTicketsSold').value = r.ticketsSold || 0;
         document.getElementById('rDrawingDate').value = r.drawingDate || '';
-        document.getElementById('rPrizeImage').value = r.prizeImage || '';
+        setRaffleImage(r.prizeImage || '');
         document.getElementById('rVenmo').value = r.paymentVenmo || '';
         document.getElementById('rPaypal').value = r.paymentPaypal || '';
         document.getElementById('rCashapp').value = r.paymentCashapp || '';
@@ -876,6 +894,7 @@
 
       // ── IMAGE UPLOAD ──
       (function () {
+        // Product image
         const zone = document.getElementById('imgDropZone');
         const fileInput = document.getElementById('fImageFile');
 
@@ -888,6 +907,20 @@
         });
         fileInput.addEventListener('change', () => {
           if (fileInput.files[0]) handleImageFile(fileInput.files[0]);
+        });
+
+        // Raffle image
+        const rZone = document.getElementById('rImgDropZone');
+        const rFileInput = document.getElementById('rImageFile');
+        rZone.addEventListener('dragover', e => { e.preventDefault(); rZone.classList.add('dragover'); });
+        rZone.addEventListener('dragleave', () => rZone.classList.remove('dragover'));
+        rZone.addEventListener('drop', e => {
+          e.preventDefault(); rZone.classList.remove('dragover');
+          const file = e.dataTransfer.files[0];
+          if (file && file.type.startsWith('image/')) handleRaffleImageFile(file);
+        });
+        rFileInput.addEventListener('change', () => {
+          if (rFileInput.files[0]) handleRaffleImageFile(rFileInput.files[0]);
         });
       })();
 
@@ -936,6 +969,44 @@
         } else {
           showImgPrompt();
         }
+      }
+
+      // Raffle image functions
+      function triggerRaffleImagePick() { document.getElementById('rImageFile').click(); }
+
+      async function handleRaffleImageFile(file) {
+        if (file.size > 5 * 1024 * 1024) { alert('Image must be under 5MB.'); return; }
+        document.getElementById('rImgPrompt').style.display = 'none';
+        document.getElementById('rImgUploading').style.display = 'flex';
+        document.getElementById('rImgPreviewWrap').style.display = 'none';
+        try {
+          const url = await DB.uploadImage(file);
+          document.getElementById('rPrizeImage').value = url;
+          showRaffleImgPreview(url);
+        } catch(err) {
+          alert('Upload failed: ' + err.message);
+          clearRaffleImage();
+        }
+        document.getElementById('rImgUploading').style.display = 'none';
+      }
+
+      function showRaffleImgPreview(url) {
+        document.getElementById('rImgPreviewImg').src = url;
+        document.getElementById('rImgPreviewWrap').style.display = 'block';
+        document.getElementById('rImgDropZone').style.display = 'none';
+      }
+
+      function clearRaffleImage() {
+        document.getElementById('rImgDropZone').style.display = '';
+        document.getElementById('rImgPrompt').style.display = '';
+        document.getElementById('rImgPreviewWrap').style.display = 'none';
+        document.getElementById('rPrizeImage').value = '';
+        document.getElementById('rImageFile').value = '';
+      }
+
+      function setRaffleImage(url) {
+        if (url) { showRaffleImgPreview(url); document.getElementById('rPrizeImage').value = url; }
+        else clearRaffleImage();
       }
 
       // ── TOAST ──
