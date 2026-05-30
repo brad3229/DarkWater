@@ -165,6 +165,70 @@
       /* ── TOAST ── */
       .toast { position: fixed; bottom: 24px; right: 24px; background: var(--green); color: #fff; border-radius: 10px; padding: 14px 20px; font-size: 14px; font-weight: 600; box-shadow: 0 4px 20px rgba(0,0,0,0.15); z-index: 1000; }
       .toast.hidden { display: none; }
+
+      /* ── RESPONSIVE ── */
+
+      /* Tablet (≤900px) */
+      @media (max-width: 900px) {
+        .admin-header { padding: 0 20px; height: 58px; }
+        .admin-header-sub { display: none; }
+        .admin-back { display: none; }
+        .admin-tabs { padding: 0 16px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .tab-btn { padding: 14px 16px; font-size: 13px; white-space: nowrap; }
+        .admin-content { padding: 20px 16px; }
+        .summary-bar { padding: 14px 16px; gap: 0; }
+        .summary-stat { padding: 8px 16px; }
+        .summary-stat.total .summary-value { font-size: 18px; }
+        .panel-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+        .panel-header .add-btn { align-self: stretch; text-align: center; }
+        .raffle-card { padding: 20px; }
+        .modal { padding: 24px 20px; }
+        .two-col { grid-template-columns: 1fr; gap: 0; }
+      }
+
+      /* Mobile (≤600px) */
+      @media (max-width: 600px) {
+        .admin-header { padding: 0 16px; height: 54px; }
+        .admin-header-title { font-size: 14px; }
+        .logout-btn { padding: 6px 12px; font-size: 12px; }
+
+        /* Tabs scroll horizontally */
+        .admin-tabs { padding: 0 12px; }
+        .tab-btn { padding: 12px 14px; font-size: 12px; }
+
+        .admin-content { padding: 16px 12px; }
+
+        /* Summary bar stacks into 2 columns */
+        .summary-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 16px 12px; }
+        .summary-stat { padding: 12px; border-right: none; border: 1.5px solid var(--border); border-radius: 10px; background: var(--white); }
+        .summary-stat:first-child { grid-column: 1 / -1; background: #f0f5ee; border-color: var(--green); }
+        .summary-stat.total .summary-value { font-size: 20px; }
+
+        /* Product table: wrap into card-style rows */
+        .product-table, .product-table thead, .product-table tbody,
+        .product-table th, .product-table td, .product-table tr { display: block; }
+        .product-table thead { display: none; }
+        .product-table tr { background: var(--white); border: 1.5px solid var(--border); border-radius: 12px; margin-bottom: 12px; padding: 14px; position: relative; }
+        .product-table tr:hover td { background: transparent; }
+        .product-table td { padding: 4px 0; border: none; font-size: 13px; }
+        .product-table td:first-child { position: absolute; top: 14px; right: 14px; }
+        .product-thumb { width: 48px; height: 36px; }
+        .product-thumb-placeholder { width: 48px; height: 36px; font-size: 18px; }
+        .row-actions { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); justify-content: flex-end; }
+
+        /* Modal full-screen on mobile */
+        .modal-overlay { padding: 0; align-items: flex-end; }
+        .modal { border-radius: 20px 20px 0 0; max-height: 92vh; padding: 20px 16px; }
+        .form-actions { flex-direction: column; }
+        .cancel-btn, .save-btn { width: 100%; text-align: center; }
+
+        /* Raffle */
+        .raffle-card { padding: 16px; }
+        .raffle-card h3 { font-size: 15px; flex-wrap: wrap; gap: 6px; }
+
+        /* Login card */
+        .login-card { padding: 28px 20px; margin: 16px; }
+      }
     </style>
   </head>
   <body>
