@@ -23,6 +23,7 @@
       quantity: row.quantity != null ? row.quantity : 1,
       imageUrl: row.image_url || '',
       badge: row.badge || '',
+      description: row.description || '',
     };
   }
 
@@ -38,6 +39,7 @@
       quantity: parseInt(p.quantity) || 0,
       image_url: p.imageUrl || '',
       badge: p.badge || '',
+      description: p.description || '',
     };
     if (!p.callForPrice && p.price !== '' && p.price != null) {
       row.price = parseFloat(p.price) || 0;
