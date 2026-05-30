@@ -167,11 +167,26 @@
     if (error) console.error('deleteWinner:', error);
   }
 
+  // ── IMAGE UPLOAD ──
+  async function uploadImage(file) {
+    const ext = file.name.split('.').pop().toLowerCase();
+    const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const { data, error } = await client.storage
+      .from('product-images')
+      .upload(path, file, { contentType: file.type, upsert: false });
+    if (error) throw new Error(error.message);
+    const { data: { publicUrl } } = client.storage
+      .from('product-images')
+      .getPublicUrl(data.path);
+    return publicUrl;
+  }
+
   window.DB = {
     escHtml,
     signIn, signOut, getSession,
     getProducts, upsertProduct, deleteProduct,
     getRaffle, saveRaffle,
     getWinners, upsertWinner, deleteWinner,
+    uploadImage,
   };
 })();

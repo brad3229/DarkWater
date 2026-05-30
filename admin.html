@@ -143,6 +143,25 @@
       .summary-stat.total .summary-value { font-size: 22px; color: var(--green); }
       .summary-sub { font-size: 11px; color: var(--text2); margin-top: 1px; font-weight: 500; }
 
+      /* ── IMAGE UPLOAD ── */
+      .img-drop-zone { border: 2px dashed var(--border); border-radius: 12px; padding: 28px 20px; text-align: center; cursor: pointer; transition: border-color 0.2s, background 0.2s; position: relative; background: var(--bg); }
+      .img-drop-zone:hover, .img-drop-zone.dragover { border-color: var(--green); background: #f0f5ee; }
+      .img-drop-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+      .img-drop-icon { font-size: 30px; margin-bottom: 8px; }
+      .img-drop-text { font-size: 13px; color: var(--text2); line-height: 1.5; }
+      .img-drop-text strong { color: var(--green); }
+      .img-drop-hint { font-size: 11px; color: var(--text2); margin-top: 4px; opacity: 0.7; }
+      .img-uploading { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 20px; font-size: 14px; color: var(--text2); }
+      .img-spinner { width: 18px; height: 18px; border: 2px solid var(--border); border-top-color: var(--green); border-radius: 50%; animation: spin 0.7s linear infinite; }
+      @keyframes spin { to { transform: rotate(360deg); } }
+      .img-preview-wrap { position: relative; margin-top: 10px; }
+      .img-preview-wrap img { width: 100%; max-height: 160px; object-fit: cover; border-radius: 10px; display: block; border: 1.5px solid var(--border); }
+      .img-preview-actions { display: flex; gap: 8px; margin-top: 8px; }
+      .img-replace-btn { font-size: 12px; font-weight: 600; color: var(--tan); background: none; border: 1.5px solid var(--border); border-radius: 6px; padding: 5px 12px; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+      .img-replace-btn:hover { border-color: var(--tan); }
+      .img-remove-btn { font-size: 12px; font-weight: 600; color: var(--red); background: none; border: 1.5px solid var(--border); border-radius: 6px; padding: 5px 12px; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+      .img-remove-btn:hover { border-color: var(--red); }
+
       /* ── TOAST ── */
       .toast { position: fixed; bottom: 24px; right: 24px; background: var(--green); color: #fff; border-radius: 10px; padding: 14px 20px; font-size: 14px; font-weight: 600; box-shadow: 0 4px 20px rgba(0,0,0,0.15); z-index: 1000; }
       .toast.hidden { display: none; }
@@ -409,9 +428,26 @@
           </div>
 
           <div class="form-row">
-            <label for="fImageUrl">Image URL <span class="optional">(optional)</span></label>
-            <input type="url" id="fImageUrl" placeholder="https://..." />
-            <p class="form-hint">Paste a link to a photo. Leave blank to show a placeholder.</p>
+            <label>Product Image <span class="optional">(optional)</span></label>
+            <div class="img-drop-zone" id="imgDropZone">
+              <input type="file" id="fImageFile" accept="image/*" />
+              <div id="imgPrompt">
+                <div class="img-drop-icon">🖼️</div>
+                <div class="img-drop-text">Drag &amp; drop image here<br>or <strong>click to browse</strong></div>
+                <div class="img-drop-hint">JPG, PNG, WEBP · max 5MB</div>
+              </div>
+              <div class="img-uploading" id="imgUploading" style="display:none">
+                <div class="img-spinner"></div> Uploading…
+              </div>
+            </div>
+            <div class="img-preview-wrap" id="imgPreviewWrap" style="display:none">
+              <img id="imgPreviewImg" src="" alt="Preview" />
+              <div class="img-preview-actions">
+                <button type="button" class="img-replace-btn" onclick="triggerImagePick()">Replace Image</button>
+                <button type="button" class="img-remove-btn" onclick="clearImage()">Remove</button>
+              </div>
+            </div>
+            <input type="hidden" id="fImageUrl" />
           </div>
 
           <div class="form-actions">
@@ -669,7 +705,7 @@
             document.getElementById('fPrice').value = p.price || '';
             document.getElementById('fQty').value = p.quantity ?? 1;
             document.getElementById('fCallForPrice').checked = p.callForPrice;
-            document.getElementById('fImageUrl').value = p.imageUrl || '';
+            setImageForEdit(p.imageUrl || '');
             document.getElementById('fCategory').value = p.category.replace(' used', '');
             document.getElementById('fBrand').value = p.brand;
             if (cfg.showCondition) document.getElementById('fCondition').value = p.badge || '';
@@ -680,7 +716,7 @@
           document.getElementById('fPrice').value = '';
           document.getElementById('fQty').value = 1;
           document.getElementById('fCallForPrice').checked = false;
-          document.getElementById('fImageUrl').value = '';
+          showImgPrompt();
           if (cfg.showCondition) document.getElementById('fCondition').value = 'new';
           else document.getElementById('fBadge').value = 'new';
         }
@@ -836,6 +872,70 @@
         await DB.deleteWinner(id);
         await renderWinners();
         showToast('Winner removed.');
+      }
+
+      // ── IMAGE UPLOAD ──
+      (function () {
+        const zone = document.getElementById('imgDropZone');
+        const fileInput = document.getElementById('fImageFile');
+
+        zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+        zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+        zone.addEventListener('drop', e => {
+          e.preventDefault(); zone.classList.remove('dragover');
+          const file = e.dataTransfer.files[0];
+          if (file && file.type.startsWith('image/')) handleImageFile(file);
+        });
+        fileInput.addEventListener('change', () => {
+          if (fileInput.files[0]) handleImageFile(fileInput.files[0]);
+        });
+      })();
+
+      function triggerImagePick() {
+        document.getElementById('fImageFile').click();
+      }
+
+      async function handleImageFile(file) {
+        if (file.size > 5 * 1024 * 1024) { alert('Image must be under 5MB.'); return; }
+        document.getElementById('imgPrompt').style.display = 'none';
+        document.getElementById('imgUploading').style.display = 'flex';
+        document.getElementById('imgPreviewWrap').style.display = 'none';
+        try {
+          const url = await DB.uploadImage(file);
+          document.getElementById('fImageUrl').value = url;
+          showImgPreview(url);
+        } catch(err) {
+          alert('Upload failed: ' + err.message);
+          showImgPrompt();
+        }
+        document.getElementById('imgUploading').style.display = 'none';
+      }
+
+      function showImgPreview(url) {
+        document.getElementById('imgPreviewImg').src = url;
+        document.getElementById('imgPreviewWrap').style.display = 'block';
+        document.getElementById('imgDropZone').style.display = 'none';
+      }
+
+      function showImgPrompt() {
+        document.getElementById('imgDropZone').style.display = '';
+        document.getElementById('imgPrompt').style.display = '';
+        document.getElementById('imgPreviewWrap').style.display = 'none';
+        document.getElementById('fImageUrl').value = '';
+        document.getElementById('fImageFile').value = '';
+      }
+
+      function clearImage() {
+        showImgPrompt();
+      }
+
+      function setImageForEdit(url) {
+        if (url) {
+          document.getElementById('fImageUrl').value = url;
+          showImgPreview(url);
+        } else {
+          showImgPrompt();
+        }
       }
 
       // ── TOAST ──
