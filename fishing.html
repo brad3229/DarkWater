@@ -146,7 +146,6 @@
       .cart-subtotal { display: flex; justify-content: space-between; font-size: 16px; font-weight: 800; margin-bottom: 14px; }
       .cart-checkout-btn { display: block; width: 100%; background: var(--green); color: #fff; border: none; border-radius: 12px; padding: 15px; font-size: 15px; font-weight: 800; cursor: pointer; font-family: inherit; transition: background 0.2s; text-decoration: none; text-align: center; }
       .cart-checkout-btn:hover { background: #1e3418; }
-      .view-detail-hint { font-size: 12px; font-weight: 700; color: var(--green); }
 
       /* ── PRODUCT DETAIL MODAL ── */
       .pd-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 24px; }
@@ -432,7 +431,6 @@
               ${qty === 0 ? '' : qty === 1 ? `<div class="stock-count low">Only 1 left!</div>` : `<div class="stock-count ok">${qty} in stock</div>`}
               <div class="product-footer">
                 ${priceHtml}
-                <span class="view-detail-hint">View details →</span>
               </div>
             </div>
           </div>`;
