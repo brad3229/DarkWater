@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
     <title>Dark Water Sports and Firearms — Guns, Fishing & Hunting Gear</title>
     <script>
       document.documentElement.classList.add("js");
@@ -123,44 +126,233 @@
         background: #1e3418 !important;
       }
 
-      .cart-btn { position: relative; background: none; border: none; cursor: pointer; padding: 6px; color: var(--text2); display: flex; align-items: center; transition: color 0.2s; margin-left: 4px; }
-      .cart-btn:hover { color: var(--green); }
-      .cart-badge { position: absolute; top: -2px; right: -2px; background: var(--green); color: #fff; font-size: 9px; font-weight: 800; width: 17px; height: 17px; border-radius: 50%; display: none; align-items: center; justify-content: center; }
-      .cart-badge.has-items { display: flex; }
+      .cart-btn {
+        position: relative;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 6px;
+        color: var(--text2);
+        display: flex;
+        align-items: center;
+        transition: color 0.2s;
+        margin-left: 4px;
+      }
+      .cart-btn:hover {
+        color: var(--green);
+      }
+      .cart-badge {
+        position: absolute;
+        top: -2px;
+        right: -2px;
+        background: var(--green);
+        color: #fff;
+        font-size: 9px;
+        font-weight: 800;
+        width: 17px;
+        height: 17px;
+        border-radius: 50%;
+        display: none;
+        align-items: center;
+        justify-content: center;
+      }
+      .cart-badge.has-items {
+        display: flex;
+      }
 
       /* ── CART OVERLAY ── */
-      .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1100; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
-      .cart-overlay.open { opacity: 1; pointer-events: all; }
+      .cart-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1100;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s;
+      }
+      .cart-overlay.open {
+        opacity: 1;
+        pointer-events: all;
+      }
 
       /* ── CART DRAWER ── */
-      .cart-drawer { position: fixed; top: 0; right: 0; width: 400px; max-width: 100vw; height: 100vh; height: 100dvh; background: var(--white); z-index: 1200; transform: translateX(100%); transition: transform 0.3s ease; display: flex; flex-direction: column; box-shadow: -4px 0 32px rgba(0,0,0,0.15); }
-      .cart-drawer.open { transform: translateX(0); }
-      .cart-header { padding: 20px 24px; border-bottom: 1.5px solid #e0d8cc; display: flex; align-items: center; justify-content: space-between; }
-      .cart-header h2 { font-size: 18px; font-weight: 900; }
-      .cart-close { background: none; border: none; cursor: pointer; font-size: 26px; color: var(--text2); padding: 0; line-height: 1; }
-      .cart-close:hover { color: var(--text); }
-      .cart-items { flex: 1; overflow-y: auto; padding: 8px 24px; }
-      .cart-empty { text-align: center; padding: 56px 24px; color: var(--text2); }
-      .cart-empty-icon { font-size: 48px; margin-bottom: 12px; }
-      .cart-empty p { font-size: 15px; }
-      .cart-item { display: flex; gap: 12px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid #f0ece4; }
-      .cart-item:last-child { border-bottom: none; }
-      .cart-item-img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; flex-shrink: 0; background: var(--bg2); }
-      .cart-item-info { flex: 1; min-width: 0; }
-      .cart-item-name { font-size: 13px; font-weight: 700; line-height: 1.3; margin-bottom: 2px; }
-      .cart-item-brand { font-size: 11px; color: var(--text2); margin-bottom: 8px; }
-      .cart-item-controls { display: flex; align-items: center; justify-content: space-between; }
-      .cart-qty { display: flex; align-items: center; gap: 8px; }
-      .cart-qty-btn { width: 26px; height: 26px; border-radius: 6px; border: 1.5px solid #d0c8bc; background: var(--bg); cursor: pointer; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center; padding: 0; }
-      .cart-qty-btn:hover { border-color: var(--green); color: var(--green); }
-      .cart-qty-num { font-size: 13px; font-weight: 700; min-width: 20px; text-align: center; }
-      .cart-item-price { font-size: 14px; font-weight: 800; color: var(--green); }
-      .cart-item-remove { background: none; border: none; cursor: pointer; font-size: 20px; color: #ccc; padding: 0; line-height: 1; align-self: flex-start; margin-top: 2px; }
-      .cart-item-remove:hover { color: #b91c1c; }
-      .cart-footer { padding: 20px 24px; padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px)); border-top: 1.5px solid #e0d8cc; background: var(--bg2); }
-      .cart-subtotal { display: flex; justify-content: space-between; font-size: 16px; font-weight: 800; margin-bottom: 14px; }
-      .cart-checkout-btn { display: block; width: 100%; background: var(--green); color: #fff; border: none; border-radius: 12px; padding: 15px; font-size: 15px; font-weight: 800; cursor: pointer; font-family: inherit; transition: background 0.2s; text-decoration: none; text-align: center; }
-      .cart-checkout-btn:hover { background: #1e3418; }
+      .cart-drawer {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 400px;
+        max-width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        background: var(--white);
+        z-index: 1200;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        box-shadow: -4px 0 32px rgba(0, 0, 0, 0.15);
+      }
+      .cart-drawer.open {
+        transform: translateX(0);
+      }
+      .cart-header {
+        padding: 20px 24px;
+        border-bottom: 1.5px solid #e0d8cc;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .cart-header h2 {
+        font-size: 18px;
+        font-weight: 900;
+      }
+      .cart-close {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 26px;
+        color: var(--text2);
+        padding: 0;
+        line-height: 1;
+      }
+      .cart-close:hover {
+        color: var(--text);
+      }
+      .cart-items {
+        flex: 1;
+        overflow-y: auto;
+        padding: 8px 24px;
+      }
+      .cart-empty {
+        text-align: center;
+        padding: 56px 24px;
+        color: var(--text2);
+      }
+      .cart-empty-icon {
+        font-size: 48px;
+        margin-bottom: 12px;
+      }
+      .cart-empty p {
+        font-size: 15px;
+      }
+      .cart-item {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        padding: 14px 0;
+        border-bottom: 1px solid #f0ece4;
+      }
+      .cart-item:last-child {
+        border-bottom: none;
+      }
+      .cart-item-img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 8px;
+        flex-shrink: 0;
+        background: var(--bg2);
+      }
+      .cart-item-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .cart-item-name {
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.3;
+        margin-bottom: 2px;
+      }
+      .cart-item-brand {
+        font-size: 11px;
+        color: var(--text2);
+        margin-bottom: 8px;
+      }
+      .cart-item-controls {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .cart-qty {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .cart-qty-btn {
+        width: 26px;
+        height: 26px;
+        border-radius: 6px;
+        border: 1.5px solid #d0c8bc;
+        background: var(--bg);
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+      }
+      .cart-qty-btn:hover {
+        border-color: var(--green);
+        color: var(--green);
+      }
+      .cart-qty-num {
+        font-size: 13px;
+        font-weight: 700;
+        min-width: 20px;
+        text-align: center;
+      }
+      .cart-item-price {
+        font-size: 14px;
+        font-weight: 800;
+        color: var(--green);
+      }
+      .cart-item-remove {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 20px;
+        color: #ccc;
+        padding: 0;
+        line-height: 1;
+        align-self: flex-start;
+        margin-top: 2px;
+      }
+      .cart-item-remove:hover {
+        color: #b91c1c;
+      }
+      .cart-footer {
+        padding: 20px 24px;
+        padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+        border-top: 1.5px solid #e0d8cc;
+        background: var(--bg2);
+      }
+      .cart-subtotal {
+        display: flex;
+        justify-content: space-between;
+        font-size: 16px;
+        font-weight: 800;
+        margin-bottom: 14px;
+      }
+      .cart-checkout-btn {
+        display: block;
+        width: 100%;
+        background: var(--green);
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        padding: 15px;
+        font-size: 15px;
+        font-weight: 800;
+        cursor: pointer;
+        font-family: inherit;
+        transition: background 0.2s;
+        text-decoration: none;
+        text-align: center;
+      }
+      .cart-checkout-btn:hover {
+        background: #1e3418;
+      }
 
       .hamburger {
         display: none;
@@ -332,7 +524,6 @@
       }
 
       /* ── ANNOUNCEMENT BAR ── */
-
 
       /* ── SECTION ── */
       section {
@@ -816,25 +1007,29 @@
         width: 38px;
         height: 38px;
         border-radius: 10px;
-        background: rgba(255,255,255,0.08);
-        border: 1px solid rgba(255,255,255,0.12);
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.12);
         display: flex;
         align-items: center;
         justify-content: center;
         text-decoration: none;
-        transition: background 0.2s, border-color 0.2s;
+        transition:
+          background 0.2s,
+          border-color 0.2s;
       }
       .social-link:hover {
-        background: rgba(200,168,75,0.2);
-        border-color: rgba(200,168,75,0.5);
+        background: rgba(200, 168, 75, 0.2);
+        border-color: rgba(200, 168, 75, 0.5);
       }
       .social-link svg {
         width: 18px;
         height: 18px;
-        fill: rgba(255,255,255,0.7);
+        fill: rgba(255, 255, 255, 0.7);
         transition: fill 0.2s;
       }
-      .social-link:hover svg { fill: var(--amber); }
+      .social-link:hover svg {
+        fill: var(--amber);
+      }
 
       .ffl-disclaimer {
         font-size: 11px;
@@ -1024,24 +1219,115 @@
       }
 
       /* ── RAFFLE BANNER ── */
-      #raffleBanner { display: none; background: linear-gradient(135deg, #1a2e14 0%, #2e4c24 60%, #3d6030 100%); padding: 48px 0; }
-      .raffle-banner-inner { max-width: 1100px; margin: 0 auto; padding: 0 48px; display: flex; align-items: center; gap: 40px; flex-wrap: wrap; }
-      .raffle-banner-badge { background: var(--amber); color: #fff; font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; display: inline-block; margin-bottom: 10px; }
-      .raffle-banner-text { flex: 1; min-width: 240px; }
-      .raffle-banner-text h2 { font-size: clamp(22px, 3vw, 30px); font-weight: 900; color: #fff; margin-bottom: 6px; line-height: 1.2; }
-      .raffle-banner-text p { font-size: 15px; color: rgba(255,255,255,0.7); line-height: 1.5; }
-      .raffle-banner-countdown { display: flex; gap: 12px; flex-shrink: 0; }
-      .rcd-unit { background: rgba(255,255,255,0.1); border-radius: 12px; padding: 14px 16px; text-align: center; min-width: 64px; }
-      .rcd-num { font-size: 28px; font-weight: 900; color: #fff; line-height: 1; }
-      .rcd-label { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-top: 4px; }
-      .raffle-banner-cta { flex-shrink: 0; }
-      .raffle-banner-btn { display: inline-block; background: var(--amber); color: #fff; text-decoration: none; padding: 16px 32px; border-radius: 12px; font-size: 16px; font-weight: 800; transition: background 0.2s, transform 0.15s; white-space: nowrap; }
-      .raffle-banner-btn:hover { background: #b8922e; transform: translateY(-1px); }
+      #raffleBanner {
+        display: none;
+        background: linear-gradient(
+          135deg,
+          #1a2e14 0%,
+          #2e4c24 60%,
+          #3d6030 100%
+        );
+        padding: 48px 0;
+      }
+      .raffle-banner-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 48px;
+        display: flex;
+        align-items: center;
+        gap: 40px;
+        flex-wrap: wrap;
+      }
+      .raffle-banner-badge {
+        background: var(--amber);
+        color: #fff;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 4px 12px;
+        border-radius: 20px;
+        display: inline-block;
+        margin-bottom: 10px;
+      }
+      .raffle-banner-text {
+        flex: 1;
+        min-width: 240px;
+      }
+      .raffle-banner-text h2 {
+        font-size: clamp(22px, 3vw, 30px);
+        font-weight: 900;
+        color: #fff;
+        margin-bottom: 6px;
+        line-height: 1.2;
+      }
+      .raffle-banner-text p {
+        font-size: 15px;
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.5;
+      }
+      .raffle-banner-countdown {
+        display: flex;
+        gap: 12px;
+        flex-shrink: 0;
+      }
+      .rcd-unit {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 14px 16px;
+        text-align: center;
+        min-width: 64px;
+      }
+      .rcd-num {
+        font-size: 28px;
+        font-weight: 900;
+        color: #fff;
+        line-height: 1;
+      }
+      .rcd-label {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.5);
+        margin-top: 4px;
+      }
+      .raffle-banner-cta {
+        flex-shrink: 0;
+      }
+      .raffle-banner-btn {
+        display: inline-block;
+        background: var(--amber);
+        color: #fff;
+        text-decoration: none;
+        padding: 16px 32px;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 800;
+        transition:
+          background 0.2s,
+          transform 0.15s;
+        white-space: nowrap;
+      }
+      .raffle-banner-btn:hover {
+        background: #b8922e;
+        transform: translateY(-1px);
+      }
       @media (max-width: 700px) {
-        .raffle-banner-inner { padding: 0 20px; gap: 24px; }
-        .raffle-banner-countdown { gap: 8px; }
-        .rcd-unit { min-width: 52px; padding: 10px 10px; }
-        .rcd-num { font-size: 22px; }
+        .raffle-banner-inner {
+          padding: 0 20px;
+          gap: 24px;
+        }
+        .raffle-banner-countdown {
+          gap: 8px;
+        }
+        .rcd-unit {
+          min-width: 52px;
+          padding: 10px 10px;
+        }
+        .rcd-num {
+          font-size: 22px;
+        }
       }
 
       @media (max-width: 600px) {
@@ -1129,10 +1415,21 @@
         <li><a href="#contact" class="nav-cta">Contact Us</a></li>
       </ul>
 
-      <div style="display:flex;align-items:center;gap:4px;">
+      <div style="display: flex; align-items: center; gap: 4px">
         <button class="cart-btn" onclick="openCart()" aria-label="Cart">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <path d="M16 10a4 4 0 01-8 0" />
           </svg>
           <span class="cart-badge" id="cartBadge"></span>
         </button>
@@ -1157,10 +1454,15 @@
         <button class="cart-close" onclick="closeCart()">&#215;</button>
       </div>
       <div class="cart-items" id="cartItemsList">
-        <div class="cart-empty"><div class="cart-empty-icon">🛒</div><p>Your cart is empty.</p></div>
+        <div class="cart-empty">
+          <div class="cart-empty-icon">🛒</div>
+          <p>Your cart is empty.</p>
+        </div>
       </div>
-      <div class="cart-footer" id="cartFooter" style="display:none">
-        <div class="cart-subtotal"><span>Subtotal</span><span id="cartSubtotal">$0.00</span></div>
+      <div class="cart-footer" id="cartFooter" style="display: none">
+        <div class="cart-subtotal">
+          <span>Subtotal</span><span id="cartSubtotal">$0.00</span>
+        </div>
         <a href="#contact" class="cart-checkout-btn">Check Out</a>
       </div>
     </div>
@@ -1192,10 +1494,22 @@
           <p id="rbPrizeDesc">Tickets available now. Drawing coming up soon.</p>
         </div>
         <div class="raffle-banner-countdown" id="rbCountdown">
-          <div class="rcd-unit"><div class="rcd-num" id="rbDays">—</div><div class="rcd-label">Days</div></div>
-          <div class="rcd-unit"><div class="rcd-num" id="rbHrs">—</div><div class="rcd-label">Hrs</div></div>
-          <div class="rcd-unit"><div class="rcd-num" id="rbMin">—</div><div class="rcd-label">Min</div></div>
-          <div class="rcd-unit"><div class="rcd-num" id="rbSec">—</div><div class="rcd-label">Sec</div></div>
+          <div class="rcd-unit">
+            <div class="rcd-num" id="rbDays">—</div>
+            <div class="rcd-label">Days</div>
+          </div>
+          <div class="rcd-unit">
+            <div class="rcd-num" id="rbHrs">—</div>
+            <div class="rcd-label">Hrs</div>
+          </div>
+          <div class="rcd-unit">
+            <div class="rcd-num" id="rbMin">—</div>
+            <div class="rcd-label">Min</div>
+          </div>
+          <div class="rcd-unit">
+            <div class="rcd-num" id="rbSec">—</div>
+            <div class="rcd-label">Sec</div>
+          </div>
         </div>
         <div class="raffle-banner-cta">
           <a href="raffle.html" class="raffle-banner-btn">Get Tickets →</a>
@@ -1216,11 +1530,7 @@
         <div class="categories-grid">
           <!-- Firearms -->
           <a class="category-card" href="firearms.html">
-            <img
-              src="firearms.jpg"
-              alt="Firearms"
-              loading="lazy"
-            />
+            <img src="firearms.jpg" alt="Firearms" loading="lazy" />
             <div class="category-overlay">
               <div class="category-icon">
                 <!-- Target/scope icon -->
@@ -1276,11 +1586,7 @@
 
           <!-- Fishing -->
           <a class="category-card" href="fishing.html">
-            <img
-              src="fishing.jpg"
-              alt="Fishing Gear"
-              loading="lazy"
-            />
+            <img src="fishing.jpg" alt="Fishing Gear" loading="lazy" />
             <div class="category-overlay">
               <div class="category-icon">
                 <!-- Wave/fish icon -->
@@ -1372,7 +1678,6 @@
               accessory, or gear item directly for you — usually within days.
             </div>
           </div>
-
         </div>
 
         <!-- FFL Banner -->
@@ -1410,7 +1715,7 @@
             </div>
             <div class="info-block">
               <h4>Phone</h4>
-              <p><a href="tel:+15550001234">(555) 000-1234</a></p>
+              <p><a href="tel:+15550001234">(910) 000-1234</a></p>
             </div>
             <div class="info-block">
               <h4>Email</h4>
@@ -1439,7 +1744,7 @@
                 src="https://maps.google.com/maps?q=34.6801626,-79.1950373&z=14&output=embed"
                 width="100%"
                 height="100%"
-                style="border:0; border-radius:16px;"
+                style="border: 0; border-radius: 16px"
                 allowfullscreen=""
                 loading="lazy"
                 referrerpolicy="no-referrer-when-downgrade"
@@ -1469,7 +1774,7 @@
             <div class="form-row">
               <div class="form-group">
                 <label>Phone</label>
-                <input type="tel" placeholder="(555) 000-0000" />
+                <input type="tel" placeholder="(910) 000-0000" />
               </div>
               <div class="form-group">
                 <label>Email</label>
@@ -1552,11 +1857,46 @@
               applicable state and federal law.
             </p>
             <div class="social-links">
-              <a href="https://facebook.com" target="_blank" rel="noopener" class="social-link" aria-label="Find us on Facebook">
-                <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+              <a
+                href="https://facebook.com"
+                target="_blank"
+                rel="noopener"
+                class="social-link"
+                aria-label="Find us on Facebook"
+              >
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"
+                  />
+                </svg>
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener" class="social-link" aria-label="Find us on Instagram">
-                <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.5"/></svg>
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener"
+                class="social-link"
+                aria-label="Find us on Instagram"
+              >
+                <svg viewBox="0 0 24 24">
+                  <rect
+                    x="2"
+                    y="2"
+                    width="20"
+                    height="20"
+                    rx="5"
+                    ry="5"
+                    fill="none"
+                    stroke="rgba(255,255,255,0.7)"
+                    stroke-width="2"
+                  />
+                  <path
+                    d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"
+                    fill="none"
+                    stroke="rgba(255,255,255,0.7)"
+                    stroke-width="2"
+                  />
+                  <circle cx="17.5" cy="6.5" r="1.5" />
+                </svg>
               </a>
             </div>
           </div>
@@ -1585,7 +1925,7 @@
             <h5>Visit Us</h5>
             <ul>
               <li><a href="#contact">123 Main Street, Pembroke NC</a></li>
-              <li><a href="tel:+15550001234">(555) 000-1234</a></li>
+              <li><a href="tel:+15550001234">(910) 000-1234</a></li>
               <li><a href="#contact">Mon–Fri: 9am–6pm</a></li>
               <li><a href="#contact">Sat: 9am–5pm</a></li>
             </ul>
@@ -1613,26 +1953,46 @@
         var raffle = await DB.getRaffle();
         if (!raffle || !raffle.active || !raffle.prizeName) return;
 
-        document.getElementById('raffleBanner').style.display = 'block';
-        document.getElementById('rbPrizeName').textContent = 'Win a ' + raffle.prizeName;
+        document.getElementById("raffleBanner").style.display = "block";
+        document.getElementById("rbPrizeName").textContent =
+          "Win a " + raffle.prizeName;
         if (raffle.ticketPrice) {
-          document.getElementById('rbPrizeDesc').textContent =
-            '$' + parseFloat(raffle.ticketPrice).toFixed(2) + ' per ticket' +
-            (raffle.drawingDate ? ' · Drawing ' + new Date(raffle.drawingDate + 'T12:00:00').toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'}) : '');
+          document.getElementById("rbPrizeDesc").textContent =
+            "$" +
+            parseFloat(raffle.ticketPrice).toFixed(2) +
+            " per ticket" +
+            (raffle.drawingDate
+              ? " · Drawing " +
+                new Date(raffle.drawingDate + "T12:00:00").toLocaleDateString(
+                  "en-US",
+                  { month: "short", day: "numeric", year: "numeric" },
+                )
+              : "");
         }
 
         if (!raffle.drawingDate) {
-          document.getElementById('rbCountdown').style.display = 'none';
+          document.getElementById("rbCountdown").style.display = "none";
           return;
         }
 
         function tick() {
-          var diff = new Date(raffle.drawingDate + 'T12:00:00') - new Date();
-          if (diff <= 0) { document.getElementById('rbCountdown').style.display = 'none'; return; }
-          document.getElementById('rbDays').textContent = Math.floor(diff / 86400000);
-          document.getElementById('rbHrs').textContent  = String(Math.floor((diff % 86400000) / 3600000)).padStart(2,'0');
-          document.getElementById('rbMin').textContent  = String(Math.floor((diff % 3600000) / 60000)).padStart(2,'0');
-          document.getElementById('rbSec').textContent  = String(Math.floor((diff % 60000) / 1000)).padStart(2,'0');
+          var diff = new Date(raffle.drawingDate + "T12:00:00") - new Date();
+          if (diff <= 0) {
+            document.getElementById("rbCountdown").style.display = "none";
+            return;
+          }
+          document.getElementById("rbDays").textContent = Math.floor(
+            diff / 86400000,
+          );
+          document.getElementById("rbHrs").textContent = String(
+            Math.floor((diff % 86400000) / 3600000),
+          ).padStart(2, "0");
+          document.getElementById("rbMin").textContent = String(
+            Math.floor((diff % 3600000) / 60000),
+          ).padStart(2, "0");
+          document.getElementById("rbSec").textContent = String(
+            Math.floor((diff % 60000) / 1000),
+          ).padStart(2, "0");
         }
         tick();
         setInterval(tick, 1000);
@@ -1640,23 +2000,26 @@
     </script>
     <script>
       // ── CART ──
-      const CART_KEY = 'dw_cart';
+      const CART_KEY = "dw_cart";
 
       function getCart() {
-        try { const s = localStorage.getItem(CART_KEY); if (s) return JSON.parse(s); } catch(e) {}
+        try {
+          const s = localStorage.getItem(CART_KEY);
+          if (s) return JSON.parse(s);
+        } catch (e) {}
         return { items: [] };
       }
 
       function updateCartBadge() {
         const total = getCart().items.reduce((sum, i) => sum + i.qty, 0);
-        const badge = document.getElementById('cartBadge');
+        const badge = document.getElementById("cartBadge");
         badge.textContent = total;
-        badge.classList.toggle('has-items', total > 0);
+        badge.classList.toggle("has-items", total > 0);
       }
 
       function removeFromCart(id) {
         const cart = getCart();
-        cart.items = cart.items.filter(i => i.id !== id);
+        cart.items = cart.items.filter((i) => i.id !== id);
         localStorage.setItem(CART_KEY, JSON.stringify(cart));
         updateCartBadge();
         renderCartDrawer();
@@ -1664,7 +2027,7 @@
 
       function updateCartQty(id, delta) {
         const cart = getCart();
-        const item = cart.items.find(i => i.id === id);
+        const item = cart.items.find((i) => i.id === id);
         if (!item) return;
         item.qty = Math.max(1, Math.min(item.qty + delta, item.maxQty || 99));
         localStorage.setItem(CART_KEY, JSON.stringify(cart));
@@ -1673,36 +2036,38 @@
       }
 
       function openCart() {
-        const drawer = document.getElementById('cartDrawer');
-        drawer.style.height = window.innerHeight + 'px';
-        drawer.classList.add('open');
-        document.getElementById('cartOverlay').classList.add('open');
-        document.body.style.overflow = 'hidden';
+        const drawer = document.getElementById("cartDrawer");
+        drawer.style.height = window.innerHeight + "px";
+        drawer.classList.add("open");
+        document.getElementById("cartOverlay").classList.add("open");
+        document.body.style.overflow = "hidden";
         renderCartDrawer();
       }
 
       function closeCart() {
-        document.getElementById('cartDrawer').classList.remove('open');
-        document.getElementById('cartOverlay').classList.remove('open');
-        document.body.style.overflow = '';
+        document.getElementById("cartDrawer").classList.remove("open");
+        document.getElementById("cartOverlay").classList.remove("open");
+        document.body.style.overflow = "";
       }
 
       function renderCartDrawer() {
         const cart = getCart();
-        const el = document.getElementById('cartItemsList');
-        const footer = document.getElementById('cartFooter');
+        const el = document.getElementById("cartItemsList");
+        const footer = document.getElementById("cartFooter");
         if (!cart.items.length) {
-          el.innerHTML = '<div class="cart-empty"><div class="cart-empty-icon">🛒</div><p>Your cart is empty.</p></div>';
-          footer.style.display = 'none';
+          el.innerHTML =
+            '<div class="cart-empty"><div class="cart-empty-icon">🛒</div><p>Your cart is empty.</p></div>';
+          footer.style.display = "none";
           return;
         }
         let subtotal = 0;
-        el.innerHTML = cart.items.map(item => {
-          const price = parseFloat(item.price) || 0;
-          const total = price * item.qty;
-          subtotal += total;
-          return `<div class="cart-item">
-            <img class="cart-item-img" src="${item.imageUrl || ''}" alt="" onerror="this.style.display='none'"/>
+        el.innerHTML = cart.items
+          .map((item) => {
+            const price = parseFloat(item.price) || 0;
+            const total = price * item.qty;
+            subtotal += total;
+            return `<div class="cart-item">
+            <img class="cart-item-img" src="${item.imageUrl || ""}" alt="" onerror="this.style.display='none'"/>
             <div class="cart-item-info">
               <div class="cart-item-name">${item.name}</div>
               <div class="cart-item-brand">${item.brand}</div>
@@ -1717,9 +2082,11 @@
             </div>
             <button class="cart-item-remove" onclick="removeFromCart('${item.id}')" title="Remove">&#215;</button>
           </div>`;
-        }).join('');
-        document.getElementById('cartSubtotal').textContent = '$' + subtotal.toFixed(2);
-        footer.style.display = '';
+          })
+          .join("");
+        document.getElementById("cartSubtotal").textContent =
+          "$" + subtotal.toFixed(2);
+        footer.style.display = "";
       }
 
       updateCartBadge();
