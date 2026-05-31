@@ -348,7 +348,7 @@
       </div>
       <div class="cart-footer" id="cartFooter" style="display:none">
         <div class="cart-subtotal"><span>Subtotal</span><span id="cartSubtotal">$0.00</span></div>
-        <a href="index.html#contact" class="cart-checkout-btn">Checkout → Contact Us</a>
+        <a href="index.html#contact" class="cart-checkout-btn">Check Out</a>
       </div>
     </div>
 
@@ -598,7 +598,9 @@
       }
 
       function openCart() {
-        document.getElementById('cartDrawer').classList.add('open');
+        const drawer = document.getElementById('cartDrawer');
+        drawer.style.height = window.innerHeight + 'px';
+        drawer.classList.add('open');
         document.getElementById('cartOverlay').classList.add('open');
         document.body.style.overflow = 'hidden';
         renderCartDrawer();
