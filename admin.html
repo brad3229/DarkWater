@@ -729,9 +729,8 @@
       }
 
       // ── RENDER LIST ──
-      async function renderList(section) {
-        const products = await DB.getProducts(section);
-        _cache[section] = products;
+      function renderListHtml(section) {
+        const products = _cache[section] || [];
         const el = document.getElementById('list-' + section);
         if (!products.length) {
           el.innerHTML = '<div class="empty-state"><strong>No products yet.</strong><p>Click &ldquo;+ Add Product&rdquo; to get started.</p></div>';
@@ -757,6 +756,12 @@
               <button class="del-btn" onclick="handleDeleteProduct('${section}','${p.id}')">Delete</button>
             </div></td>
           </tr>`).join('')}</tbody></table>`;
+      }
+
+      async function renderList(section) {
+        const products = await DB.getProducts(section);
+        _cache[section] = products;
+        renderListHtml(section);
       }
 
       async function renderAllLists() {
@@ -869,7 +874,13 @@
           badge,
         };
         await DB.upsertProduct(section, product);
-        await renderList(section);
+        if (id) {
+          const idx = (_cache[section] || []).findIndex(p => p.id === id);
+          if (idx !== -1) _cache[section][idx] = { ..._cache[section][idx], ...product };
+          renderListHtml(section);
+        } else {
+          await renderList(section);
+        }
         renderSummary();
         closeModal();
         showToast(id ? 'Product updated!' : 'Product added!');
