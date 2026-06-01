@@ -609,6 +609,7 @@
 
         const btn = document.getElementById('pdActionBtn');
         btn.textContent = qty === 0 ? 'Out of Stock' : 'Add to Cart';
+        btn.classList.remove('added');
         btn.disabled = qty === 0;
 
         document.getElementById('pdOverlay').classList.remove('hidden');
