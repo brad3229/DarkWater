@@ -293,6 +293,7 @@
         <button class="tab-btn active" onclick="switchTab('firearms', this)">Firearms &amp; Accessories</button>
         <button class="tab-btn" onclick="switchTab('hunting', this)">Hunting Gear</button>
         <button class="tab-btn" onclick="switchTab('fishing', this)">Fishing</button>
+        <button class="tab-btn" onclick="switchTab('apparel', this)">Apparel &amp; Merch</button>
         <button class="tab-btn" onclick="switchTab('raffle', this)">🎟️ Raffle</button>
       </div>
 
@@ -357,6 +358,18 @@
           </div>
           <div id="list-fishing"></div>
         </div>
+
+        <div class="panel" id="panel-apparel">
+          <div class="panel-header">
+            <div>
+              <h2>Apparel &amp; Merch</h2>
+              <p>Manage shirts, hoodies, hats, beanies, and accessories.</p>
+            </div>
+            <button class="add-btn" onclick="openForm('apparel')">+ Add Product</button>
+          </div>
+          <div id="list-apparel"></div>
+        </div>
+
         <div class="panel" id="panel-raffle">
           <div class="panel-header">
             <div>
@@ -680,6 +693,25 @@
             { id:'fi7', name:'Lazer Sharp Circle Hook Kit (50pk)', brand:'eagleclaw', brandLabel:'Eagle Claw', category:'tackle', categoryLabel:'Tackle & Accessories', price:'7.99', callForPrice:false, quantity:5, imageUrl:'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80', badge:'' },
             { id:'fi8', name:'KVD 1/2oz Spinnerbait', brand:'strikeking', brandLabel:'Strike King', category:'lures', categoryLabel:'Lures & Bait', price:'8.99', callForPrice:false, quantity:4, imageUrl:'https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=600&q=80', badge:'' },
           ],
+        },
+        apparel: {
+          storageKey: 'dw_apparel',
+          categoryLabel: 'Type',
+          categories: [
+            { value: 'shirts',       label: 'T-Shirts' },
+            { value: 'hoodies',      label: 'Hoodies' },
+            { value: 'hats',         label: 'Hats' },
+            { value: 'beanies',      label: 'Beanies' },
+            { value: 'accessories',  label: 'Accessories' },
+          ],
+          brands: [
+            { value: 'darkwater',  label: 'Dark Water' },
+            { value: 'richardson', label: 'Richardson' },
+            { value: 'gildan',     label: 'Gildan' },
+            { value: 'yupoong',    label: 'Yupoong' },
+          ],
+          showCondition: false,
+          defaults: [],
         },
       };
 
