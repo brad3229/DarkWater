@@ -24,6 +24,7 @@
       imageUrl: row.image_url || '',
       badge: row.badge || '',
       description: row.description || '',
+      sizes: row.sizes || '',
     };
   }
 
@@ -44,6 +45,7 @@
     if (!p.callForPrice && p.price !== '' && p.price != null) {
       row.price = parseFloat(p.price) || 0;
     }
+    if (p.sizes !== undefined) row.sizes = p.sizes || null;
     return row;
   }
 

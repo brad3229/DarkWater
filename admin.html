@@ -90,6 +90,9 @@
       .modal h3 { font-size: 20px; font-weight: 900; margin-bottom: 24px; }
       .form-row { margin-bottom: 18px; }
       .form-row > label, .form-row > div > label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--tan); margin-bottom: 6px; }
+      .sizes-check-grid { display: flex; gap: 14px; flex-wrap: wrap; padding: 2px 0; }
+      .size-check { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; cursor: pointer; color: var(--text); user-select: none; }
+      .size-check input { width: 16px; height: 16px; accent-color: var(--green); cursor: pointer; }
       .form-row input[type="text"],
       .form-row input[type="url"],
       .form-row input[type="number"],
@@ -505,6 +508,19 @@
             </div>
           </div>
 
+          <div class="form-row" id="sizesRow" style="display:none">
+            <label>Size</label>
+            <div class="sizes-check-grid">
+              <label class="size-check"><input type="radio" name="fSizes" value="XS"> XS</label>
+              <label class="size-check"><input type="radio" name="fSizes" value="S"> S</label>
+              <label class="size-check"><input type="radio" name="fSizes" value="M"> M</label>
+              <label class="size-check"><input type="radio" name="fSizes" value="L"> L</label>
+              <label class="size-check"><input type="radio" name="fSizes" value="XL"> XL</label>
+              <label class="size-check"><input type="radio" name="fSizes" value="2XL"> 2XL</label>
+              <label class="size-check"><input type="radio" name="fSizes" value="3XL"> 3XL</label>
+            </div>
+          </div>
+
           <div class="form-row two-col">
             <div>
               <label for="fPrice">Price ($)</label>
@@ -824,6 +840,13 @@
       }
 
       // ── MODAL ──
+      function updateSizesRow() {
+        const section = document.getElementById('editSection').value;
+        const cat = document.getElementById('fCategory').value;
+        const show = section === 'apparel' && (cat === 'shirts' || cat === 'hoodies');
+        document.getElementById('sizesRow').style.display = show ? '' : 'none';
+      }
+
       function openForm(section, id = null) {
         const cfg = SECTIONS[section];
         document.getElementById('editSection').value = section;
@@ -834,6 +857,7 @@
         document.getElementById('fBrand').innerHTML = cfg.brands.map(b => `<option value="${b.value}">${b.label}</option>`).join('');
         document.getElementById('conditionRow').style.display = cfg.showCondition ? '' : 'none';
         document.getElementById('badgeRow').style.display = cfg.showCondition ? 'none' : '';
+        document.getElementById('fCategory').onchange = updateSizesRow;
 
         if (id) {
           const p = (_cache[section] || []).find(x => x.id === id);
@@ -848,6 +872,11 @@
             document.getElementById('fBrand').value = p.brand;
             if (cfg.showCondition) document.getElementById('fCondition').value = p.badge || '';
             else document.getElementById('fBadge').value = p.badge || '';
+            updateSizesRow();
+            const savedSize = (p.sizes || '').trim();
+            document.querySelectorAll('[name="fSizes"]').forEach(rb => {
+              rb.checked = rb.value === savedSize;
+            });
           }
         } else {
           document.getElementById('fName').value = '';
@@ -858,6 +887,8 @@
           showImgPrompt();
           if (cfg.showCondition) document.getElementById('fCondition').value = 'new';
           else document.getElementById('fBadge').value = 'new';
+          updateSizesRow();
+          document.querySelectorAll('[name="fSizes"]').forEach(rb => rb.checked = false);
         }
         togglePriceField();
         document.getElementById('modalOverlay').classList.remove('hidden');
@@ -894,6 +925,10 @@
           badge = document.getElementById('fBadge').value;
           category = catValue;
         }
+        const sizesRow = document.getElementById('sizesRow');
+        const sizes = sizesRow.style.display !== 'none'
+          ? Array.from(document.querySelectorAll('[name="fSizes"]:checked')).map(cb => cb.value).join(',')
+          : '';
         const product = {
           id: id || null,
           name: document.getElementById('fName').value.trim(),
@@ -904,6 +939,7 @@
           quantity: parseInt(document.getElementById('fQty').value, 10) || 0,
           imageUrl: document.getElementById('fImageUrl').value.trim(),
           badge,
+          sizes,
         };
         await DB.upsertProduct(section, product);
         if (id) {
