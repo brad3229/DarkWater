@@ -33,7 +33,8 @@ function handleSubmit(e) {
 window.addEventListener("scroll", () => {
   document.getElementById("navbar").style.boxShadow =
     window.scrollY > 60 ? "0 2px 20px rgba(0,0,0,0.1)" : "";
-});
+  closeMenu();
+}, { passive: true });
 
 // ── SPLASH DISMISS ──
 (function () {
