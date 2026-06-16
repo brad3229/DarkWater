@@ -62,6 +62,11 @@
       .panel-header p { font-size: 13px; color: var(--text2); margin-top: 3px; }
       .add-btn { background: var(--green); color: #fff; border: none; border-radius: 10px; padding: 11px 20px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; transition: background 0.2s; white-space: nowrap; flex-shrink: 0; }
       .add-btn:hover { background: var(--green2); }
+      .search-wrap { position: relative; margin-bottom: 16px; }
+      .search-wrap svg { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; stroke: var(--text2); pointer-events: none; }
+      .search-input { width: 100%; padding: 10px 14px 10px 38px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 14px; font-family: inherit; background: var(--white); color: var(--text); outline: none; box-sizing: border-box; transition: border-color 0.15s; }
+      .search-input:focus { border-color: var(--green); }
+      .search-count { font-size: 12px; color: var(--text2); margin-bottom: 10px; }
 
       /* ── PRODUCT TABLE ── */
       .product-table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 16px; overflow: hidden; border: 1.5px solid var(--border); }
@@ -342,6 +347,10 @@
             </div>
             <button class="add-btn" onclick="openForm('firearms')">+ Add Product</button>
           </div>
+          <div class="search-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="search" class="search-input" id="search-firearms" placeholder="Search firearms..." oninput="renderListHtml('firearms')">
+          </div>
           <div id="list-firearms"></div>
         </div>
 
@@ -352,6 +361,10 @@
               <p>Manage clothing, optics, calls, knives, cameras, and ammo.</p>
             </div>
             <button class="add-btn" onclick="openForm('hunting')">+ Add Product</button>
+          </div>
+          <div class="search-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="search" class="search-input" id="search-hunting" placeholder="Search hunting gear..." oninput="renderListHtml('hunting')">
           </div>
           <div id="list-hunting"></div>
         </div>
@@ -364,6 +377,10 @@
             </div>
             <button class="add-btn" onclick="openForm('fishing')">+ Add Product</button>
           </div>
+          <div class="search-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="search" class="search-input" id="search-fishing" placeholder="Search fishing gear..." oninput="renderListHtml('fishing')">
+          </div>
           <div id="list-fishing"></div>
         </div>
 
@@ -374,6 +391,10 @@
               <p>Manage shirts, hoodies, hats, beanies, and accessories.</p>
             </div>
             <button class="add-btn" onclick="openForm('apparel')">+ Add Product</button>
+          </div>
+          <div class="search-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="search" class="search-input" id="search-apparel" placeholder="Search apparel..." oninput="renderListHtml('apparel')">
           </div>
           <div id="list-apparel"></div>
         </div>
@@ -779,17 +800,31 @@
         document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
         btn.classList.add('active');
         document.getElementById('panel-' + section).classList.add('active');
+        const searchEl = document.getElementById('search-' + section);
+        if (searchEl) { searchEl.value = ''; renderListHtml(section); }
       }
 
       // ── RENDER LIST ──
       function renderListHtml(section) {
-        const products = _cache[section] || [];
+        const all = _cache[section] || [];
         const el = document.getElementById('list-' + section);
-        if (!products.length) {
+        if (!all.length) {
           el.innerHTML = '<div class="empty-state"><strong>No products yet.</strong><p>Click &ldquo;+ Add Product&rdquo; to get started.</p></div>';
           return;
         }
-        el.innerHTML = `<table class="product-table">
+        const searchEl = document.getElementById('search-' + section);
+        const q = searchEl ? searchEl.value.toLowerCase().trim() : '';
+        const products = q ? all.filter(p =>
+          p.name.toLowerCase().includes(q) ||
+          (p.brandLabel || p.brand).toLowerCase().includes(q) ||
+          (p.categoryLabel || p.category).toLowerCase().includes(q)
+        ) : all;
+        if (!products.length) {
+          el.innerHTML = '<div class="empty-state"><strong>No results.</strong><p>No products match &ldquo;' + DB.escHtml(q) + '&rdquo;. Try a different search.</p></div>';
+          return;
+        }
+        const countHtml = q ? `<div class="search-count">Showing ${products.length} of ${all.length} products</div>` : '';
+        el.innerHTML = countHtml + `<table class="product-table">
           <thead><tr>
             <th style="width:76px">Image</th><th>Name</th><th>Brand</th>
             <th>Category</th><th>Price</th>
