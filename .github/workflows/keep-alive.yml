@@ -11,7 +11,8 @@ jobs:
     steps:
       - name: Ping Supabase database
         run: |
-          curl -s "https://rudxcgzbyuyeldzokvui.supabase.co/rest/v1/products?limit=1" \
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
             -H "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1ZHhjZ3pieXV5ZWxkem9rdnVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwMTQ1NDAsImV4cCI6MjA5NTU5MDU0MH0.H_E9115w6LkK-S98gfV40fxrNC3b_onk4tNY71ZNIvE" \
-            -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1ZHhjZ3pieXV5ZWxkem9rdnVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwMTQ1NDAsImV4cCI6MjA5NTU5MDU0MH0.H_E9115w6LkK-S98gfV40fxrNC3b_onk4tNY71ZNIvE"
-          echo "Supabase pinged successfully"
+            -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1ZHhjZ3pieXV5ZWxkem9rdnVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwMTQ1NDAsImV4cCI6MjA5NTU5MDU0MH0.H_E9115w6LkK-S98gfV40fxrNC3b_onk4tNY71ZNIvE" \
+            "https://rudxcgzbyuyeldzokvui.supabase.co/rest/v1/products?limit=1") || RESPONSE="failed"
+          echo "Supabase ping status: $RESPONSE"
